@@ -1,0 +1,32 @@
+# Wärmepumpe Seite 1 Koordinaten (Minimal Startgerüst)
+# Platzhalter-Beispiele: hp_title, hp_summary_line1, hp_summary_line2, hp_core_kpi_1, hp_core_kpi_2
+Text: {{hp_title}}
+Position: (100, 730, 500, 760)
+Schriftart: Helvetica-Bold
+Schriftgröße: 18
+Farbe: 0
+----------------------------------------
+Text: {{hp_summary_line1}}
+Position: (100, 700, 500, 720)
+Schriftart: Helvetica
+Schriftgröße: 11
+Farbe: 0
+----------------------------------------
+Text: {{hp_summary_line2}}
+Position: (100, 682, 500, 700)
+Schriftart: Helvetica
+Schriftgröße: 11
+Farbe: 0
+----------------------------------------
+Text: {{hp_core_kpi_1}}
+Position: (100, 640, 260, 660)
+Schriftart: Helvetica-Bold
+Schriftgröße: 12
+Farbe: 0
+----------------------------------------
+Text: {{hp_core_kpi_2}}
+Position: (280, 640, 440, 660)
+Schriftart: Helvetica-Bold
+Schriftgröße: 12
+Farbe: 0
+----------------------------------------

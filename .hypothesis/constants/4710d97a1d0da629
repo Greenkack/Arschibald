@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\backend\core\config.py
+# hypothesis_version: 6.147.0
+
+[3600, 8000, '.env', '1.0.0', '127.0.0.1', 'HS256', 'INFO', 'Solar Calculator Pro', 'ignore', 'logs', 'logs/app.log', 'temp', 'uploads', 'utf-8']

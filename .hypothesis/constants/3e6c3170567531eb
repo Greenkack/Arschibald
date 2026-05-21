@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\chart\bar_chart.py
+# hypothesis_version: 6.147.0
+
+[150, 'axId', 'bar', 'bar3DChart', 'barChart', 'barDir', 'box', 'clustered', 'col', 'cone', 'coneToMax', 'cylinder', 'dLbls', 'gapDepth', 'gapWidth', 'grouping', 'overlap', 'percentStacked', 'pyramid', 'pyramidToMax', 'ser', 'serLines', 'shape', 'stacked', 'standard', 'varyColors']

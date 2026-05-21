@@ -1,0 +1,155 @@
+/**
+ * Backup Management Styles
+ */
+
+.backup-management {
+  padding: 2rem;
+}
+
+.backup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.backup-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.backup-header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.backup-table {
+  margin-top: 1.5rem;
+}
+
+.backup-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.backup-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.backup-create-form .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.backup-create-form .field label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.backup-create-form .field small {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.backup-components {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--surface-ground);
+  border-radius: 6px;
+}
+
+.field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.field-checkbox label {
+  margin: 0;
+  cursor: pointer;
+}
+
+.backup-verification {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.backup-verification h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.verification-check {
+  padding: 1rem;
+  background: var(--surface-ground);
+  border-radius: 6px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.check-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.check-header i {
+  font-size: 1.25rem;
+}
+
+.check-name {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.check-details {
+  margin: 0;
+  padding: 0.75rem;
+  background: var(--surface-card);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+
+.text-green-500 {
+  color: #22c55e;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .backup-management {
+    padding: 1rem;
+  }
+
+  .backup-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .backup-header-actions {
+    width: 100%;
+  }
+
+  .backup-header-actions button {
+    flex: 1;
+  }
+
+  .backup-actions {
+    flex-direction: column;
+  }
+}

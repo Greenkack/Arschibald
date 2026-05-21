@@ -1,0 +1,13 @@
+# Wärmepumpe Seite 3 (Finanzierung)
+Text: {{hp_financing_header}}
+Position: (100, 730, 500, 760)
+Schriftart: Helvetica-Bold
+Schriftgröße: 16
+Farbe: 0
+----------------------------------------
+Text: {{hp_financing_block}}
+Position: (100, 660, 500, 710)
+Schriftart: Helvetica
+Schriftgröße: 10
+Farbe: 0
+----------------------------------------

@@ -1,0 +1,357 @@
+/**
+ * Window Management Component Styles
+ */
+
+.window-management {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.window-management h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+}
+
+.window-management h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+/* Not Electron State */
+.window-management.not-electron {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+/* Loading State */
+.window-management.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #666;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error State */
+.window-management.error {
+  padding: 20px;
+  text-align: center;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-bottom: 16px;
+}
+
+/* Sections */
+.window-management section {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+/* Window Info Section */
+.window-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item span {
+  font-size: 14px;
+  color: #333;
+}
+
+.status-yes {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.status-no {
+  color: #95a5a6;
+}
+
+/* Window Actions */
+.window-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.action-button {
+  padding: 10px 16px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.action-button:hover {
+  background: #2980b9;
+}
+
+.action-button:active {
+  transform: translateY(1px);
+}
+
+.action-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Preferences Form */
+.preferences-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input[type="number"] {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  max-width: 200px;
+}
+
+.form-group input[type="number"]:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-label span {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.save-button {
+  padding: 10px 24px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.save-button:hover {
+  background: #229954;
+}
+
+.save-button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+.save-status {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.save-status.success {
+  color: #27ae60;
+}
+
+.save-status.error {
+  color: #e74c3c;
+}
+
+/* All Windows Section */
+.windows-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.window-item {
+  padding: 16px;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.window-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.window-item-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.window-id {
+  font-size: 12px;
+  color: #666;
+  font-family: monospace;
+  background: #e0e0e0;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.window-item-info {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.window-item-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #3498db;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.focused {
+  background: #27ae60;
+}
+
+/* Advanced Section */
+.advanced-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.danger-button {
+  padding: 10px 16px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.danger-button:hover {
+  background: #c0392b;
+}
+
+.danger-button:active {
+  transform: translateY(1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .window-management {
+    padding: 16px;
+  }
+
+  .window-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .window-actions,
+  .advanced-actions {
+    flex-direction: column;
+  }
+
+  .action-button,
+  .danger-button,
+  .save-button {
+    width: 100%;
+  }
+
+  .form-group input[type="number"] {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,63 @@
+================================================================================
+BATCH VALIDATION SUMMARY
+================================================================================
+Timestamp: 2025-11-11T20:39:13.277841
+
+OVERALL STATISTICS
+--------------------------------------------------------------------------------
+  Total combinations validated: 4
+  Valid combinations: 2 (50.0%)
+  Invalid combinations: 2 (50.0%)
+  Total errors: 5
+  Total warnings: 1
+  Total collisions: 1
+
+BREAKDOWN BY FIRMA
+--------------------------------------------------------------------------------
+
+  Firma 1:
+    Seiten validated: 2
+    Valid: 1/2
+    Errors: 3
+    Warnings: 0
+    Collisions: 1
+    Invalid seiten: 1
+
+  Firma 2:
+    Seiten validated: 2
+    Valid: 1/2
+    Errors: 2
+    Warnings: 1
+    Collisions: 0
+    Invalid seiten: 1
+
+BREAKDOWN BY SEITE
+--------------------------------------------------------------------------------
+
+  Seite 1:
+    Firmen validated: 2
+    Valid: 0/2
+    Errors: 5
+    Warnings: 1
+    Collisions: 1
+    Invalid firmen: 1, 2
+
+  Seite 2:
+    Firmen validated: 2
+    Valid: 2/2
+    Errors: 0
+    Warnings: 0
+    Collisions: 0
+
+INVALID COMBINATIONS
+--------------------------------------------------------------------------------
+  Firma 1, Seite 1:
+    Errors: 3
+    Warnings: 0
+    Collisions: 1
+  Firma 2, Seite 1:
+    Errors: 2
+    Warnings: 1
+    Collisions: 0
+
+================================================================================

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\narwhals\_translate.py
+# hypothesis_version: 6.147.0
+
+['FromArrowDT_contra', 'FromDictDT_contra', 'FromIterableT_contra', 'FromNativeT', 'FromNumpyDT_contra', 'FromNumpyT_contra', 'ToArrowT_co', 'ToDictDT_co', 'ToNarwhalsT_co', 'ToNumpyT_co', 'dict[str, Any]']

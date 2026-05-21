@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\narwhals\_expression_parsing.py
+# hypothesis_version: 6.147.0
+
+['EagerNamespaceAny', 'T', 'expansion_kind', 'has_windows', 'is_elementwise', 'is_literal', 'is_scalar_like', 'last_node', 'n_orderable_ops', 'preserves_length']

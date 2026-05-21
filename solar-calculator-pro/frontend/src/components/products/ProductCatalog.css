@@ -1,0 +1,59 @@
+.product-catalog {
+  margin-top: 1.5rem;
+}
+
+.product-image-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-image {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--surface-100);
+  border-radius: 4px;
+  color: var(--text-color-secondary);
+}
+
+.no-image i {
+  font-size: 1.5rem;
+}
+
+.product-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.product-model {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.product-brand {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.product-actions {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.favorite-active {
+  color: var(--yellow-500);
+}
+
+.product-table .p-datatable-tbody > tr > td {
+  padding: 0.75rem;
+}
+
+.product-table .p-datatable-thead > tr > th {
+  padding: 0.75rem;
+  background-color: var(--surface-50);
+}

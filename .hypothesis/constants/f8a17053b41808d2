@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\drawing\properties.py
+# hypothesis_version: 6.147.0
+
+['auto', 'black', 'blackGray', 'blackWhite', 'cNvGrpSpPr', 'cNvPr', 'cNvSpPr', 'clr', 'gray', 'grayWhite', 'grpSpLocks', 'grpSpPr', 'hidden', 'hlinkClick', 'hlinkHover', 'invGray', 'ltGray', 'nvGrpSpPr', 'spLocks', 'txBax', 'white']

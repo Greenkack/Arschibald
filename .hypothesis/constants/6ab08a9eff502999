@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\narwhals\_namespace.py
+# hypothesis_version: 6.147.0
+
+['EagerOnly | Polars', 'LazyOnly | Polars', 'Namespace', 'PandasLike | Arrow', 'SQLFrameDataFrame', 'T', '_PandasLike | _Arrow', '_Polars | _EagerOnly', '_Polars | _LazyOnly', 'cudf', 'dask', 'duckdb', 'ibis', 'modin', 'pandas', 'polars', 'pyarrow', 'pyspark', 'pyspark[connect]', 'sqlframe']

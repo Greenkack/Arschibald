@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlparse\engine\statement_splitter.py
+# hypothesis_version: 6.147.0
+
+['(', ')', ';', 'BEGIN', 'CASE', 'CREATE', 'DECLARE', 'END', 'END FOR', 'END IF', 'END WHILE', 'FOR', 'GO', 'IF', 'WHILE']

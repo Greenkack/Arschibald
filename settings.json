@@ -1,0 +1,17 @@
+{
+  "ui": {
+    "theme": "light",
+    "language": "de",
+    "sidebar_collapsed": false
+  },
+  "calculations": {
+    "pv_efficiency": 0.95,
+    "battery_efficiency": 0.92,
+    "inverter_efficiency": 0.97
+  },
+  "defaults": {
+    "currency": "EUR",
+    "vat_rate": 0.19,
+    "electricity_price": 0.30
+  }
+}

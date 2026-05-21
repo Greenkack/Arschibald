@@ -1,0 +1,149 @@
+User-agent: *
+Disallow: /cgi-bin/
+
+# Disallow: /*?*sort=
+# Disallow: /*?*cache=
+# Disallow: /*?*nocache=
+
+### Sitemaps ###
+
+Sitemap: https://www.heizungsdiscount24.de/sitemap.xml
+Sitemap: https://www.heizungsdiscount24.de/sitemap_images.xml
+Sitemap: https://www.heizungsdiscount24.de/sitemap_pdfhistory.xml
+
+### Indiv. ###
+
+User-agent: bingbot
+Crawl-delay: 0
+User-agent: adidxbot
+Crawl-delay: 0
+User-agent: MicrosoftPreview
+Crawl-delay: 0
+User-agent: msnbot
+Crawl-delay: 0
+
+### Disallow1 ###
+
+User-agent: Seekbot
+Disallow: /
+User-agent: SemrushBot
+Disallow: /
+User-agent: SemrushBot-SA
+Disallow: /
+User-agent: CheckMarkNetwork/1.0 (+http://www.checkmarknetwork.com/spider.html)
+Disallow: /
+User-agent: VelenPublicWebCrawler
+Disallow: /
+User-agent: pricebot
+Disallow: / 
+User-agent: serpstatbot
+Disallow: /
+
+### Disallow2 ###
+
+User-agent: MJ12bot
+Disallow: /
+User-agent: dotbot
+Disallow: /
+User-agent: SeznamBot
+Disallow: /
+User-agent: MauiBot
+Disallow: /
+User-agent: AlphaBot
+Disallow: /
+User-agent: DnyzBot
+Disallow: /
+User-agent: GuzzleHttp
+Disallow: /
+User-agent: ltx71
+Disallow: /
+User-agent: Vagabondo
+Disallow: /
+User-agent: Freshbot
+Disallow: /
+User-agent: SEOkicks-Robot
+Disallow: /
+User-agent: jobs.de-Robot
+Disallow: /
+user-agent: AhrefsBot
+disallow: /
+user-agent: UnisterBot
+disallow: /
+User-agent: SurveyBot
+Disallow: /
+user-agent: SEOdiver
+disallow: /
+User-agent: spbot
+Disallow: /
+User-agent: wotbox
+Disallow: /
+User-agent: meanpathbot
+Disallow: /
+User-agent: BacklinkCrawler 
+Disallow: /
+User-agent: magpie-crawler
+Disallow: /
+User-agent: oBot
+Disallow: /
+User-agent: fr-crawler
+Disallow: /
+User-agent: BLEXBot
+Disallow: /
+User-agent: MegaIndex.ru
+Disallow: /
+User-agent: megaindex.com
+Disallow: /
+User-Agent: CloudServerMarketSpider
+Disallow: /
+User-Agent: trendictionbot 
+Disallow: /
+User-agent: Exabot
+Disallow: /
+User-agent: careerbot
+Disallow: /
+User-agent: seoscanners.net
+Disallow: /
+User-agent: MetaJobBot
+Disallow: /
+User-agent: Spiderbot
+Disallow: /
+User-agent: JobboerseBot
+Disallow: /
+User-agent: ICCrawler
+Disallow: /
+User-agent: Domain Re-Animator Bot
+Disallow: /
+User-agent: turnitinbot
+Disallow: /
+User-agent: mindUpBot
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Qwantify
+Disallow: /
+User-agent: Kraken
+Disallow: /
+User-agent: plukkie 
+Disallow: /
+User-agent: SafeDNSBot
+Disallow: /
+User-agent: HaosouSpider
+Disallow: /
+User-agent: OpenHoseBot
+Disallow: /
+User-agent: ThumbSniper
+Disallow: /
+User-agent: R6_CommentReader
+Disallow: /
+User-agent: ImplisenseBot
+Disallow: /
+User-agent: Cliqzbot
+Disallow: /
+User-agent: aiHitBot
+Disallow: /
+User-Agent: trendictionbot
+Disallow: /
+User-agent: WBSearchBot
+Disallow: /
+
+### END ###

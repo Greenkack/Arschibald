@@ -1,0 +1,467 @@
+/* Layout */
+.step { display: none; }
+.step.active { display: block; }
+.flex { display: flex; flex-wrap: wrap; gap: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Buttons */
+.btn { 
+  background: #CB1F27; 
+  color: #fff; 
+  border: none; 
+  padding: 12px 24px; 
+  font-size: 16px; 
+  font-weight: 700; 
+  cursor: pointer; 
+}
+.btn:hover { background: #a81820; }
+.btn-secondary { background: #103F6C; }
+.btn-secondary:hover { background: #0b2c4d; }
+
+.btn[onclick="exportToPDF()"] { background: #22c55e !important; }
+.btn[onclick="exportToPDF()"]:hover { background: #16a34a !important; }
+.btn[onclick="exportToPDF()"] img { filter: brightness(0) invert(1); }
+
+/* Navigation */
+.step-nav { 
+  margin-top: 24px; 
+  display: flex; 
+  gap: 12px; 
+}
+
+/* Cards */
+.mode-card, .category-card, .type-card, .heiztyp-card {
+  background: #f6f8fa; 
+  border-radius: 2px; 
+  padding: 16px; 
+  text-align: center; 
+  cursor: pointer; 
+  border: 2px solid transparent; 
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.mode-card.selected, .category-card.selected, .type-card.selected, .heiztyp-card.selected {
+  border-color: #103F6C; 
+  background: #e0e7ff; 
+}
+
+/* Mode Selection */
+.mode-selection {
+  display: flex;
+  gap: 24px;
+  margin: 24px 0;
+  justify-content: center;
+}
+
+.mode-card {
+  flex: 1;
+  max-width: 400px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(16,63,108,0.07);
+  border-radius: 2px;
+}
+
+.mode-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(16,63,108,0.12);
+}
+
+.mode-icon { margin-bottom: 16px; }
+.mode-icon img { width: 80px; height: 80px; object-fit: contain; transition: filter 0.2s; }
+.mode-card.selected .mode-icon img {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(85%) saturate(747%) hue-rotate(176deg) brightness(97%) contrast(101%);
+}
+
+.mode-card h3 {
+  margin: 0 0 12px 0;
+  color: #103F6C;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.mode-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #666;
+}
+
+/* Heating Type Selection */
+.heiztyp-auswahl {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  justify-content: center;
+}
+
+.heiztyp-card {
+  min-width: 120px;
+  flex: 1 1 120px;
+  padding: 18px 20px 12px 20px;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(16,63,108,0.07);
+}
+
+.heiztyp-svg img {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 10px;
+  transition: filter 0.1s;
+}
+
+.heiztyp-card.selected .heiztyp-svg img {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(85%) saturate(747%) hue-rotate(176deg) brightness(97%) contrast(101%);
+}
+
+.heiztyp-label {
+  font-weight: 600;
+  font-size: 1.1em;
+  color: #103F6C;
+}
+
+/* Category Cards */
+.category-container { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 16px; 
+  margin-bottom: 24px; 
+}
+
+.category-card { 
+  flex: 1 1 200px; 
+  min-width: 180px; 
+  margin-bottom: 16px; 
+}
+
+.category-card img { 
+  width: 80px; 
+  height: 80px; 
+  object-fit: contain; 
+  margin-bottom: 8px; 
+  border-radius: 2px; 
+}
+
+.category-card .title { 
+  font-weight: 700; 
+  font-size: 16px; 
+}
+
+/* Type Selection */
+.type-select { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 12px; 
+  margin-bottom: 24px; 
+}
+
+.type-card { 
+  flex: 1 1 120px; 
+  min-width: 100px; 
+  padding: 12px; 
+}
+
+.type-card img { 
+  width: 120px; 
+  height: auto; 
+  object-fit: contain; 
+  margin-bottom: 6px; 
+}
+
+/* Forms */
+.input-box { 
+  background: #fff; 
+  border-radius: 2px; 
+  padding: 24px; 
+  margin-bottom: 24px; 
+}
+
+.input-section { 
+  margin-top: 24px; 
+  padding-top: 16px; 
+  border-top: 1px solid #e5dcdc; 
+}
+
+.section-title { 
+  font-weight: 700; 
+  margin-bottom: 12px; 
+  color: #103F6C; 
+}
+
+label { 
+  font-weight: 600; 
+  margin-bottom: 4px; 
+  display: block; 
+}
+
+input, select { 
+  height: 46px; 
+  padding: 10px; 
+  border: 1px solid #e5dcdc; 
+  border-radius: 2px; 
+  background: #f9fafb; 
+  font-size: 15px; 
+  box-sizing: border-box; 
+  width: 100%; 
+  max-width: 300px; 
+}
+
+input:focus, select:focus { 
+  outline: none; 
+  border-color: #103F6C; 
+}
+
+/* Results */
+.result, .chart-box { 
+  background: #fff; 
+  border-radius: 2px; 
+  padding: 24px; 
+  margin-top: 24px; 
+  box-shadow: 0 2px 8px rgba(0,0,0,.05); 
+}
+
+.item { 
+  display: flex; 
+  justify-content: space-between; 
+  padding: 6px 0; 
+  border-bottom: 1px solid #e5dcdc; 
+}
+
+/* Heizkörper List */
+.hk-list { margin-top: 24px; }
+
+.hk-entry { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  background: #f6f8fa; 
+  border-radius: 2px; 
+  padding: 10px 12px; 
+  margin-bottom: 8px; 
+}
+
+.hk-entry img { 
+  width: 40px; 
+  height: 40px; 
+  object-fit: contain; 
+  border-radius: 2px; 
+}
+
+.hk-entry .desc { flex: 1; }
+
+.hk-entry button { 
+  padding: 4px 10px; 
+  font-size: 14px; 
+  border-radius: 2px;
+  color: #fff; 
+  border: none; 
+}
+
+.hk-entry .edit { background: #103F6C; }
+.hk-entry .edit:hover { background: #0b2c4d; }
+.hk-entry .del { background: #CB1F27; }
+.hk-entry .del:hover { background: #a81820; }
+
+/* Tables */
+.heizkoerper-table { 
+  width: 100%; 
+  font-size: 0.9rem; 
+  border-collapse: collapse; 
+  max-width: 960px; 
+  margin-bottom: 2rem; 
+}
+
+.heizkoerper-table th, .heizkoerper-table td { 
+  padding: 8px; 
+  text-align: left; 
+  border: 1px solid #ccc; 
+  vertical-align: top; 
+  min-width: 120px; 
+}
+
+.heizkoerper-table th { background-color: #f5f5f5; }
+
+/* Stepper */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px 0 12px 0;
+}
+
+.stepper-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 0;
+  position: relative;
+}
+
+.stepper-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ddd;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.stepper-step.active .stepper-circle,
+.stepper-step.completed .stepper-circle {
+  background: #103F6C;
+  color: #fff;
+}
+
+.stepper-label {
+  font-size: 13px;
+  text-align: center;
+  color: #666;
+  min-width: 80px;
+}
+
+.stepper-step.active .stepper-label,
+.stepper-step.completed .stepper-label {
+  color: #103F6C;
+  font-weight: 700;
+}
+
+.stepper-bar {
+  height: 4px;
+  background: #ddd;
+  flex: 1 1 0;
+  margin: 0 4px;
+  border-radius: 2px;
+}
+
+.progress-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #103F6C 60%, #CB1F27 100%);
+  width: 0%;
+  transition: width 0.3s;
+}
+
+/* Tooltips */
+.tooltipcalculator{
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipcalculator .tooltipcalculatortext {
+  visibility: hidden;
+  width: 260px;
+  background-color: #103F6C;
+  color: #fff;
+  text-align: left;
+  border-radius: 8px;
+  padding: 10px 14px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -130px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.tooltipcalculator:hover .tooltipcalculatortext {
+  visibility: visible;
+  opacity: 1;
+}
+#step5 .step-nav {
+  justify-content: flex-start;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container2 {
+    margin: 20px auto;
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; }
+  .flex { flex-direction: column; gap: 12px; }
+  .grid2 { grid-template-columns: 1fr; }
+  input, select { max-width: 100%; }
+  .mode-selection { flex-direction: column; gap: 16px; }
+  .mode-card { max-width: none; }
+  .mode-icon img { width: 60px; height: 60px; }
+  .mode-card h3 { font-size: 18px; }
+  .heiztyp-auswahl { flex-direction: column; gap: 12px; }
+  .heiztyp-card { min-width: 0; }
+  .type-card { flex: 1 1 100px; min-width: 100px; }
+  .category-card { flex: 1 1 140px; min-width: 140px; }
+  .hk-entry { flex-wrap: wrap; }
+  .hk-entry .desc { width: 100%; margin-bottom: 8px; }
+  .heizkoerper-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 0.8rem;
+  }
+  .stepper-label { font-size: 11px; min-width: 60px; }
+  .stepper-circle { width: 28px; height: 28px; font-size: 15px; }
+  .stepper { margin: 20px 0 8px 0; }
+  .progress-bar-wrap { margin-bottom: 16px; }
+  /* Responsive buttons for step 5 */
+  #step5 .step-nav {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  #step5 .btn {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 16px;
+    min-height: 48px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  /* Mobile text for PDF button */
+  .btn[onclick="exportToPDF()"] .desktop-text {
+    display: none;
+  }
+  .btn[onclick="exportToPDF()"] .mobile-text {
+    display: inline;
+  }
+}
+/* Desktop text for PDF button */
+@media (min-width: 769px) {
+  .btn[onclick="exportToPDF()"] .mobile-text {
+    display: none;
+  }
+  .btn[onclick="exportToPDF()"] .desktop-text {
+    display: inline;
+  }
+}
+/* Additional responsive breakpoint for very small screens */
+@media (max-width: 480px) {
+  #step5 .btn {
+    padding: 14px 20px;
+    font-size: 15px;
+    min-height: 44px;
+  }
+  #step5 .step-nav {
+    gap: 12px;
+  }
+}
+@media (max-width: 700px) {
+  .heiztyp-auswahl { flex-direction: column; gap: 12px; }
+  .heiztyp-card { min-width: 0; }
+}

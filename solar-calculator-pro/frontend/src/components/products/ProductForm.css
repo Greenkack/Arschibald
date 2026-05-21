@@ -1,0 +1,133 @@
+.product-form {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.form-header h2 {
+  margin: 0;
+  color: var(--text-color);
+}
+
+.form-section {
+  margin-bottom: 1.5rem;
+}
+
+.form-section .p-panel-content {
+  padding: 1.5rem;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.field .p-invalid {
+  border-color: var(--red-500);
+}
+
+.field .p-error {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--red-500);
+  font-size: 0.875rem;
+}
+
+.image-upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.image-preview {
+  width: 200px;
+  height: 200px;
+  border: 2px dashed var(--surface-border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--surface-ground);
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.specifications-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.spec-input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.specifications-list {
+  margin-top: 1rem;
+}
+
+.specifications-list h4 {
+  margin: 0.5rem 0;
+  color: var(--text-color);
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: var(--surface-card);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.spec-key {
+  font-weight: 600;
+  color: var(--text-color);
+  min-width: 150px;
+}
+
+.spec-value {
+  flex: 1;
+  color: var(--text-color-secondary);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+@media (max-width: 768px) {
+  .spec-input-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\IPython\core\debugger_backport.py
+# hypothesis_version: 6.147.0
+
+['!', '...   ', '<stdin>', '<string>', '__pdb_eval__', '__pdb_outer', 'def __pdb_outer():\n', 'eval', 'exec', 'finally:\n', 'result', 'single', 'try:\n', 'write_back']

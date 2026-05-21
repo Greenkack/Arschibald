@@ -1,0 +1,362 @@
+/**
+ * Project Wizard Styles
+ * Multi-step form wizard for project creation
+ */
+
+.project-wizard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Header Card */
+.wizard-header-card {
+  margin-bottom: 1rem;
+}
+
+.wizard-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.wizard-header h2 {
+  margin: 0 0 0.5rem 0;
+  color: var(--primary-color, #2196F3);
+  font-size: 1.75rem;
+}
+
+.wizard-header p {
+  margin: 0;
+  color: var(--text-color-secondary, #6c757d);
+  font-size: 1rem;
+}
+
+/* Progress Bar */
+.wizard-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.wizard-progress .p-progressbar {
+  flex: 1;
+  height: 8px;
+}
+
+.wizard-progress .progress-text {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary, #6c757d);
+  white-space: nowrap;
+}
+
+/* Steps Card */
+.wizard-steps-card {
+  margin-bottom: 1rem;
+}
+
+.wizard-steps-card .p-steps {
+  padding: 0;
+}
+
+.wizard-steps-card .p-steps .p-steps-item {
+  flex: 1;
+}
+
+.wizard-steps-card .p-steps .p-steps-item .p-menuitem-link {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wizard-steps-card .p-steps .p-steps-item .p-steps-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+}
+
+.wizard-steps-card .p-steps .p-steps-item .p-steps-title {
+  font-size: 0.875rem;
+}
+
+/* Content Card */
+.wizard-content-card {
+  margin-bottom: 1rem;
+  min-height: 400px;
+}
+
+.step-content {
+  padding: 1rem 0;
+}
+
+/* Navigation Card */
+.wizard-navigation-card {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  background: var(--surface-card, #ffffff);
+}
+
+.wizard-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-left,
+.nav-center,
+.nav-right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-left {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.nav-center {
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-right {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* Step Form Styles */
+.step-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step-description {
+  color: var(--text-color-secondary, #6c757d);
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--text-color, #333);
+  font-size: 0.95rem;
+}
+
+.form-group label .required {
+  color: var(--red-500, #ef4444);
+  margin-left: 0.25rem;
+}
+
+.form-group .p-inputtext,
+.form-group .p-dropdown,
+.form-group .p-inputnumber,
+.form-group .p-inputtextarea {
+  width: 100%;
+}
+
+.form-group .field-hint {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary, #6c757d);
+  margin-top: 0.25rem;
+}
+
+/* Form Row */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.form-row-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.form-row-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.form-row-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* System Type Selection */
+.system-type-selection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.system-type-card {
+  border: 2px solid var(--surface-border, #dee2e6);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.system-type-card:hover {
+  border-color: var(--primary-color, #2196F3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.system-type-card.selected {
+  border-color: var(--primary-color, #2196F3);
+  background: var(--primary-50, #e3f2fd);
+}
+
+.system-type-card .icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.system-type-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--text-color, #333);
+}
+
+.system-type-card p {
+  margin: 0;
+  color: var(--text-color-secondary, #6c757d);
+  font-size: 0.9rem;
+}
+
+/* Address Auto-Parse */
+.address-auto-parse {
+  background: var(--surface-ground, #f8f9fa);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.address-auto-parse .hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color, #2196F3);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkbox-item label {
+  cursor: pointer;
+}
+
+/* Conditional Fields */
+.conditional-fields {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--surface-ground, #f8f9fa);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color, #2196F3);
+}
+
+/* Section Divider */
+.section-divider {
+  margin: 1.5rem 0;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Info Box */
+.info-box {
+  background: var(--blue-50, #e3f2fd);
+  border: 1px solid var(--blue-200, #90caf9);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.info-box .pi {
+  color: var(--blue-500, #2196F3);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.info-box p {
+  margin: 0;
+  color: var(--blue-900, #0d47a1);
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .project-wizard {
+    padding: 0.5rem;
+  }
+
+  .wizard-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .wizard-steps-card .p-steps .p-steps-item .p-steps-title {
+    display: none;
+  }
+
+  .form-row,
+  .form-row-2,
+  .form-row-3,
+  .form-row-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .system-type-selection {
+    grid-template-columns: 1fr;
+  }
+
+  .wizard-navigation {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    width: 100%;
+    justify-content: center;
+  }
+}

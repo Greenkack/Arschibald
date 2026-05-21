@@ -1,0 +1,149 @@
+/* Template Preview Styles */
+
+.template-preview-dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.template-preview-dialog .p-dialog-content {
+  flex: 1;
+  padding: 0;
+  overflow: hidden;
+}
+
+.template-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.template-preview-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.template-preview-title i {
+  color: var(--primary-color);
+}
+
+.template-preview-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.zoom-level {
+  min-width: 50px;
+  text-align: center;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.preview-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+  color: var(--text-color-secondary);
+}
+
+.preview-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: var(--surface-100);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+}
+
+.preview-content {
+  transform-origin: top center;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 900px;
+}
+
+.pdf-preview-iframe {
+  width: 100%;
+  height: 800px;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.template-preview-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-top: 1px solid var(--surface-border);
+  background: var(--surface-50);
+}
+
+.page-navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.page-info {
+  font-weight: 500;
+  color: var(--text-color);
+  min-width: 100px;
+  text-align: center;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .template-preview-dialog {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh;
+  }
+  
+  .template-preview-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .template-preview-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .page-navigation,
+  .preview-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .preview-container {
+    padding: 1rem;
+  }
+  
+  .pdf-preview-iframe {
+    height: 600px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .pdf-preview-iframe {
+    background: #2a2a2a;
+  }
+}

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\prompt_toolkit\patch_stdout.py
+# hypothesis_version: 6.147.0
+
+[0.2, 'StdoutProxy', 'patch_stdout', 'strict']

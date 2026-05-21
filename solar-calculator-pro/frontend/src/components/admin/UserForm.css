@@ -1,0 +1,48 @@
+.user-form {
+  padding: 1rem 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.form-field .p-inputtext,
+.form-field .p-dropdown,
+.form-field .p-password {
+  width: 100%;
+}
+
+.form-field .p-error {
+  color: var(--red-500);
+  font-size: 0.875rem;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .user-form-dialog {
+    width: 95vw !important;
+  }
+}

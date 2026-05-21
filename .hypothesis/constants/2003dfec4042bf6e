@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_parcoords.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'customdata', 'customdatasrc', 'dimensiondefaults', 'dimensions', 'domain', 'ids', 'idssrc', 'labelangle', 'labelfont', 'labelside', 'legend', 'legendgrouptitle', 'legendrank', 'legendwidth', 'line', 'meta', 'metasrc', 'name', 'parcoords', 'rangefont', 'skip_invalid', 'stream', 'tickfont', 'type', 'uid', 'uirevision', 'unselected', 'visible']

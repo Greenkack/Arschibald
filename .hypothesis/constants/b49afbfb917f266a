@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_contourcarpet.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'a', 'a0', 'asrc', 'atype', 'autocolorscale', 'autocontour', 'b', 'b0', 'bsrc', 'btype', 'carpet', 'coloraxis', 'colorbar', 'colorscale', 'contourcarpet', 'contours', 'customdata', 'customdatasrc', 'da', 'db', 'fillcolor', 'hovertext', 'hovertextsrc', 'ids', 'idssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'line', 'meta', 'metasrc', 'name', 'ncontours', 'opacity', 'reversescale', 'showlegend', 'showscale', 'skip_invalid', 'stream', 'text', 'textsrc', 'transpose', 'type', 'uid', 'uirevision', 'visible', 'xaxis', 'yaxis', 'z', 'zauto', 'zmax', 'zmid', 'zmin', 'zorder', 'zsrc']

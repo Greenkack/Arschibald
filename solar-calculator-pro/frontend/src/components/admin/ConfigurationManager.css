@@ -1,0 +1,137 @@
+/**
+ * Configuration Manager Styles
+ */
+
+.configuration-manager {
+  padding: 1rem;
+}
+
+.configuration-manager .card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.configuration-table {
+  font-size: 0.9rem;
+}
+
+.configuration-table .p-datatable-thead > tr > th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  padding: 0.75rem;
+}
+
+.configuration-table .p-datatable-tbody > tr > td {
+  padding: 0.75rem;
+}
+
+.configuration-table .p-datatable-tbody > tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Configuration Editor */
+.configuration-editor .p-tabview-panels {
+  padding: 1.5rem;
+}
+
+.configuration-editor .field {
+  margin-bottom: 1.5rem;
+}
+
+.configuration-editor .field-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.configuration-editor .p-invalid {
+  border-color: #e24c4c;
+}
+
+.configuration-editor .p-error {
+  color: #e24c4c;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Configuration Comparison */
+.configuration-comparison .comparison-table {
+  font-size: 0.85rem;
+}
+
+.configuration-comparison .comparison-table .p-datatable-thead > tr > th {
+  background-color: #e3f2fd;
+  font-weight: 600;
+  text-align: center;
+}
+
+.configuration-comparison .comparison-table .p-column-title {
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Configuration Templates */
+.configuration-templates .templates-table {
+  font-size: 0.9rem;
+}
+
+.configuration-templates .templates-table .p-datatable-tbody > tr:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+/* Configuration Import/Export */
+.configuration-import-export .p-card {
+  margin-bottom: 1rem;
+}
+
+.configuration-import-export .p-card .p-card-body {
+  padding: 1rem;
+}
+
+.configuration-import-export .p-fileupload {
+  width: 100%;
+}
+
+.configuration-import-export .p-fileupload .p-button {
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .configuration-manager {
+    padding: 0.5rem;
+  }
+  
+  .configuration-manager .card {
+    padding: 1rem;
+  }
+  
+  .configuration-table {
+    font-size: 0.8rem;
+  }
+  
+  .configuration-table .p-datatable-thead > tr > th,
+  .configuration-table .p-datatable-tbody > tr > td {
+    padding: 0.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .configuration-manager .card {
+    background: #1e1e1e;
+    color: #e0e0e0;
+  }
+  
+  .configuration-table .p-datatable-thead > tr > th {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+  }
+  
+  .configuration-table .p-datatable-tbody > tr:hover {
+    background-color: #2d2d2d;
+  }
+}

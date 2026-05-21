@@ -1,0 +1,47 @@
+﻿# Build Artefakte
+dist/
+build/
+*.spec
+
+# PDFs (generiert)
+output_pdfs/
+customer_documents/**/*.pdf
+
+# Große Dateien
+code.zip
+*.zip
+.streamlit/static/*.mp4
+static/intro_videos/*.mp4
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.pytest_cache/
+
+# Environment
+.env
+.env.local
+venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backups
+backups/
+*.backup

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\chart\area_chart.py
+# hypothesis_version: 6.147.0
+
+['area', 'area3DChart', 'areaChart', 'axId', 'dLbls', 'dropLines', 'gapDepth', 'grouping', 'percentStacked', 'ser', 'stacked', 'standard', 'varyColors']

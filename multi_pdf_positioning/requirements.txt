@@ -1,0 +1,14 @@
+# Multi-PDF Positioning System - Requirements
+# Python 3.8+
+
+# Core dependencies
+PyYAML>=6.0
+PyPDF2>=3.0.0
+pdfplumber>=0.10.0
+
+# Optional dependencies for visualization
+Pillow>=10.0.0
+
+# Development dependencies (optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0

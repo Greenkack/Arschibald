@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\controlling\report_generator.py
+# hypothesis_version: 6.147.0
+
+[0.5, '#366092', '366092', 'A', 'ALIGN', 'B', 'BACKGROUND', 'BOTTOMPADDING', 'C', 'Criterion', 'CustomHeading', 'CustomTitle', 'Employee', 'FFFFFF', 'FONTNAME', 'FONTSIZE', 'GRID', 'Generated', 'Heading1', 'Heading2', 'Helvetica-Bold', 'LEFT', 'N/A', 'Normal', 'Percentage', 'Performance Quotas', 'Period', 'Position', 'Quota Name', 'Quotas', 'Ratio Description', 'Raw Performance Data', 'Report', 'Report Type', 'TEXTCOLOR', 'TOP', 'VALIGN', 'Value', 'aggregated_data', 'created_at', 'employee_count', 'employee_id', 'employee_ids', 'employee_name', 'employee_reports', 'end_date', 'generated_at', 'is_comparison', 'position', 'quotas', 'ratio_descriptions', 'ratios', 'raw_data', 'report_id', 'report_metadata', 'report_type', 'solid', 'start_date']

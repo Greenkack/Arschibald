@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\db\models\functions\math.py
+# hypothesis_version: 6.147.0
+
+['ABS', 'ACOS', 'ASIN', 'ATAN', 'ATAN2', 'CEIL', 'CEILING', 'COS', 'COT', 'DBMS_RANDOM.VALUE', 'DEGREES', 'EXP', 'FLOOR', 'LN', 'LOG', 'MOD', 'PI', 'POWER', 'RADIANS', 'RAND', 'RANDOM', 'ROUND', 'SIGN', 'SIN', 'SQRT', 'TAN', 'abs', 'acos', 'asin', 'atan', 'ceil', 'cos', 'cot', 'degrees', 'exp', 'floor', 'ln', 'radians', 'round', 'sign', 'sin', 'spatialite', 'sqrt', 'tan']

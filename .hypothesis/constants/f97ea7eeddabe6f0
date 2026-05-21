@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\termcolor\termcolor.py
+# hypothesis_version: 6.147.0
+
+[100, 101, 102, 103, 104, 105, 106, 107, '\x1b[%dm%s', '\x1b[0m', '\x1b[38;2;%d;%d;%dm%s', '\x1b[48;2;%d;%d;%dm%s', 'ANSI_COLORS_DISABLED', 'FORCE_COLOR', 'NO_COLOR', 'TERM', 'black', 'blink', 'blue', 'bold', 'concealed', 'cyan', 'dark', 'dark_grey', 'dumb', 'fileno', 'green', 'grey', 'light_blue', 'light_cyan', 'light_green', 'light_grey', 'light_magenta', 'light_red', 'light_yellow', 'magenta', 'on_black', 'on_blue', 'on_cyan', 'on_dark_grey', 'on_green', 'on_grey', 'on_light_blue', 'on_light_cyan', 'on_light_green', 'on_light_grey', 'on_light_magenta', 'on_light_red', 'on_light_yellow', 'on_magenta', 'on_red', 'on_white', 'on_yellow', 'red', 'reverse', 'strike', 'underline', 'white', 'yellow']

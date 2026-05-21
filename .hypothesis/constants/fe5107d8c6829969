@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\worksheet\protection.py
+# hypothesis_version: 6.147.0
+
+['algorithmName', 'autoFilter', 'deleteColumns', 'deleteRows', 'formatCells', 'formatColumns', 'formatRows', 'hashValue', 'insertColumns', 'insertHyperlinks', 'insertRows', 'objects', 'password', 'pivotTables', 'saltValue', 'scenarios', 'selectLockedCells', 'selectUnlockedCells', 'sheet', 'sheetProtection', 'sort', 'spinCount']

@@ -1,0 +1,7 @@
+.dark-mode-toggle {
+  transition: all 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  transform: scale(1.05);
+}

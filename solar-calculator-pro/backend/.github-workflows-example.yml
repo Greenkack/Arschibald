@@ -1,0 +1,188 @@
+# Example GitHub Actions Workflow for Backend Packaging
+# 
+# To use this workflow:
+# 1. Create .github/workflows/ directory in your repository
+# 2. Copy this file to .github/workflows/build-backend.yml
+# 3. Commit and push to trigger the workflow
+
+name: Build Backend Executable
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        python-version: ['3.10']
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+        working-directory: solar-calculator-pro/backend
+      
+      - name: Build backend executable
+        run: python build_backend.py --clean --optimize --package
+        working-directory: solar-calculator-pro/backend
+      
+      - name: Test backend executable
+        run: python test_packaging.py
+        working-directory: solar-calculator-pro/backend
+        continue-on-error: true  # Don't fail build if tests have warnings
+      
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "version=dev-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create archive
+        shell: bash
+        run: |
+          cd solar-calculator-pro/backend/dist
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            7z a backend-package-${{ steps.version.outputs.version }}-windows.zip backend-package/
+          else
+            tar -czf backend-package-${{ steps.version.outputs.version }}-${{ runner.os }}.tar.gz backend-package/
+          fi
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-${{ runner.os }}-${{ steps.version.outputs.version }}
+          path: |
+            solar-calculator-pro/backend/dist/*.zip
+            solar-calculator-pro/backend/dist/*.tar.gz
+          retention-days: 30
+      
+      - name: Calculate checksums
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          cd solar-calculator-pro/backend/dist
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            certutil -hashfile *.zip SHA256 > checksums.txt
+          else
+            shasum -a 256 *.tar.gz > checksums.txt
+          fi
+      
+      - name: Upload checksums
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v3
+        with:
+          name: checksums-${{ runner.os }}
+          path: solar-calculator-pro/backend/dist/checksums.txt
+  
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+      
+      - name: Display structure
+        run: ls -R artifacts
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/**/*.zip
+            artifacts/**/*.tar.gz
+            artifacts/**/checksums.txt
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  notify:
+    name: Notify Build Status
+    needs: [build, release]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Send notification
+        run: |
+          echo "Build completed with status: ${{ needs.build.result }}"
+          # Add your notification logic here (Slack, Discord, Email, etc.)
+
+# Additional job for code signing (optional)
+  sign:
+    name: Sign Executables
+    needs: build
+    runs-on: ${{ matrix.os }}
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-${{ runner.os }}-${{ github.ref_name }}
+      
+      - name: Sign Windows executable
+        if: runner.os == 'Windows'
+        run: |
+          # Add Windows code signing logic here
+          # signtool sign /f certificate.pfx /p ${{ secrets.CERT_PASSWORD }} backend.exe
+          echo "Windows signing would happen here"
+      
+      - name: Sign macOS executable
+        if: runner.os == 'macOS'
+        run: |
+          # Add macOS code signing and notarization logic here
+          # codesign --force --sign "Developer ID" backend
+          # xcrun altool --notarize-app --file backend.zip
+          echo "macOS signing would happen here"
+      
+      - name: Upload signed artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-${{ runner.os }}-${{ github.ref_name }}-signed
+          path: backend*

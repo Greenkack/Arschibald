@@ -1,0 +1,25 @@
+.form-input {
+  margin-bottom: 1rem;
+}
+
+.form-input label {
+  color: var(--text-color);
+}
+
+.form-input .p-error {
+  color: var(--red-500);
+  font-size: 0.875rem;
+}
+
+.form-input .text-500 {
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.form-input .p-invalid {
+  border-color: var(--red-500);
+}
+
+.form-input .p-invalid:enabled:focus {
+  box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.25);
+}

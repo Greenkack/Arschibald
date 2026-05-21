@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\interpreter\_import\spec.py
+# hypothesis_version: 6.147.0
+
+[b'declare_namespace(__name__)', b'extend_path', b'pkg_resources', b'pkgutil', 1024, 4096, '.', '.py', '.pyi', '_EditableFinder', '_SixMetaPathImporter', '__init__', '__init__.py', 'distutils', 'egg', 'filename', 'find_spec', 'ignore', 'namespace', 'rb']

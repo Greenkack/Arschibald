@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\layout\_annotation.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'align', 'annotations', 'arrowcolor', 'arrowhead', 'arrowside', 'arrowsize', 'arrowwidth', 'ax', 'axref', 'ay', 'ayref', 'bgcolor', 'bordercolor', 'borderpad', 'borderwidth', 'captureevents', 'clicktoshow', 'font', 'height', 'hoverlabel', 'hovertext', 'layout', 'layout.annotation', 'name', 'opacity', 'showarrow', 'skip_invalid', 'standoff', 'startarrowhead', 'startarrowsize', 'startstandoff', 'templateitemname', 'text', 'textangle', 'valign', 'visible', 'width', 'x', 'xanchor', 'xclick', 'xref', 'xshift', 'y', 'yanchor', 'yclick', 'yref', 'yshift']

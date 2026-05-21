@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\styles\cell_style.py
+# hypothesis_version: 6.147.0
+
+['alignment', 'applyAlignment', 'applyProtection', 'borderId', 'cellXfs', 'count', 'fillId', 'fontId', 'i', 'numFmtId', 'pivotButton', 'protection', 'quotePrefix', 'xf', 'xfId']

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\_histogram2dcontour.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'autobinx', 'autobiny', 'autocolorscale', 'autocontour', 'bingroup', 'coloraxis', 'colorbar', 'colorscale', 'contours', 'customdata', 'customdatasrc', 'histfunc', 'histnorm', 'histogram2dcontour', 'hoverinfo', 'hoverinfosrc', 'hoverlabel', 'hovertemplate', 'hovertemplatesrc', 'ids', 'idssrc', 'legend', 'legendgroup', 'legendgrouptitle', 'legendrank', 'legendwidth', 'line', 'marker', 'meta', 'metasrc', 'name', 'nbinsx', 'nbinsy', 'ncontours', 'opacity', 'reversescale', 'showlegend', 'showscale', 'skip_invalid', 'stream', 'textfont', 'texttemplate', 'type', 'uid', 'uirevision', 'visible', 'x', 'xaxis', 'xbingroup', 'xbins', 'xcalendar', 'xhoverformat', 'xsrc', 'y', 'yaxis', 'ybingroup', 'ybins', 'ycalendar', 'yhoverformat', 'ysrc', 'z', 'zauto', 'zhoverformat', 'zmax', 'zmid', 'zmin', 'zsrc']

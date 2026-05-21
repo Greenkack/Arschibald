@@ -1,0 +1,52 @@
+.user-management {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.management-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.management-card .p-card-body {
+  padding: 0;
+}
+
+.management-card .p-tabview {
+  border: none;
+}
+
+.management-card .p-tabview-panels {
+  padding: 1.5rem;
+}
+
+.tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.tab-header h2 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .user-management {
+    padding: 1rem;
+  }
+
+  .tab-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .tab-header h2 {
+    font-size: 1.25rem;
+  }
+}

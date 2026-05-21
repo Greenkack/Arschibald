@@ -1,0 +1,50 @@
+.custom-toast .p-toast-message {
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-toast .p-toast-message-content {
+  padding: 1rem;
+}
+
+.custom-toast .p-toast-message-icon {
+  font-size: 1.5rem;
+}
+
+.custom-toast .p-toast-summary {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.custom-toast .p-toast-detail {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Success */
+.custom-toast .p-toast-message-success {
+  background: rgba(34, 197, 94, 0.95);
+  border-left: 4px solid rgb(22, 163, 74);
+  color: white;
+}
+
+/* Info */
+.custom-toast .p-toast-message-info {
+  background: rgba(59, 130, 246, 0.95);
+  border-left: 4px solid rgb(37, 99, 235);
+  color: white;
+}
+
+/* Warning */
+.custom-toast .p-toast-message-warn {
+  background: rgba(251, 191, 36, 0.95);
+  border-left: 4px solid rgb(245, 158, 11);
+  color: rgb(30, 30, 30);
+}
+
+/* Error */
+.custom-toast .p-toast-message-error {
+  background: rgba(239, 68, 68, 0.95);
+  border-left: 4px solid rgb(220, 38, 38);
+  color: white;
+}

@@ -1,0 +1,191 @@
+/* frontend/src/components/settings/UserPreferences.css */
+
+.user-preferences {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.preferences-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.preferences-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.preferences-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.preference-card {
+  margin-bottom: 1.5rem;
+}
+
+.preference-card .p-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+}
+
+.preference-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.preference-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.preference-item label {
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.preference-item .p-inputtext,
+.preference-item .p-dropdown,
+.preference-item .p-inputnumber {
+  width: 100%;
+}
+
+.preference-item .p-inputswitch {
+  align-self: flex-start;
+}
+
+/* Tab styling */
+.user-preferences .p-tabview-nav {
+  background: var(--surface-card);
+  border-bottom: 2px solid var(--surface-border);
+}
+
+.user-preferences .p-tabview-nav-link {
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  transition: all 0.2s;
+}
+
+.user-preferences .p-tabview-nav-link:hover {
+  color: var(--primary-color);
+}
+
+.user-preferences .p-tabview-nav-link.p-highlight {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.user-preferences .p-tabview-panels {
+  padding: 2rem 0;
+  background: transparent;
+}
+
+/* Button styling */
+.user-preferences .p-button {
+  font-weight: 500;
+}
+
+.user-preferences .p-button-outlined {
+  border-width: 2px;
+}
+
+/* Message styling */
+.user-preferences .p-message {
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .user-preferences {
+    padding: 1rem;
+  }
+
+  .preferences-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .preferences-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .preferences-actions .p-button,
+  .preferences-actions .p-fileupload {
+    width: 100%;
+  }
+
+  .preference-group {
+    grid-template-columns: 1fr;
+  }
+
+  .user-preferences .p-tabview-nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Loading state */
+.user-preferences .p-d-flex {
+  display: flex;
+}
+
+.user-preferences .p-jc-center {
+  justify-content: center;
+}
+
+.user-preferences .p-ai-center {
+  align-items: center;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .preference-card {
+    background: var(--surface-card);
+  }
+
+  .preference-item label {
+    color: var(--text-color);
+  }
+}
+
+/* Animation */
+.preference-item {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus states */
+.preference-item .p-inputtext:focus,
+.preference-item .p-dropdown:focus-within,
+.preference-item .p-inputnumber:focus-within {
+  box-shadow: 0 0 0 0.2rem var(--primary-color-alpha);
+}
+
+/* Disabled state */
+.preference-item .p-inputswitch.p-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

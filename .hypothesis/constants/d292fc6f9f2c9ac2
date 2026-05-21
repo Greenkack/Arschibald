@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\langsmith\_internal\_context.py
+# hypothesis_version: 6.147.0
+
+['Client', 'RunTree', '_CLIENT', '_METADATA', '_PARENT_RUN_TREE', '_PROJECT_NAME', '_TAGS', '_TRACING_ENABLED', 'local']

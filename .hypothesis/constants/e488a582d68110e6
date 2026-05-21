@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\numpy\lib\scimath.py
+# hypothesis_version: 6.147.0
+
+[1.0, 2.0, 'arccos', 'arcsin', 'arctanh', 'log', 'log10', 'log2', 'logn', 'power', 'sqrt']

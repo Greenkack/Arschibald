@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\ext\declarative\extensions.py
+# hypothesis_version: 6.147.0
+
+['*', '__mapper__', 'include_properties', 'pjoin', 'polymorphic_abstract', 'polymorphic_on', 'strict_attrs', 'type', 'with_polymorphic']

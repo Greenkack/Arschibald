@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\click\exceptions.py
+# hypothesis_version: 6.147.0
+
+[' / ', ', ', 'Error: {message}', 'Missing argument', 'Missing option', 'Missing parameter', 'Missing {param_type}', 'argument', 'exit_code', 'option', 'parameter', 'unknown error']

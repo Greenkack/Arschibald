@@ -1,0 +1,4636 @@
+# gui.py
+"""Haupt-GUI für Ömer's Solar-App – kompakte, FUNKTIONSFÄHIGE Version (Mai 2025)."""
+
+from __future__ import annotations  # MUSS DIE ALLERERSTE CODE-ZEILE SEIN
+
+import importlib
+import json
+import logging
+import os
+import sys
+import traceback as tb_module
+import warnings
+from datetime import datetime
+from typing import Any, Dict
+
+# Starte Video-Server im Hintergrund für Intro-Screen Video
+# Singleton Pattern: verhindert doppelte Server-Starts
+try:
+    from video_server import start_video_server, get_server_status
+    import threading
+    
+    # Prüfe ob Server bereits läuft
+    server_status = get_server_status()
+    if not server_status.get('running', False):
+        # Starte Server in separatem Thread
+        def _start_video_server_safe():
+            try:
+                success, port, msg = start_video_server(port=8503, retry_attempts=3)
+                if success:
+                    print(f"✓ Video-Server erfolgreich gestartet auf http://localhost:{port}")
+                else:
+                    print(f"✗ Video-Server konnte nicht gestartet werden: {msg}")
+            except Exception as e:
+                print(f"✗ Video-Server Fehler in Thread: {e}")
+        
+        video_server_thread = threading.Thread(target=_start_video_server_safe, daemon=True, name="VideoServer")
+        video_server_thread.start()
+    else:
+        print(f"✓ Video-Server läuft bereits auf {server_status.get('address', 'unknown')}")
+except ImportError as e:
+    print(f"⚠ Video-Server Modul nicht gefunden: {e}")
+except Exception as e:
+    print(f"⚠ Video-Server konnte nicht initialisiert werden: {e}")
+
+import streamlit as st
+import streamlit.components.v1 as components
+
+__all__ = [
+    'main',
+]
+
+# ========================================
+# MIGRATION: Cleanup nicht-serialisierbarer Session State Objekte
+# ========================================
+# Muss VOR allen anderen Imports passieren, um Serialisierungsfehler zu vermeiden
+
+import pickle
+
+# FORCE CLEANUP: Teste JEDES Objekt auf Serialisierbarkeit
+keys_to_delete = []
+for key in list(st.session_state.keys()):
+    try:
+        # Versuche das Objekt zu picklen
+        obj = st.session_state[key]
+        pickle.dumps(obj)
+    except (TypeError, AttributeError, pickle.PicklingError):
+        # Objekt kann nicht serialisiert werden -> löschen!
+        keys_to_delete.append(key)
+
+# Lösche ALLE nicht-serialisierbaren Objekte
+for key in keys_to_delete:
+    try:
+        del st.session_state[key]
+    except Exception:
+        pass
+
+# ========================================
+# CORE INTEGRATION - Phase 1: Config & Logging
+# ========================================
+# Sichere Integration der core-Module für Stabilität & Performance
+# Alle Features sind optional und haben Fallbacks
+try:
+    from core_integration import (
+        init_core_integration,
+        log_info,
+        log_error,
+        log_warning,
+        is_feature_enabled)
+    
+    # Initialisiere Core-Module beim App-Start
+    if 'core_initialized' not in st.session_state:
+        core_status = init_core_integration(enable_logging=True)
+        st.session_state.core_initialized = True
+        st.session_state.core_status = core_status
+        
+        # Log successful initialization
+        if core_status.get('logging'):
+            log_info(
+                "bokuk2_startup",
+                version="2.0.0",
+                core_features=core_status
+            )
+        
+        # SESSION RECOVERY (Phase 3) - Browser-Refresh-Unterstützung
+        if core_status.get('session') and is_feature_enabled('session'):
+            from core_integration import bootstrap_session
+            
+            # Versuche Session aus URL-Parameter oder Cookie zu recovern
+            session_id_param = st.query_params.get('session_id')
+            
+            # Bootstrap session (neu oder recovery)
+            user_session = bootstrap_session(
+                session_id=session_id_param,
+                user_id=st.session_state.get('user_id')
+            )
+            
+            if user_session:
+                st.session_state.user_session_recovered = True
+                log_info("session_recovered", session_id=user_session.session_id)
+                
+                # Zeige Recovery-Hinweis (nur einmal)
+                if not st.session_state.get('recovery_notice_shown'):
+                    st.toast("Sitzung wiederhergestellt")
+                    st.session_state.recovery_notice_shown = True
+            else:
+                st.session_state.user_session_recovered = False
+                
+except Exception as e:
+    # Fallback - App funktioniert auch ohne core-Module
+    print(f"Core integration disabled: {e}")
+    def log_info(msg, **kwargs): print(f"INFO: {msg}")
+    def log_error(msg, **kwargs): print(f"ERROR: {msg}")
+    def log_warning(msg, **kwargs): print(f"WARNING: {msg}")
+    def is_feature_enabled(f): return False
+# ========================================
+
+from emoji_toggle import initialize_emoji_support
+from live_preview_helpers import (
+    render_live_cost_preview as render_live_cost_preview_sidebar)
+import theme_manager
+from ui_state_manager import request_rerun, set_current_page
+
+# Initialize Tracing and Evaluation (optional - graceful fallback if not available)
+try:
+    from app_tracing import initialize_tracing, shutdown_tracing, trace_ui, trace_calculation, app_tracer
+    from app_evaluation import evaluation_system, track_success, track_error, evaluate_performance
+    import time
+    import atexit
+    
+    # Initialize tracing (AI Toolkit OTLP endpoint: http://localhost:4318)
+    # DEAKTIVIERT: OTLP-Server läuft nicht, verursacht Connection-Fehler
+    TRACING_ENABLED = os.environ.get("ENABLE_TRACING", "false").lower() == "true"
+    if TRACING_ENABLED:
+        initialize_tracing()
+        atexit.register(shutdown_tracing)
+    MONITORING_AVAILABLE = True
+except ImportError as e:
+    print(f"Monitoring not available: {e}")
+    MONITORING_AVAILABLE = False
+    # Fallback stubs
+    def track_success(op): pass
+    def track_error(op, err): pass
+    def evaluate_performance(op, time): pass
+
+# Rauschunterdrückung / Log-Reduktion sehr lauter Bibliotheken und Browser-Controller
+os.environ.setdefault("BROWSER", "none")  # verhindert automatisches Öffnen via webbrowser
+for _ln in (
+    "choreographer",
+    "choreographer.browser_async",
+    "asyncio",
+    "urllib3",
+    "PIL.PngImagePlugin"):
+    logging.getLogger(_ln).setLevel(logging.ERROR)
+warnings.filterwarnings("ignore")
+
+# --- BESTEHENDE STRUKTUR ---
+EXTRA = os.path.join(sys.prefix, "extras")
+if EXTRA not in sys.path:
+    sys.path.insert(0, EXTRA)
+try:
+    import streamlit_shadcn_ui as sui
+    SUI_AVAILABLE = True
+except (ImportError, RuntimeError) as e:
+    # RuntimeError bei Streamlit Config-Konflikten (z.B. developmentMode + port)
+    SUI_AVAILABLE = False
+    sui = None
+    if isinstance(e, RuntimeError):
+        print(f"⚠ shadcn-ui deaktiviert (Config-Konflikt): {e}")
+
+initialize_emoji_support()
+
+import_errors: list[str] = []
+
+# Initialtexte laden
+_texts_initial: dict[str, str] = {}
+try:
+    _temp_base_dir = os.path.dirname(os.path.abspath(__file__))
+    _temp_file_path = os.path.join(_temp_base_dir, 'de.json')
+    if os.path.exists(_temp_file_path):
+        with open(_temp_file_path, encoding='utf-8') as f:
+            loaded_texts = json.load(f)
+            if isinstance(loaded_texts, dict) and loaded_texts:
+                _texts_initial = loaded_texts
+            else:
+                _texts_initial = {"app_title": "ÖMERs ALL in ONE DINGSBUMS"}
+    else:
+        raise FileNotFoundError("de.json nicht gefunden.")
+except (FileNotFoundError, ValueError, json.JSONDecodeError):
+    _texts_initial = {
+        "app_title": "ÖMERs ALL in ONE DINGSBUMS", "menu_item_input": "Projekt- Bedarfsanalyse",
+    "menu_item_analysis": "Ergebnisse & Visualisierungen", "menu_item_quick_calc": "A.G.E.N.T.",
+        "menu_item_crm": "Kundenmanagement CRM", "menu_item_info_platform": "Controlling",
+        "menu_item_options": "Administration & Verwaltung", "menu_item_admin": "Administration & Verwaltung",
+        "menu_item_doc_output": "Dokumenterstellung & Output", "sidebar_navigation_title": "Angebotserstellung",
+        "sidebar_select_area": "Bereich:", "import_errors_title": " Ladefehler",
+        "db_init_error": "DB Init Fehler:", "module_unavailable": " Modul fehlt",
+        "module_unavailable_details": "Funktion nicht da.", "pdf_creation_no_data_info": "PDF: Bitte zuerst Daten eingeben & berechnen.",
+        "gui_critical_error_no_db": "Kritischer Fehler! Datenbankmodul nicht geladen.",
+        "gui_critical_error": "Ein kritischer Fehler ist in der Anwendung aufgetreten!",
+        "menu_item_heatpump": "Wärmepumpen Simulator",
+    "menu_item_solar_calculator": "Solar Calculator",
+        "menu_item_crm_dashboard": "Dashboard",
+        "menu_item_crm_pipeline": "Pipeline Kunden",
+        "menu_item_crm_calendar": "Kalender",
+        "crm_tab_customers": "Kunden",
+        "crm_tab_dashboard": "Dashboard",
+        "crm_tab_pipeline": "Pipeline",
+        "crm_tab_calendar": "Kalender"
+    }
+except Exception:
+    _texts_initial = {"app_title": "ÖMERs ALL in ONE DINGSBUMS"}
+
+TEXTS: dict[str, str] = {}
+
+locales_module: Any | None = None
+database_module: Any | None = None
+product_db_module: Any | None = None
+data_input_module: Any | None = None
+calculations_module: Any | None = None
+analysis_module: Any | None = None
+crm_module: Any | None = None
+admin_panel_module: Any | None = None
+doc_output_module: Any | None = None
+quick_calc_module: Any | None = None
+info_platform_module: Any | None = None
+options_module: Any | None = None
+pv_visuals_module: Any | None = None
+ai_companion_module: Any | None = None
+multi_offer_module: Any | None = None
+pdf_preview_module: Any | None = None
+heatpump_ui_module: Any | None = None
+solar_calculator_module: Any | None = None
+crm_dashboard_ui_module: Any | None = None
+crm_pipeline_ui_module: Any | None = None
+crm_calendar_ui_module: Any | None = None
+
+def import_module_with_fallback(module_name: str, import_errors_list: list[str]):
+    try:
+        module = importlib.import_module(module_name)
+        return module
+    except ImportError as e:
+        error_message = f"Import-Fehler Modul '{module_name}': {e}"
+        import_errors_list.append(error_message)
+        return None
+    except Exception as e_general_import:
+        error_message = f"Allgemeiner Import-Fehler Modul '{module_name}': {e_general_import}"
+        import_errors_list.append(error_message)
+        return None
+
+def get_text_gui(key: str, default_text: str | None = None) -> str:
+    base_texts = TEXTS if TEXTS else _texts_initial
+    if default_text is None:
+        default_text = _texts_initial.get(key, key.replace("_", " ").title() + " (Fallback GUI Text)")
+    return base_texts.get(key, default_text)
+
+def initialize_database_once():
+    if database_module and callable(getattr(database_module, 'init_db', None)):
+        try:
+            database_module.init_db() # type: ignore
+        except Exception as e_init_db:
+            error_msg_db = get_text_gui("db_init_error", "Fehler bei DB-Initialisierung:") + f" {e_init_db}"
+            import_errors.append(error_msg_db)
+    else:
+        error_msg_db_mod_missing = get_text_gui("db_init_error", "Fehler bei DB-Initialisierung:") + " database_module oder init_db Funktion nicht verfügbar."
+        import_errors.append(error_msg_db_mod_missing)
+
+def render_live_cost_preview():
+    """Wrapper, der die zentrale Live-Kosten-Vorschau rendert."""
+    render_live_cost_preview_sidebar()
+
+
+def _apply_active_app_theme(*, inject_css: bool = True) -> None:
+    """Aktiviert das aktuell gewählte Anwendungstheme inklusive Akzentfarben."""
+
+    def _emit_warning(message: str) -> None:
+        if inject_css:
+            st.warning(message)
+        else:
+            print(f"[Theme Manager] {message}")
+
+    try:
+        themes = theme_manager.load_available_themes()
+    except Exception as exc:
+        _emit_warning(f"Theme-Verzeichnis konnte nicht geladen werden: {exc}")
+        return
+
+    if not themes:
+        return
+
+    overrides_in_state = st.session_state.get("_theme_overrides")
+    overrides: Dict[str, Dict[str, str]]
+    if isinstance(overrides_in_state, dict):
+        overrides = overrides_in_state
+    else:
+        overrides = {}
+
+    if not overrides and database_module and callable(getattr(database_module, "load_admin_setting", None)):
+        try:
+            raw_overrides = database_module.load_admin_setting("app_theme_overrides", None)
+        except Exception:
+            raw_overrides = None
+
+        if isinstance(raw_overrides, str) and raw_overrides.strip():
+            try:
+                overrides = json.loads(raw_overrides)
+            except json.JSONDecodeError:
+                overrides = {}
+        elif isinstance(raw_overrides, dict):
+            overrides = raw_overrides
+
+    st.session_state["_theme_overrides"] = overrides
+    theme_manager.set_theme_overrides(overrides)
+
+    active_key = st.session_state.get("active_theme_key")
+    if not isinstance(active_key, str) or active_key not in themes:
+        stored_key = None
+        if database_module and callable(getattr(database_module, "load_admin_setting", None)):
+            try:
+                stored_key = database_module.load_admin_setting("app_theme_key", None)
+            except Exception:
+                stored_key = None
+
+        if isinstance(stored_key, str) and stored_key in themes:
+            active_key = stored_key
+        else:
+            active_key = next(iter(themes.keys()))
+
+        st.session_state.active_theme_key = active_key
+
+    try:
+        st.session_state["_active_theme_payload"] = theme_manager.get_theme_payload_json(active_key)
+    except Exception:
+        pass
+
+    try:
+        css_payload = theme_manager.build_theme_css(active_key)
+    except Exception as exc:
+        _emit_warning(f"Theme-Styling konnte nicht generiert werden: {exc}")
+        return
+
+    if not inject_css or not css_payload:
+        return
+
+    # Track last applied theme to detect changes
+    last_applied = st.session_state.get("_last_applied_theme_key")
+    theme_changed = last_applied != active_key
+    
+    # Verwende einen stabilen Placeholder - erstelle ihn nur EINMAL
+    placeholder = st.session_state.get("_theme_css_placeholder")
+    if placeholder is None:
+        # Erstelle Placeholder nur beim allerersten Mal
+        placeholder = st.empty()
+        st.session_state["_theme_css_placeholder"] = placeholder
+        st.session_state["_last_applied_theme_key"] = active_key
+    elif theme_changed:
+        # Theme hat sich geändert - update den Key aber behalte den Placeholder
+        st.session_state["_last_applied_theme_key"] = active_key
+
+    # Wende CSS an - der Placeholder bleibt stabil
+    try:
+        placeholder.markdown(css_payload, unsafe_allow_html=True)
+    except Exception as e:
+        # Wenn Placeholder ungültig ist, erstelle einen neuen
+        placeholder = st.empty()
+        st.session_state["_theme_css_placeholder"] = placeholder
+        placeholder.markdown(css_payload, unsafe_allow_html=True)
+
+
+def inject_custom_context_menu(nav_lock_enabled: bool) -> Any:
+    """Bindet ein individuelles Kontextmenü in das Streamlit-Frontend ein und liefert Klickereignisse zurück."""
+    menu_items = [
+        {
+            "label": "Tools",
+            "children": [
+                {"action": "refresh_page", "label": "Seite aktualisieren"},
+                {"action": "navigate_back", "label": "↩Zurück zur letzten Ansicht"},
+                {
+                    "action": "clear_cache",
+                    "label": "Cache leeren",
+                    "confirm": "Cache wirklich leeren? Alle gecachten Daten werden verworfen.",
+                },
+                {"action": "toggle_debug", "label": "Debugs ein/aus"},
+                {"action": "create_screenshot", "label": "Screenshot erstellen"},
+            ],
+        },
+        {"action": "switch_company", "label": "Unternehmen wechseln"},
+        {
+            "label": "Zur PDF Ausgabe springen",
+            "children": [
+                {"action": "goto_pdf_output_standard", "label": "Standard"},
+                {"action": "goto_pdf_output_multi", "label": "Multi PDF"},
+            ],
+        },
+        {"action": "open_pdf_preview", "label": "PDF Vorschau"},
+        {"action": "restart_calculations", "label": "Berechnungen neu starten"},
+        {"action": "save_to_crm", "label": "In CRM speichern"},
+        {"action": "add_note", "label": "Notiz hinzufügen"},
+    ]
+
+    menu_items_json = json.dumps(menu_items)
+
+    html_template = """
+    <script>
+    (function() {{
+        const parentDoc = window.parent?.document;
+        if (!parentDoc) {{
+            return;
+        }}
+
+        const menuItems = __MENU_ITEMS__;
+        const styleId = 'custom-context-menu-style';
+        const menuId = 'custom-context-menu';
+
+        if (!parentDoc.getElementById(styleId)) {{
+            const styleTag = parentDoc.createElement('style');
+            styleTag.id = styleId;
+            styleTag.innerHTML = `
+                .custom-context-menu {
+                    position: absolute;
+                    z-index: 99999;
+                    min-width: 228px;
+                    background: rgba(17, 24, 39, 0.95);
+                    -webkit-backdrop-filter: blur(6px);
+                    backdrop-filter: blur(6px);
+                    border-radius: 12px;
+                    -webkit-box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+                    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+                    padding: 8px 0;
+                    color: #f9fafb;
+                    font-family: 'Inter', sans-serif;
+                    display: none;
+                }
+                .custom-context-menu.visible {{
+                    display: block;
+                    animation: contextMenuFade 120ms ease-out;
+                }}
+                .custom-context-menu__entry {{
+                    position: relative;
+                }}
+                .custom-context-menu__button {{
+                    width: 100%;
+                    border: none;
+                    background: none;
+                    padding: 10px 18px;
+                    font-size: 14px;
+                    display: -webkit-flex;
+                    display: -ms-flexbox;
+                    display: flex;
+                    gap: 10px;
+                    -webkit-align-items: center;
+                    -ms-flex-align: center;
+                    align-items: center;
+                    color: inherit;
+                    cursor: pointer;
+                    transition: background 120ms ease;
+                    text-align: left;
+                }}
+                .custom-context-menu__entry.has-children > .custom-context-menu__button {{
+                    padding-right: 32px;
+                }}
+                .custom-context-menu__entry.has-children > .custom-context-menu__button::after {{
+                    content: '›';
+                    margin-left: auto;
+                    font-size: 12px;
+                    opacity: 0.55;
+                }}
+                .custom-context-menu__button:hover {{
+                    background: rgba(59, 130, 246, 0.18);
+                }}
+                .custom-context-menu__button:active {{
+                    background: rgba(59, 130, 246, 0.28);
+                }}
+                .custom-context-submenu {{
+                    position: absolute;
+                    top: -8px;
+                    left: calc(100% - 6px);
+                    min-width: 210px;
+                    background: rgba(17, 24, 39, 0.96);
+                    border-radius: 12px;
+                    box-shadow: 0 10px 48px rgba(0, 0, 0, 0.35);
+                    padding: 8px 0;
+                    display: none;
+                }}
+                .custom-context-menu__entry.has-children:hover > .custom-context-submenu,
+                .custom-context-menu__entry.has-children:focus-within > .custom-context-submenu {{
+                    display: block;
+                }}
+                .custom-context-submenu .custom-context-menu__entry.has-children > .custom-context-submenu {{
+                    left: calc(100% - 4px);
+                }}
+                @keyframes contextMenuFade {{
+                    from {{
+                        opacity: 0;
+                        transform: translateY(4px);
+                    }}
+                    to {{
+                        opacity: 1;
+                        transform: translateY(0);
+                    }}
+                }}
+            `;
+            parentDoc.head.appendChild(styleTag);
+        }}
+
+        let menu = parentDoc.getElementById(menuId);
+        if (!menu) {{
+            menu = parentDoc.createElement('div');
+            menu.id = menuId;
+            menu.className = 'custom-context-menu';
+            parentDoc.body.appendChild(menu);
+        }}
+
+        const buildMenu = (container, items) => {{
+            container.innerHTML = '';
+            if (!Array.isArray(items)) {{
+                return;
+            }}
+            items.forEach((item) => {{
+                const entry = parentDoc.createElement('div');
+                entry.className = 'custom-context-menu__entry';
+
+                const button = parentDoc.createElement('button');
+                button.className = 'custom-context-menu__button';
+                button.type = 'button';
+                button.textContent = item?.label ?? '';
+
+                const actionName = item?.action ?? '';
+                if (actionName) {{
+                    button.dataset.action = actionName;
+                }}
+
+                if (typeof item?.confirm === 'string' && item.confirm.trim().length > 0) {{
+                    button.dataset.confirm = item.confirm.trim();
+                }}
+
+                const hasChildren = Array.isArray(item?.children) && item.children.length > 0;
+                if (hasChildren) {{
+                    entry.classList.add('has-children');
+                }}
+
+                entry.appendChild(button);
+
+                if (hasChildren) {{
+                    const subMenu = parentDoc.createElement('div');
+                    subMenu.className = 'custom-context-submenu';
+                    buildMenu(subMenu, item.children);
+                    entry.appendChild(subMenu);
+                }}
+
+                container.appendChild(entry);
+            }});
+        }};
+
+        buildMenu(menu, menuItems);
+
+        const hideMenu = () => {{
+            menu.classList.remove('visible');
+        }};
+
+        const clampPosition = (value, max, size) => {{
+            return Math.max(8, Math.min(value, max - size - 8));
+        }};
+
+        const showMenu = (x, y) => {{
+            const docEl = parentDoc.documentElement;
+            const win = parentDoc.defaultView || window;
+            const scrollX = (win?.scrollX ?? docEl.scrollLeft ?? parentDoc.body.scrollLeft ?? 0);
+            const scrollY = (win?.scrollY ?? docEl.scrollTop ?? parentDoc.body.scrollTop ?? 0);
+            const maxX = scrollX + docEl.clientWidth;
+            const maxY = scrollY + docEl.clientHeight;
+
+            const rect = menu.getBoundingClientRect();
+            const width = rect.width || menu.offsetWidth;
+            const height = rect.height || menu.offsetHeight;
+
+            const posX = clampPosition(x, maxX, width || 0);
+            const posY = clampPosition(y, maxY, height || 0);
+
+            menu.style.left = `${posX}px`;
+            menu.style.top = `${posY}px`;
+            menu.classList.add('visible');
+        }};
+
+        const applyPendingTabNavigation = () => {{
+            try {{
+                const win = parentDoc.defaultView || window;
+                const target = win.sessionStorage?.getItem('contextMenuNavigateTab');
+                if (!target) {{
+                    return;
+                }}
+
+                const labelMap = {{
+                    standard: ['PDF-Ausgabe', 'PDF Ausgabe', 'Standard'],
+                    preview: ['PDF-Vorschau', 'PDF Vorschau', 'Vorschau'],
+                    multi: ['Multi-Firmen-Angebote', 'Multi Firmen Angebote', 'Multi PDF'],
+                }};
+
+                const attemptsLimit = 40;
+                let attempts = 0;
+
+                const tryActivate = () => {{
+                    attempts += 1;
+                    const buttons = parentDoc.querySelectorAll('[data-baseweb="tab"]');
+                    for (const btn of buttons) {{
+                        const text = btn.textContent?.trim() ?? '';
+                        if (!text) continue;
+                        const candidates = labelMap[target] ?? [];
+                        const matches = candidates.some((label) => text.includes(label));
+                        if (matches) {{
+                            btn.click();
+                            win.sessionStorage?.removeItem('contextMenuNavigateTab');
+                            return true;
+                        }}
+                    }}
+                    if (attempts >= attemptsLimit) {{
+                        win.sessionStorage?.removeItem('contextMenuNavigateTab');
+                        return true;
+                    }}
+                    return false;
+                }};
+
+                if (!tryActivate()) {{
+                    const timer = setInterval(() => {{
+                        if (tryActivate()) {{
+                            clearInterval(timer);
+                        }}
+                    }}, 150);
+                }}
+            }} catch (err) {{
+                console.warn('Context menu tab navigation failed', err);
+            }}
+        }};
+
+        if (!window.customContextMenuEventsBound) {{
+            window.customContextMenuEventsBound = true;
+
+            parentDoc.addEventListener('contextmenu', (event) => {{
+                if (event.target?.closest('input, textarea, select, [contenteditable="true"], .custom-context-menu-ignore')) {{
+                    return;
+                }}
+                if (event.ctrlKey || event.metaKey || event.altKey) {{
+                    return;
+                }}
+                event.preventDefault();
+                showMenu(event.pageX, event.pageY);
+            }}, true);
+
+            parentDoc.addEventListener('click', (event) => {{
+                if (!event.target?.closest('#' + menuId)) {{
+                    hideMenu();
+                }}
+            }});
+
+            parentDoc.addEventListener('keydown', (event) => {{
+                if (event.key === 'Escape') {{
+                    hideMenu();
+                }}
+            }});
+
+            parentDoc.addEventListener('scroll', hideMenu, true);
+            parentDoc.addEventListener('resize', hideMenu, true);
+
+            menu.addEventListener('contextmenu', (event) => event.preventDefault());
+
+            menu.addEventListener('click', (event) => {{
+                const button = event.target?.closest('.custom-context-menu__button');
+                if (!button) {{
+                    return;
+                }}
+                const action = button.dataset.action ?? '';
+                if (!action) {{
+                    return;
+                }}
+
+                const confirmMessage = button.dataset.confirm;
+                if (confirmMessage) {{
+                    const win = parentDoc.defaultView || window;
+                    if (!win.confirm(confirmMessage)) {{
+                        return;
+                    }}
+                }}
+
+                hideMenu();
+
+                if (action === 'create_screenshot') {{
+                    try {{
+                        const win = parentDoc.defaultView || window;
+                        win.focus();
+                        win.print();
+                    }} catch (error) {{
+                        console.warn('Screenshot trigger failed', error);
+                    }}
+                }}
+
+                if (['goto_pdf_output_standard', 'goto_pdf_output_multi', 'open_pdf_preview'].includes(action)) {{
+                    try {{
+                        const win = parentDoc.defaultView || window;
+                        const target = action === 'goto_pdf_output_multi' ? 'multi' : (action === 'open_pdf_preview' ? 'preview' : 'standard');
+                        win.sessionStorage?.setItem('contextMenuNavigateTab', target);
+                    }} catch (error) {{
+                        console.warn('Unable to persist tab preference', error);
+                    }}
+                }}
+
+                const payload = {{ action, nonce: Date.now() }};
+                window.parent.postMessage({{
+                    isStreamlitMessage: true,
+                    type: 'streamlit:setComponentValue',
+                    value: payload,
+                }}, '*');
+            }});
+        }}
+
+        applyPendingTabNavigation();
+    }})();
+    </script>
+    """
+
+    html_payload = (
+        html_template
+        .replace("__MENU_ITEMS__", menu_items_json)
+        .replace("{{", "{")
+        .replace("}}", "}")
+    )
+
+    try:
+        return components.html(html_payload, height=0, width=0, key="custom_context_menu")
+    except TypeError:
+        return components.html(html_payload, height=0, width=0)
+
+
+def _clear_streamlit_cache() -> bool:
+    cleared = False
+    try:
+        st.cache_data.clear()
+        cleared = True
+    except Exception:
+        pass
+    cache_resource = getattr(st, "cache_resource", None)
+    if cache_resource is not None and hasattr(cache_resource, "clear"):
+        try:
+            cache_resource.clear()
+            cleared = True
+        except Exception:
+            pass
+    return cleared
+
+
+def _set_doc_output_target(target: str, message: str) -> None:
+    st.session_state.context_menu_doc_output_preferred_tab = target
+    st.toast(message)
+    already_on_doc = st.session_state.get("selected_page_key_sui") == "doc_output"
+    set_current_page("doc_output")
+    if already_on_doc:
+        request_rerun()
+
+
+def _reset_calculations() -> None:
+    for key in ("calculation_results", "analysis_results", "calculation_results_backup"):
+        if key in st.session_state:
+            st.session_state[key] = {}
+    st.session_state.calculation_results_timestamp = None
+    st.toast("Berechnungsdaten zurückgesetzt. Bitte Analyse erneut ausführen.")
+    already_on_analysis = st.session_state.get("selected_page_key_sui") == "analysis"
+    set_current_page("analysis")
+    if already_on_analysis:
+        request_rerun()
+
+
+def _handle_context_menu_save_to_crm() -> None:
+    if crm_module is None:
+        st.toast("CRM-Modul nicht verfügbar.")
+        return
+
+    project_data = st.session_state.get("project_data") or {}
+    if not project_data:
+        st.toast("Keine Projektdaten vorhanden.")
+        return
+
+    customer = project_data.get("customer_data") or {}
+    if not customer:
+        st.toast("Kundendaten fehlen.")
+        return
+
+    get_conn = getattr(crm_module, "get_db_connection_safe_crm", None)
+    if not callable(get_conn) and database_module is not None:
+        get_conn = getattr(database_module, "get_db_connection", None)
+    if not callable(get_conn):
+        st.toast("CRM-Datenbank nicht erreichbar.")
+        return
+
+    try:
+        conn = get_conn()
+    except Exception as err:
+        st.toast(f"CRM-Verbindung fehlgeschlagen: {err}")
+        return
+
+    if not conn:
+        st.toast("CRM-Verbindung nicht möglich.")
+        return
+
+    project_id = None
+    try:
+        if hasattr(crm_module, "create_tables_crm"):
+            crm_module.create_tables_crm(conn)
+
+        save_customer = getattr(crm_module, "save_customer", None)
+        save_project = getattr(crm_module, "save_project", None)
+        if not callable(save_customer) or not callable(save_project):
+            st.toast("CRM-Speicherfunktionen fehlen.")
+            return
+
+        def _clean(value: Any) -> Any:
+            return value.strip() if isinstance(value, str) else value
+
+        first_name = (customer.get("first_name") or "").strip()
+        last_name = (customer.get("last_name") or "").strip()
+        if not first_name:
+            first_name = customer.get("company_name") or "Interessent"
+        if not last_name:
+            last_name = customer.get("company_name") or "Unbekannt"
+
+        customer_payload = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'company_name': _clean(customer.get('company_name')),
+            'address': _clean(customer.get('address')),
+            'house_number': _clean(customer.get('house_number')),
+            'zip_code': _clean(customer.get('zip_code')),
+            'city': _clean(customer.get('city')),
+            'state': _clean(customer.get('state')),
+            'region': _clean(customer.get('region')),
+            'email': _clean(customer.get('email')),
+            'phone_landline': _clean(customer.get('phone_landline') or customer.get('phone')),
+            'phone_mobile': _clean(customer.get('phone_mobile')),
+            'income_tax_rate_percent': float(customer.get('income_tax_rate_percent') or 0.0),
+            'creation_date': datetime.now().isoformat(),
+        }
+
+        customer_id = save_customer(conn, customer_payload)
+        if not customer_id:
+            st.toast("Kunde konnte nicht gespeichert werden.")
+            return
+
+        project_details = project_data.get("project_details") or {}
+        consumption_data = project_data.get("consumption_data") or {}
+
+        project_payload = {
+            'customer_id': customer_id,
+            'project_name': project_details.get('project_name') or f"Projekt {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+            'project_status': project_details.get('project_status') or 'Angebot',
+            'roof_type': project_details.get('roof_type'),
+            'roof_covering_type': project_details.get('roof_covering_type'),
+            'free_roof_area_sqm': project_details.get('free_roof_area_sqm'),
+            'roof_orientation': project_details.get('roof_orientation'),
+            'roof_inclination_deg': project_details.get('roof_inclination_deg'),
+            'building_height_gt_7m': int(bool(project_details.get('building_height_gt_7m'))),
+            'annual_consumption_kwh': project_details.get('annual_consumption_kwh') or consumption_data.get('annual_consumption'),
+            'costs_household_euro_mo': project_details.get('costs_household_euro_mo'),
+            'annual_heating_kwh': project_details.get('annual_heating_kwh') or consumption_data.get('consumption_heating_kwh_yr'),
+            'costs_heating_euro_mo': project_details.get('costs_heating_euro_mo'),
+            'anlage_type': project_details.get('anlage_type'),
+            'feed_in_type': project_details.get('feed_in_type'),
+            'module_quantity': project_details.get('module_quantity'),
+            'selected_module_id': project_details.get('selected_module_id'),
+            'selected_inverter_id': project_details.get('selected_inverter_id'),
+            'include_storage': int(bool(project_details.get('include_storage'))),
+            'selected_storage_id': project_details.get('selected_storage_id'),
+            'selected_storage_storage_power_kw': 1.0,
+            'include_additional_components': int(bool(project_details.get('include_additional_components'))),
+            'visualize_roof_in_pdf': int(bool(project_details.get('visualize_roof_in_pdf'))),
+            'latitude': project_details.get('latitude'),
+            'longitude': project_details.get('longitude'),
+            'creation_date': datetime.now().isoformat(),
+        }
+
+        project_id = save_project(conn, project_payload)
+    except Exception as err:
+        st.toast(f"CRM-Fehler: {err}")
+        return
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
+    st.session_state["_last_saved_crm_customer_id"] = customer_id
+    if project_id:
+        st.session_state["_last_saved_crm_project_id"] = project_id
+    st.toast("Projekt im CRM gespeichert.")
+
+
+def handle_context_menu_action(action: str) -> None:
+    if action == "refresh_page":
+        st.toast("Aktualisiere Seite …")
+        request_rerun()
+        return
+
+    if action == "navigate_back":
+        history = st.session_state.get("nav_history", [])
+        if isinstance(history, list) and len(history) >= 2:
+            history.pop()
+            target = history[-1]
+            st.session_state.nav_history = history
+            st.session_state.nav_history_skip_append = True
+            st.toast("Zur letzten Ansicht gewechselt.")
+            set_current_page(target)
+        else:
+            st.toast("Keine vorherige Ansicht gespeichert.")
+        return
+
+    if action == "clear_cache":
+        cleared = _clear_streamlit_cache()
+        st.toast("Cache geleert." if cleared else "Keine Cache-Daten zum Löschen gefunden.")
+        request_rerun()
+        return
+
+    if action == "toggle_debug":
+        new_value = not st.session_state.get("context_menu_debug_enabled", False)
+        st.session_state.context_menu_debug_enabled = new_value
+        st.toast("Debug-Modus aktiviert." if new_value else "Debug-Modus deaktiviert.")
+        return
+
+    if action == "create_screenshot":
+        st.toast("Öffne Druckdialog für Screenshot …")
+        return
+
+    if action == "switch_company":
+        active_id = st.session_state.get("active_company_id")
+        if active_id is None and database_module is not None and callable(getattr(database_module, "load_admin_setting", None)):
+            try:
+                loaded = database_module.load_admin_setting("active_company_id", None)
+                if loaded not in (None, ""):
+                    active_id = int(loaded)
+            except Exception:
+                active_id = None
+        st.session_state.context_menu_company_selection = active_id
+        st.session_state.context_menu_company_switch_open = True
+        request_rerun()
+        return
+
+    if action == "goto_pdf_output_standard":
+        _set_doc_output_target("standard", "Zur PDF-Ausgabe (Standard) gewechselt.")
+        return
+
+    if action == "goto_pdf_output_multi":
+        _set_doc_output_target("multi", "Zur PDF-Ausgabe (Multi) gewechselt.")
+        return
+
+    if action == "open_pdf_preview":
+        _set_doc_output_target("preview", "Zur PDF-Vorschau gewechselt.")
+        return
+
+    if action == "restart_calculations":
+        _reset_calculations()
+        return
+
+    if action == "save_to_crm":
+        _handle_context_menu_save_to_crm()
+        return
+
+    if action == "add_note":
+        st.session_state.context_menu_note_modal_open = True
+        request_rerun()
+        return
+
+    st.toast(f"Unbekannte Aktion: {action}")
+
+def main():
+    global TEXTS # Erlaube Modifikation der globalen TEXTS Variable
+
+    # Progress Manager initialisieren
+    try:
+        from components.progress_manager import progress_manager
+        # progress_manager wird automatisch beim Import initialisiert
+    except ImportError:
+        pass
+    except Exception:
+        # Ignoriere Fehler bei Progress Manager Init
+        pass
+
+    loaded_translations: Any = None
+
+    if locales_module and callable(getattr(locales_module, 'load_translations', None)):
+        try:
+            loaded_translations = locales_module.load_translations('de')
+        except Exception as e_load_loc:
+            if 'import_errors' in globals() and isinstance(globals()['import_errors'], list):
+                globals()['import_errors'].append(f"Fehler beim Laden der Übersetzungen: {e_load_loc}")
+            loaded_translations = None
+
+    if isinstance(loaded_translations, dict) and loaded_translations:
+        TEXTS = loaded_translations
+    else:
+        if loaded_translations is not None:
+            if 'import_errors' in globals() and isinstance(globals()['import_errors'], list):
+                globals()['import_errors'].append(f"WARNUNG: Übersetzungsdaten sind kein gültiges Dictionary {type(loaded_translations)}). Verwende Fallback-Texte.")
+
+        if isinstance(_texts_initial, dict):
+            TEXTS = _texts_initial.copy()
+        else:
+            TEXTS = {"app_title": "Solar App (Kritischer Text-Fallback)"}
+            if 'import_errors' in globals() and isinstance(globals()['import_errors'], list):
+                globals()['import_errors'].append("KRITISCH: ist kein Dictionary! Minimale Fallback-Texte verwendet.")
+
+    _apply_active_app_theme(inject_css=False)
+    theme_payload = getattr(theme_manager, "streamlit_theme", None)
+    try:
+        if isinstance(theme_payload, dict) and theme_payload:
+            st.set_page_config(page_title=get_text_gui("app_title"), page_icon="⚡", layout="wide", theme=theme_payload)
+        else:
+            st.set_page_config(page_title=get_text_gui("app_title"), page_icon="⚡", layout="wide")
+    except TypeError:
+        try:
+            streamlit_theme_config = st.get_option("theme") or {}
+        except RuntimeError:
+            # Older Streamlit builds do not expose the "theme" config option
+            streamlit_theme_config = {}
+        except Exception:
+            streamlit_theme_config = {}
+
+        updated_theme: Dict[str, Any] = {}
+        if isinstance(streamlit_theme_config, dict):
+            updated_theme.update(streamlit_theme_config)
+
+        if isinstance(theme_payload, dict) and theme_payload:
+            updated_theme.update(theme_payload)
+            if updated_theme:
+                try:
+                    st._config.set_option("theme", updated_theme)
+                except Exception:
+                    pass
+
+        st.set_page_config(page_title=get_text_gui("app_title"), page_icon="⚡", layout="wide")
+    _apply_active_app_theme()
+    
+    # ============================================================================
+    # UI-SETTINGS HANDLER - Lädt Benutzer-Einstellungen
+    # ============================================================================
+    try:
+        from ui_settings_handler import apply_ui_settings
+        apply_ui_settings()
+    except Exception as e:
+        st.warning(f"UI-Einstellungen konnten nicht geladen werden: {e}")
+
+    # ============================================================================
+    # DYNAMISCHE GLOBALE UI-EFFEKTE (10 verschiedene Stile zur Auswahl)
+    # ============================================================================
+    # Lade UI-Effekt-Einstellungen
+    try:
+        from admin_ui_effects_settings import load_ui_effects_settings
+        from ui_effects_library import get_effect_css
+        
+        ui_effects_settings = load_ui_effects_settings()
+        effects_enabled = ui_effects_settings.get("enabled", True)
+        active_effect = ui_effects_settings.get("active_effect", "shimmer_pulse")
+        
+        if effects_enabled:
+            effect_css = get_effect_css(active_effect)
+            st.markdown(f"""
+            <style>
+            /* ========== DYNAMISCHE UI-EFFEKTE: {active_effect.upper()} ========== */
+            {effect_css}
+            </style>
+            """, unsafe_allow_html=True)
+        else:
+            # Effekte deaktiviert - kein CSS laden
+            pass
+    except Exception as e:
+        # Fallback auf Standard-Effekt bei Fehler
+        from ui_effects_library import get_effect_css
+        fallback_css = get_effect_css("shimmer_pulse")
+        st.markdown(f"""
+        <style>
+        /* ========== GLOBALE BUTTON-EFFEKTE (FALLBACK) ========== */
+        {fallback_css}
+        </style>
+        """, unsafe_allow_html=True)
+
+    # ============================================================================
+    # GLOBALES DROPDOWN/SELECTBOX STYLING
+    # ============================================================================
+    # Lade Dropdown-Styling aus CSS-Datei
+    try:
+        from css_template_manager import get_css_manager
+        css_manager = get_css_manager()
+        dropdown_css = css_manager.load_template_css("dropdown_styling")
+        if dropdown_css:
+            st.markdown(f"""
+            <style>
+            /* ========== GLOBALES DROPDOWN STYLING ========== */
+            {dropdown_css}
+            </style>
+            """, unsafe_allow_html=True)
+    except Exception as e:
+        # Fallback: Inline CSS falls Manager nicht verfügbar
+        st.markdown("""
+        <style>
+        /* ========== DROPDOWN/SELECTBOX STYLING (FALLBACK) ========== */
+        div[data-baseweb="select"] {
+            margin-top: 0.25rem !important;
+        }
+        div[data-baseweb="select"] > div {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.95rem !important;
+            transition: all 0.2s ease !important;
+            min-height: 42px !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        div[data-baseweb="select"] > div:hover {
+            border-color: #ff8c00 !important;
+            box-shadow: 0 0 0 10px #ff8c00 !important;
+        }
+        div[data-baseweb="select"] > div:focus-within {
+            border-color: #ff8c00 !important;
+            box-shadow: 0 0 0 10px rgba(255, 140, 0, 0.2) !important;
+        }
+        div[data-baseweb="select"] > div > div {
+            display: flex !important;
+            align-items: center !important;
+            padding: 0 !important;
+        }
+        div[data-baseweb="select"] svg {
+            color: #ff8c00 !important;
+        }
+        .stSelectbox > label {
+            font-weight: 600 !important;
+            color: #2d3748 !important;
+            font-size: 0.9rem !important;
+            margin-bottom: 0.4rem !important;
+            display: block !important;
+        }
+        div[data-baseweb="popover"] {
+            border-radius: 8px !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+        }
+        ul[role="listbox"] > li {
+            padding: 0.6rem 0.75rem !important;
+            font-size: 0.95rem !important;
+            transition: background-color 0.15s ease !important;
+        }
+        ul[role="listbox"] > li:hover {
+            background-color: #f7f9fc !important;
+            color: #ff8c00 !important;
+        }
+        ul[role="listbox"] > li[aria-selected="true"] {
+            background-color: #ff8c00 !important;
+            color: white !important;
+            font-weight: 600 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+    # ============================================================================
+    # ZUSÄTZLICHE GLOBALE EFFEKTE: SLIDER & CHECKBOXEN
+    # ========================================================================
+    st.markdown("""
+    <style>
+    /* ========== GLOBALE SLIDER-EFFEKTE (+ / - BUTTONS) ========== */
+    /* Shimmer- und Pulse-Animationen für Slider-Increment/Decrement-Buttons */
+    
+    /* Slider Plus/Minus Buttons */
+    button[data-testid="stNumberInputStepUp"],
+    button[data-testid="stNumberInputStepDown"],
+    div[data-testid="stNumberInput"] button,
+    .step-up,
+    .step-down {
+        position: relative !important;
+        overflow: hidden !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        cursor: pointer !important;
+    }
+    
+    /* Number Input Buttons - Basis-Styling mit grauer Farbe */
+    button[data-testid="stNumberInputStepUp"],
+    button[data-testid="stNumberInputStepDown"],
+    div[data-testid="stNumberInput"] button {
+        background: linear-gradient(135deg, #acadae 0%, #acadae 100%) !important;
+        border: 1px solid #9ca3af !important;
+        color: #ffffff !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* Shimmer-Effekt für Slider-Buttons */
+    button[data-testid="stNumberInputStepUp"]::before,
+    button[data-testid="stNumberInputStepDown"]::before,
+    div[data-testid="stNumberInput"] button::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: -100% !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: linear-gradient(90deg, transparent, rgba(156, 163, 175, 0.3), transparent) !important;
+        transition: left 0.4s ease !important;
+        pointer-events: none !important;
+        z-index: 1 !important;
+    }
+    
+    /* Shimmer aktivieren beim Hover */
+    button[data-testid="stNumberInputStepUp"]:hover::before,
+    button[data-testid="stNumberInputStepDown"]:hover::before,
+    div[data-testid="stNumberInput"] button:hover::before {
+        left: 100% !important;
+    }
+    
+    /* Hover-Effekte für Slider-Buttons */
+    button[data-testid="stNumberInputStepUp"]:hover,
+    button[data-testid="stNumberInputStepDown"]:hover,
+    div[data-testid="stNumberInput"] button:hover {
+        background: linear-gradient(135deg, #7a8592 0%, #5b6571 100%) !important;
+        box-shadow: 0 10px 12px rgba(107, 114, 128, 0.3) !important;
+        transform: scale(1.05) !important;
+        border: 1px solid #b0b7c0 !important;
+    }
+    
+    @keyframes sliderButtonPulse {
+        0%, 100% {
+            box-shadow: 0 10px 12px rgba(107, 114, 128, 0.3);
+            transform: scale(1.05);
+        }
+        50% {
+            box-shadow: 0 10px 16px rgba(107, 114, 128, 0.4);
+            transform: scale(1.08);
+        }
+    }
+    
+    /* Active State (beim Klicken) */
+    button[data-testid="stNumberInputStepUp"]:active,
+    button[data-testid="stNumberInputStepDown"]:active,
+    div[data-testid="stNumberInput"] button:active {
+        transform: scale(0.95) !important;
+        box-shadow: 0 10px 10px rgba(107, 114, 128, 0.4) inset !important;
+        background: linear-gradient(135deg, #5b6571 0%, #4b5563 100%) !important;
+    }
+    
+    /* ========== SOLAR CALCULATOR MODULE BUTTONS (+ / -) ========== */
+    /* Spezielle Buttons für Modul-Anzahl im Solar Calculator */
+    button[kind="primary"][data-testid*="btn_module_qty"],
+    .stButton button[data-testid*="btn_module_qty"] {
+        background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%) !important;
+        border: 2px solid #ff8c00 !important;
+        color: #ffffff !important;
+        font-size: 28px !important;
+        font-weight: 900 !important;
+        padding: 16px 24px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 20px rgba(255, 140, 0, 0.4) !important;
+        transition: all 0.3s ease !important;
+        min-width: 100% !important;
+        height: 65px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+    }
+    
+    button[kind="primary"][data-testid*="btn_module_qty"]:hover,
+    .stButton button[data-testid*="btn_module_qty"]:hover {
+        background: linear-gradient(135deg, #ffaa33 0%, #ff8800 100%) !important;
+        box-shadow: 0 10px 30px rgba(255, 140, 0, 0.6) !important;
+        transform: scale(1.05) translateY(-2px) !important;
+        border: 2px solid #ffaa33 !important;
+    }
+    
+    button[kind="primary"][data-testid*="btn_module_qty"]:active,
+    .stButton button[data-testid*="btn_module_qty"]:active {
+        transform: scale(0.95) !important;
+        box-shadow: 0 10px 12px rgba(255, 140, 0, 0.5) inset !important;
+        background: linear-gradient(135deg, #ff6600 0%, #ff4400 100%) !important;
+    }
+    
+    /* ========== SLIDER KOMPLETT ÜBERSCHREIBEN - ORANGE ========== */
+    
+    /* ALLE Slider-Container und Child-Elemente */
+    [data-testid="stSlider"],
+    [data-testid="stSlider"] *,
+    [data-baseweb="slider"],
+    [data-baseweb="slider"] * {
+        border-color: transparent !important;
+    }
+    
+    /* Track Background - HELLGRAU */
+    [data-baseweb="slider"] > div:first-child,
+    [data-baseweb="slider"] > div > div:first-child {
+        background-color: #e5e7eb !important;
+        background: #e5e7eb !important;
+    }
+    
+    /* Progress Bar (gefüllter Teil) - MITTELGRAU */
+    [data-baseweb="slider"] > div:first-child > div:first-child,
+    [data-baseweb="slider"] > div > div:first-child > div:first-child {
+        background-color: #d1d5db !important;
+        background: #d1d5db !important;
+    }
+    
+    /* THUMB (KREIS) - ORANGE mit maximaler Priorität */
+    [role="slider"],
+    div[role="slider"],
+    [data-baseweb="slider"] [role="slider"],
+    [data-testid="stSlider"] [role="slider"] {
+        background-color: #ff8c00 !important;
+        background: #ff8c00 !important;
+        border: 2px solid #ff8c00 !important;
+        width: 24px !important;
+        height: 24px !important;
+        box-shadow: 0 10px 10px rgba(255, 140, 0, 0.4) !important;
+    }
+    
+    /* Pseudo-Elemente auch orange */
+    [role="slider"]::before,
+    [role="slider"]::after {
+        background-color: #ff8c00 !important;
+        background: #ff8c00 !important;
+        border-color: #ff8c00 !important;
+    }
+    
+    /* Hover State */
+    [role="slider"]:hover {
+        background-color: #ff6600 !important;
+        background: #ff6600 !important;
+        border-color: #ff6600 !important;
+        box-shadow: 0 0 0 10px rgba(255, 140, 0, 0.15), 0 10px 10px rgba(255, 140, 0, 0.5) !important;
+    }
+    
+    /* Active/Focus State */
+    [role="slider"]:active,
+    [role="slider"]:focus {
+        background-color: #ff6600 !important;
+        background: #ff6600 !important;
+        border-color: #ff6600 !important;
+    }
+    
+    /* ========== ENDE SLIDER ========== */
+    
+    /* ========== GLOBALE CHECKBOX-EFFEKTE ========== */
+    /* Shimmer- und Pulse-Animationen für Checkboxen */
+    
+    /* Checkbox Container */
+    div[data-testid="stCheckbox"],
+    .stCheckbox,
+    label[data-testid="stCheckbox"] {
+        position: relative !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    /* Checkbox Label Hover-Effekt */
+    div[data-testid="stCheckbox"]:hover,
+    .stCheckbox:hover,
+    label[data-testid="stCheckbox"]:hover {
+        background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%) !important;
+        padding-left: 8px !important;
+        border-radius: 6px !important;
+        transform: translateX(3px) !important;
+    }
+    
+    /* Checkbox Input Box */
+    div[data-testid="stCheckbox"] input[type="checkbox"],
+    .stCheckbox input[type="checkbox"],
+    input[type="checkbox"] {
+        position: relative !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    /* Checkbox Hover-Effekt - Shimmer */
+    div[data-testid="stCheckbox"]:hover input[type="checkbox"],
+    .stCheckbox:hover input[type="checkbox"] {
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
+        border-color: rgba(102, 126, 234, 0.6) !important;
+        animation: checkboxPulse 1.5s ease-in-out infinite !important;
+    }
+    
+    @keyframes checkboxPulse {
+        0%, 100% {
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15);
+            transform: scale(1);
+        }
+        50% {
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.25);
+            transform: scale(1.05);
+        }
+    }
+    
+    /* ========== GLOBALE RADIO BUTTONS - ORANGE MIT KREIS ========== */
+    /* Radio Container - Kein Hintergrund */
+    div[data-testid="stRadio"],
+    div[data-testid="stRadio"] div[role="radiogroup"] {
+        background: transparent !important;
+    }
+    
+    /* Radio Label - Kein Hintergrund */
+    div[data-testid="stRadio"] label,
+    div[data-testid="stRadio"] label > div:last-child {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    
+    /* Radio Circle Container - Positionierung */
+    div[data-testid="stRadio"] label > div:first-child {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 20px !important;
+        min-height: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    /* Radio Button Outer Circle - Grauer Ring (unselected) */
+    div[data-testid="stRadio"] [data-baseweb="radio"] {
+        border: 2px solid #cbd5e0 !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        width: 20px !important;
+        height: 20px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Radio Button Outer Circle SELECTED - ORANGER Ring */
+    div[data-testid="stRadio"] input[type="radio"]:checked ~ div[data-baseweb="radio"],
+    div[data-testid="stRadio"] [aria-checked="true"][data-baseweb="radio"] {
+        border: 2px solid #ff8c00 !important;
+        background: transparent !important;
+    }
+    
+    /* Radio Button Inner Circle (Dot) SELECTED - ORANGER gefüllter Kreis */
+    div[data-testid="stRadio"] input[type="radio"]:checked ~ div[data-baseweb="radio"] > div,
+    div[data-testid="stRadio"] [aria-checked="true"][data-baseweb="radio"] > div {
+        background: #ff8c00 !important;
+        background-color: #ff8c00 !important;
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50% !important;
+    }
+    
+    /* Radio Button Hover - Orange Akzent */
+    div[data-testid="stRadio"] label:hover [data-baseweb="radio"] {
+        border-color: #ff8c00 !important;
+    }
+    
+    div[data-testid="stRadio"] label:hover {
+        background: transparent !important;
+    }
+    
+    /* Radio Button Focus State */
+    div[data-testid="stRadio"] input[type="radio"]:focus ~ div[data-baseweb="radio"] {
+        border-color: #ff8c00 !important;
+        box-shadow: 0 0 0 10px rgba(255, 140, 0, 0.15) !important;
+    }
+    
+    /* Checked Checkbox - Pulse-Effekt */
+    div[data-testid="stCheckbox"] input[type="checkbox"]:checked,
+    .stCheckbox input[type="checkbox"]:checked,
+    input[type="checkbox"]:checked {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(102, 126, 234, 0.7) 100%) !important;
+        border-color: rgba(102, 126, 234, 1) !important;
+        animation: checkboxCheckedPulse 2s ease-in-out infinite !important;
+    }
+    
+    @keyframes checkboxCheckedPulse {
+        0%, 100% {
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+        50% {
+            box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+    }
+    
+    /* Checkbox Checkmark - Shimmer-Effekt */
+    div[data-testid="stCheckbox"] input[type="checkbox"]:checked::after,
+    .stCheckbox input[type="checkbox"]:checked::after {
+        animation: checkmarkShimmer 2s ease-in-out infinite !important;
+    }
+    
+    @keyframes checkmarkShimmer {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.8;
+            filter: brightness(1.2);
+        }
+    }
+    
+    /* Radio Buttons - Ähnliche Effekte */
+    div[data-testid="stRadio"] label:hover,
+    .stRadio label:hover {
+        background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%) !important;
+        padding-left: 8px !important;
+        border-radius: 6px !important;
+        transform: translateX(3px) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    div[data-testid="stRadio"] input[type="radio"]:hover,
+    .stRadio input[type="radio"]:hover {
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0.15) !important;
+        animation: checkboxPulse 1.5s ease-in-out infinite !important;
+    }
+    
+    /* ========== ENDE GLOBALE CHECKBOX-EFFEKTE ========== */
+    
+    </style>
+    """, unsafe_allow_html=True)
+
+    # INTRO-BILDSCHIRM (VOR DER HAUPTANWENDUNG)
+    # ============================================================================
+    # Prüfe ob Intro-Bildschirm angezeigt werden soll
+    if 'intro_completed' not in st.session_state:
+        try:
+            from intro_screen import render_intro_screen
+            render_intro_screen()
+            # Wenn render_intro_screen() False zurückgibt, stoppe hier
+            # Die Funktion selbst managed den st.rerun() nach Button-Klick
+            st.stop()
+        except ImportError:
+            # Wenn intro_screen.py nicht verfügbar, überspringe Intro
+            st.session_state['intro_completed'] = True
+            st.session_state['user_mode'] = 'quick_start'
+            st.session_state['username'] = 'Benutzer'
+        except Exception as e:
+            st.warning(f"Intro-Bildschirm konnte nicht geladen werden: {e}")
+            st.session_state['intro_completed'] = True
+            st.session_state['user_mode'] = 'quick_start'
+            st.session_state['username'] = 'Benutzer'
+
+    # ============================================================================
+    # ROBUSTE SESSION STATE INITIALISIERUNG
+    # ============================================================================
+    # Verwende eine Guard-Variable um sicherzustellen, dass kritische Initialisierungen
+    # nur EINMAL pro Session passieren und nicht bei jedem Rerun überschrieben werden
+    
+    if '_session_initialized' not in st.session_state:
+        st.session_state._session_initialized = True
+        
+        # Projekt-Daten initialisieren
+        if 'project_data' not in st.session_state:
+            st.session_state.project_data = {
+                'customer_data': {}, 
+                'project_details': {}, 
+                'economic_data': {}
+            }
+        
+        # Berechnungs-Ergebnisse initialisieren
+        if 'calculation_results' not in st.session_state:
+            st.session_state.calculation_results = {}
+        
+        if 'calculation_results_timestamp' not in st.session_state:
+            st.session_state.calculation_results_timestamp = None
+        
+        if 'calculation_results_backup' not in st.session_state:
+            st.session_state.calculation_results_backup = {}
+        
+        # Navigation-Stabilität: Lock aktiviert standardmäßig
+        if 'nav_lock_enabled' not in st.session_state:
+            st.session_state.nav_lock_enabled = True
+        
+        if 'nav_event' not in st.session_state:
+            st.session_state.nav_event = False
+        
+        # Context Menu States
+        if 'context_menu_company_switch_open' not in st.session_state:
+            st.session_state.context_menu_company_switch_open = False
+        
+        if 'context_menu_company_selection' not in st.session_state:
+            st.session_state.context_menu_company_selection = None
+        
+        if 'context_menu_note_modal_open' not in st.session_state:
+            st.session_state.context_menu_note_modal_open = False
+        
+        if 'context_menu_note_input' not in st.session_state:
+            st.session_state.context_menu_note_input = ""
+        
+        if 'context_notes' not in st.session_state:
+            st.session_state.context_notes = []
+        
+        if 'context_menu_debug_enabled' not in st.session_state:
+            st.session_state.context_menu_debug_enabled = False
+        
+        # Navigation History
+        if 'nav_history' not in st.session_state:
+            st.session_state.nav_history = []
+        
+        if 'nav_history_skip_append' not in st.session_state:
+            st.session_state.nav_history_skip_append = False
+    
+    # Prüfe ob kritische States noch existieren (können durch Cleanup gelöscht werden)
+    if 'project_data' not in st.session_state:
+        st.session_state.project_data = {'customer_data': {}, 'project_details': {}, 'economic_data': {}}
+    if 'calculation_results' not in st.session_state:
+        st.session_state.calculation_results = {}
+    
+    # Stelle sicher dass Lists auch wirklich Lists sind (nicht None oder andere Typen)
+    if not isinstance(st.session_state.get('context_notes'), list):
+        st.session_state.context_notes = []
+    if not isinstance(st.session_state.get('nav_history'), list):
+        st.session_state.nav_history = []
+
+    # Context Menu (Rechtsklick)
+    menu_event = inject_custom_context_menu(st.session_state.get('nav_lock_enabled', True))
+    if isinstance(menu_event, dict):
+        nonce = menu_event.get('nonce')
+        action = menu_event.get('action')
+        last_nonce = st.session_state.get('_context_menu_last_nonce')
+        if nonce is not None and nonce != last_nonce:
+            st.session_state._context_menu_last_nonce = nonce
+            if isinstance(action, str) and action:
+                handle_context_menu_action(action)
+    
+    # Ausfahrbarer Drawer - unten rechts mit funktionierenden Click Events
+    # JavaScript manipuliert das DOM direkt und setzt Session State für Callbacks
+    components.html("""
+    <script>
+    (function() {
+        const parentDoc = window.parent?.document;
+        if (!parentDoc) return;
+        
+        // Entferne alte Elemente
+        const oldBtn = parentDoc.getElementById('drawer-btn');
+        const oldDrawer = parentDoc.getElementById('drawer-panel');
+        if (oldBtn) oldBtn.remove();
+        if (oldDrawer) oldDrawer.remove();
+        
+        // Style hinzufügen
+        if (!parentDoc.getElementById('drawer-style')) {
+            const style = parentDoc.createElement('style');
+            style.id = 'drawer-style';
+            style.innerHTML = `
+                .drawer-button {
+                    position: fixed !important;
+                    top: 15px !important;
+                    left: 55% !important;
+                    transform: translateX(-50%) !important;
+                    z-index: 999998 !important;
+                    background: linear-gradient(135deg, #ffffff 30%, #b3b3b3 70%) !important;
+                    color: #000000 !important;
+                    border: 2px solid #000000 !important;
+                    border-radius: 15px !important;
+                    width: 1400px !important;
+                    height: 20px !important;
+                    font-size: 10px !important;
+                    font-weight: bold !important;
+                    cursor: pointer !important;
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6) !important;
+                    transition: all 0.3s ease !important;
+                }
+                .drawer-button:hover {
+                    transform: translateX(-50%) translateY(3px) !important;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+                    background: linear-gradient(135deg, #ffffff 30%, #b3b3b3 70%) !important;
+                }
+                .drawer-panel {
+                    position: fixed !important;
+                    top: -750px !important;
+                    left: 55% !important;
+                    transform: translateX(-50%) !important;
+                    width: 1400px !important;
+                    height: 700px !important;
+                    background: #c3c3c3 !important;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
+                    z-index: 999999 !important;
+                    transition: top 1.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                    border-radius: 0 0 20px 20px !important;
+                    padding: 25px !important;
+                    overflow-y: auto !important;
+                }
+                .drawer-panel.open {
+                    top: 0 !important;
+                }
+                .drawer-close {
+                    position: absolute;
+                    top: 25px;
+                    right: 25px;
+                    background: #2a2a2a;
+                    border: 2px solid #ff8c00;
+                    color: #ff8c00;
+                    font-size: 24px;
+                    width: 35px;
+                    height: 35px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.6);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    line-height: 1;
+                }
+                .drawer-close:hover {
+                    background: #ff8c00;
+                    color: #000000;
+                    transform: rotate(90deg);
+                    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.8);
+                }
+                .drawer-title {
+                    color: #000000;
+                    font-size: 28px;
+                    font-weight: bold;
+                    margin-bottom: 20px;
+                    padding-top: 10px;
+                }
+                .drawer-btn {
+                    width: 100%;
+                    padding: 15px;
+                    margin: 10px 0;
+                    background: #ffffff;
+                    border: 2px solid #ff8c00;
+                    border-radius: 10px;
+                    color: #000000;
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    text-align: left;
+                    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.7), 0 10px 10px rgba(0, 0, 0, 0.5), inset 0 10px 10px rgba(255, 255, 255, 0.3);
+                }
+                .drawer-btn:hover {
+                    background: linear-gradient(135deg, #ffffff 30%, #b3b3b3 70%);
+                    color: #000000;
+                    transform: translateX(-5px);
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 10px 10px rgba(255, 140, 0, 0.4), inset 0 10px 10px rgba(255, 255, 255, 0.3);
+                    border-color: #ff9900;
+                }
+            `;
+            parentDoc.head.appendChild(style);
+        }
+        
+        // Drawer Panel erstellen
+        const drawer = parentDoc.createElement('div');
+        drawer.id = 'drawer-panel';
+        drawer.className = 'drawer-panel';
+        drawer.innerHTML = `
+            <button class="drawer-close">×</button>
+            <div class="drawer-title">nützliche Tools</div>
+            <button class="drawer-btn" data-action="voice_command"> Sprachbefehl</button>
+            <button class="drawer-btn" data-action="3d_view"> 3D Visualisierung</button>
+            <button class="drawer-btn" data-action="save_customer"> Kunde ins CRM</button>
+            <button class="drawer-btn" data-action="monitoring"> Überwachung & Diagnose</button>
+            <button class="drawer-btn" data-action="quick_pdf"> Blitz-Angebot</button>
+            <button class="drawer-btn" data-action="help_menu"> Hilfe-Menü</button>
+            <button class="drawer-btn" data-action="logout" style="background: #ff8c00; border-color: #ffffff;"> Logout</button>
+        `;
+        parentDoc.body.appendChild(drawer);
+        
+        // Event Listeners für Drawer Buttons - Direkt Streamlit Query Params setzen
+        drawer.querySelectorAll('.drawer-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const action = this.getAttribute('data-action');
+                console.log('Drawer action clicked:', action);
+                
+                // Setze URL Query Parameter für Streamlit
+                const url = new URL(window.parent.location.href);
+                url.searchParams.set('drawer_action', action);
+                url.searchParams.set('drawer_nonce', Date.now()); // Force refresh
+                window.parent.history.pushState({}, '', url);
+                
+                // Trigger Streamlit rerun
+                const buttons = window.parent.document.querySelectorAll('button[kind="primary"]');
+                if (buttons.length > 0) {
+                    buttons[0].click();
+                } else {
+                    // Alternative: Sende Custom Event
+                    window.parent.dispatchEvent(new Event('popstate'));
+                }
+                
+                // Schließe Drawer
+                drawer.classList.remove('open');
+            });
+        });
+        
+        // Toggle Button erstellen
+        const btn = parentDoc.createElement('button');
+        btn.id = 'drawer-btn';
+        btn.className = 'drawer-button';
+        btn.innerHTML = '>>  T O O L S';
+        btn.title = 'nützliches';
+        
+        btn.onclick = function() {
+            drawer.classList.toggle('open');
+        };
+        
+        // Close button
+        drawer.querySelector('.drawer-close').onclick = function() {
+            drawer.classList.remove('open');
+        };
+        
+        parentDoc.body.appendChild(btn);
+    })();
+    </script>
+    """, height=0, width=0)
+    
+    # JavaScript: Erzwinge dunkle Schriftfarbe im Streamlit-Menü
+    components.html("""
+    <script>
+    (function forceMenuTextColor() {
+        const parentDoc = window.parent?.document;
+        if (!parentDoc) return;
+        
+        // Style für Menü-Schriftfarbe
+        const styleId = 'force-menu-text-dark';
+        if (!parentDoc.getElementById(styleId)) {
+            const style = parentDoc.createElement('style');
+            style.id = styleId;
+            style.innerHTML = `
+                /* ERZWINGE SCHWARZE SCHRIFT IM STREAMLIT-MENÜ */
+                [data-testid="stMainMenu"] *,
+                [data-testid="stMainMenuPopover"] *,
+                ul[data-testid="main-menu-list"],
+                ul[data-testid="main-menu-list"] *,
+                ul[data-testid="main-menu-list"] li,
+                ul[data-testid="main-menu-list"] a,
+                ul[data-testid="main-menu-list"] span,
+                ul[data-testid="main-menu-list"] button,
+                div[role="menu"],
+                div[role="menu"] *,
+                div[role="menuitem"],
+                div[role="menuitem"] *,
+                li[role="menuitem"],
+                li[role="menuitem"] *,
+                .viewerBadge *,
+                nav[role="navigation"] *,
+                header button,
+                header button *,
+                header svg,
+                header svg path {
+                    color: #000000 !important;
+                    fill: #000000 !important;
+                    stroke: #000000 !important;
+                    font-weight: 700 !important;
+                }
+                
+                /* Menu Container Hintergrund */
+                [data-testid="stMainMenu"],
+                [data-testid="stMainMenuPopover"],
+                ul[data-testid="main-menu-list"],
+                div[role="menu"] {
+                    background-color: #ffffff !important;
+                    border: 2px solid #000000 !important;
+                }
+            `;
+            parentDoc.head.appendChild(style);
+        }
+        
+        // Überwache DOM-Änderungen und wende Farbe direkt an
+        function applyDarkText() {
+            const selectors = [
+                '[data-testid="stMainMenu"]',
+                '[data-testid="stMainMenuPopover"]',
+                'ul[data-testid="main-menu-list"]',
+                'div[role="menu"]',
+                'div[role="menuitem"]',
+                'li[role="menuitem"]',
+                'section[role="dialog"]',
+                '[data-testid="stModal"]',
+                'div[class*="Modal"]',
+                'div[class*="ModalDialog"]',
+                'div[class*="ModalBody"]'
+            ];
+            
+            selectors.forEach(selector => {
+                const elements = parentDoc.querySelectorAll(selector);
+                elements.forEach(el => {
+                    el.style.color = '#000000';
+                    el.style.fontWeight = '700';
+                    
+                    // Alle Kinder
+                    const children = el.querySelectorAll('*');
+                    children.forEach(child => {
+                        child.style.color = '#000000';
+                        child.style.fontWeight = '700';
+                    });
+                });
+            });
+            
+            // Header Buttons
+            const headerButtons = parentDoc.querySelectorAll('header button, header button *');
+            headerButtons.forEach(btn => {
+                btn.style.color = '#000000';
+                btn.style.fill = '#000000';
+            });
+            
+            // Settings Dialog - spezifisch
+            const dialogElements = parentDoc.querySelectorAll('section[role="dialog"] *, [data-testid="stModal"] *');
+            dialogElements.forEach(el => {
+                el.style.color = '#000000';
+                el.style.fontWeight = '600';
+            });
+        }
+        
+        // Sofort anwenden
+        applyDarkText();
+        
+        // Bei DOM-Änderungen wiederholen
+        const observer = new MutationObserver(applyDarkText);
+        observer.observe(parentDoc.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        // Periodisch prüfen (falls Observer nicht greift)
+        setInterval(applyDarkText, 500);
+    })();
+    </script>
+    """, height=0, width=0)
+    
+    # Drawer Action Handler via Query Params
+    drawer_action = st.query_params.get('drawer_action')
+    drawer_nonce = st.query_params.get('drawer_nonce')
+    
+    if drawer_action and drawer_nonce != st.session_state.get('last_drawer_nonce'):
+        st.session_state['last_drawer_nonce'] = drawer_nonce
+        
+        # Clear query params
+        st.query_params.clear()
+        
+        if drawer_action == 'logout':
+            from user_menu import logout_user
+            logout_user()
+            st.rerun()
+        elif drawer_action == 'voice_command':
+            from drawer_actions import handle_drawer_action_voice_command
+            handle_drawer_action_voice_command()
+            st.rerun()
+        elif drawer_action == '3d_view':
+            from drawer_actions import handle_drawer_action_3d_visualization
+            handle_drawer_action_3d_visualization()
+            st.rerun()
+        elif drawer_action == 'save_customer':
+            from drawer_actions import handle_drawer_action_save_customer
+            handle_drawer_action_save_customer()
+            st.rerun()
+        elif drawer_action == 'quick_pdf':
+            from drawer_actions import handle_drawer_action_quick_pdf
+            handle_drawer_action_quick_pdf()
+            st.rerun()
+        elif drawer_action == 'monitoring':
+            # Öffne Monitoring Dashboard
+            st.session_state['active_page'] = 'monitoring'
+            st.session_state['selected_page_key_sui'] = 'monitoring'
+            st.rerun()
+        elif drawer_action == 'help_menu':
+            st.session_state['show_help_drawer'] = True
+            st.rerun()
+    
+    # Show drawer notifications
+    from drawer_actions import show_drawer_notifications
+    show_drawer_notifications()
+
+
+
+    # Sidebar-Styling - Moderne Navigation im Behance-Stil
+    st.markdown("""
+    <style>
+    /* HAUPT-HINTERGRUND: Dunkles Grau */
+    .stApp, .main, [data-testid="stAppViewContainer"], .block-container {
+        background-color: #d8dce1 !important;
+    }
+    
+    /* ========== GLOBALE TEXT-FORMATIERUNG: SCHWARZ & FETT ========== */
+    body, p, span, div, label, 
+    .stMarkdown, .stMarkdown p, .stMarkdown span, .stMarkdown li,
+    .stApp label, .main label,
+    div[data-testid="stWidgetLabel"], div[data-testid="stWidgetLabel"] p, div[data-testid="stWidgetLabel"] span,
+    .stSelectbox label, .stTextInput label, .stNumberInput label,
+    .stCheckbox label, .stRadio label, .stSlider label, .stTextArea label,
+    h1, h2, h3, h4, h5, h6 {
+        color: #1a202c !important;
+        font-weight: 700 !important;
+    }
+    
+    /* ========== MODERNE BUTTONS - Card-Stil mit GRAU ========== */
+    .stButton > button {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #1a202c !important;
+        border: 4px solid rgba(200, 210, 220, 0.5) !important;
+        border-radius: 12px !important;
+        padding: 12px 24px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.08) !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-color: #9ca3af !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.15), 0 10px 10px rgba(0,0,0,0.1) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    .stButton > button:active {
+        transform: translateY(0) !important;
+        background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%) !important;
+    }
+    
+    /* PRIMARY BUTTONS - GRAU statt türkis/blau */
+    .stButton > button[kind="primary"],
+    button[kind="primary"],
+    button[data-testid="baseButton-primary"] {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+        color: #ffffff !important;
+        border: 2px solid #4b5563 !important;
+    }
+    
+    .stButton > button[kind="primary"]:hover,
+    button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;
+        border-color: #374151 !important;
+    }
+    
+    .stButton > button[kind="primary"]:active,
+    button[kind="primary"]:active {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%) !important;
+    }
+    
+    /* ========== INFO/WARNING/SUCCESS BOXEN - Card-Stil mit ORANGE ========== */
+    .stAlert, [data-testid="stAlert"],
+    div[data-baseweb="notification"],
+    .stInfo, .stSuccess, .stWarning, .stError {
+        background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%) !important;
+        color: #1a202c !important;
+        border-left: 5px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        padding: 16px 20px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.12), 0 10px 10px rgba(0,0,0,0.08) !important;
+        font-weight: 600 !important;
+    }
+    
+    /* ========== EXPANDER - Card-Stil mit ORANGE Akzent ========== */
+    .streamlit-expanderHeader {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #1a202c !important;
+        border-left: 5px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    /* ========== GLOBALE TABS - ENTFERNE BLAUE FARBEN ========== */
+    /* Tab Container */
+    [data-testid="stTabs"],
+    div[data-testid="stTabs"],
+    [data-baseweb="tab-list"],
+    div[data-baseweb="tab-list"] {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+    }
+    
+    /* Tab Buttons */
+    [data-testid="stTabs"] button,
+    [data-baseweb="tab"],
+    div[data-baseweb="tab"] {
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        border-bottom: 3px solid transparent !important;
+        color: #4a5568 !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Tab Active/Selected - ORANGE */
+    [data-testid="stTabs"] button[aria-selected="true"],
+    [data-baseweb="tab"][aria-selected="true"] {
+        background: rgba(255, 140, 0, 0.1) !important;
+        background-color: rgba(255, 140, 0, 0.1) !important;
+        border-bottom: 3px solid #ff8c00 !important;
+        color: #ff8c00 !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Tab Hover - Orange */
+    [data-testid="stTabs"] button:hover,
+    [data-baseweb="tab"]:hover {
+        background: rgba(255, 140, 0, 0.05) !important;
+        background-color: rgba(255, 140, 0, 0.05) !important;
+        color: #ff8c00 !important;
+    }
+    
+    /* Tab Panel (Content Area) */
+    [data-testid="stTabs"] [role="tabpanel"],
+    div[role="tabpanel"] {
+        background: transparent !important;
+        background-color: transparent !important;
+    }
+    
+    .streamlit-expanderHeader:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 6px solid #ff8c00 !important;
+    }
+    
+    /* ========== EINGABEFELDER - Card-Stil mit ORANGE Border ========== */
+    /* Äußere Container mit border-left */
+    .stTextInput > div,
+    .stNumberInput > div,
+    .stSelectbox > div,
+    .stTextArea > div,
+    .stDateInput > div,
+    .stTimeInput > div {
+        border-left: 3px solid #ff8c00 !important;
+        border-radius: 12px !important;
+    }
+    
+    /* Innere Input-Felder ohne border-left */
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input,
+    .stSelectbox > div > div > div,
+    .stTextArea > div > div > textarea,
+    .stDateInput > div > div > input,
+    .stTimeInput > div > div > input,
+    select, input[type="text"], input[type="number"], input[type="email"], 
+    input[type="tel"], textarea {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #1a202c !important;
+        border: 1px solid rgba(200, 210, 220, 0.5) !important;
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.06), 0 10px 10px rgba(0,0,0,0.04) !important;
+        transition: all 0.3s ease !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Focus auf Container */
+    .stTextInput > div:focus-within,
+    .stNumberInput > div:focus-within,
+    .stSelectbox > div:focus-within,
+    .stTextArea > div:focus-within,
+    .stDateInput > div:focus-within,
+    .stTimeInput > div:focus-within {
+        border-left: 4px solid #ff8c00 !important;
+        box-shadow: 0 10px 16px rgba(255,140,0,0.2), 0 10px 10px rgba(255,140,0,0.15) !important;
+    }
+    
+    /* Focus auf Input-Feldern */
+    .stTextInput > div > div > input:focus,
+    .stNumberInput > div > div > input:focus,
+    .stSelectbox > div > div > div:focus,
+    input:focus, select:focus, textarea:focus {
+        border-color: #ff8c00 !important;
+        outline: none !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    
+    /* Hover auf Container */
+    .stTextInput > div:hover,
+    .stNumberInput > div:hover,
+    .stSelectbox > div:hover,
+    .stTextArea > div:hover,
+    .stDateInput > div:hover,
+    .stTimeInput > div:hover {
+        box-shadow: 0 10px 16px rgba(255,140,0,0.1), 0 10px 10px rgba(255,140,0,0.08) !important;
+    }
+    
+    .stTextInput > div > div > input:hover,
+    .stNumberInput > div > div > input:hover,
+    .stSelectbox > div > div > div:hover,
+    input:hover, select:hover, textarea:hover {
+        border-color: #ff8c00 !important;
+    }
+    
+    /* ========== CHECKBOXEN & RADIO - Card-Stil mit ORANGE ========== */
+    .stCheckbox > label, .stRadio > label {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        color: #1a202c !important;
+        border: 2px solid rgba(200, 210, 220, 0.5) !important;
+        border-left: 3px solid #ff8c00 !important;
+        border-radius: 10px !important;
+        padding: 10px 14px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.05), 0 10px 10px rgba(0,0,0,0.03) !important;
+        font-weight: 700 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stCheckbox > label:hover, .stRadio > label:hover {
+        border-color: #ff8c00 !important;
+        border-left: 4px solid #ff8c00 !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+    }
+    
+    /* Checkbox/Radio checked state */
+    input[type="checkbox"]:checked, input[type="radio"]:checked {
+        accent-color: #ff8c00 !important;
+    }
+    
+    /* ========== DATAFRAMES & TABELLEN - Card-Stil mit ORANGE ========== */
+    .stDataFrame, [data-testid="stDataFrame"],
+    .stTable, table {
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        overflow: hidden !important;
+    }
+    
+    /* ========== METRIKEN - Card-Stil mit ORANGE ========== */
+    div[data-testid="stMetric"],
+    .stMetric {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    div[data-testid="stMetric"]:hover,
+    .stMetric:hover {
+        border-left: 5px solid #ff8c00 !important;
+        box-shadow: 0 10px 16px rgba(255,140,0,0.2), 0 10px 10px rgba(0,0,0,0.12) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* ========== TABS - Card-Stil mit ORANGE ========== */
+    button[data-baseweb="tab"] {
+        border-bottom: 3px solid transparent !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    button[data-baseweb="tab"]:hover {
+        border-bottom-color: rgba(255, 140, 0, 0.5) !important;
+    }
+    
+    button[data-baseweb="tab"][aria-selected="true"] {
+        border-bottom: 3px solid #ff8c00 !important;
+        color: #ff8c00 !important;
+        font-weight: 700 !important;
+    }
+    
+    /* ========== DIVIDER mit ORANGE Akzent ========== */
+    hr, .stDivider, [data-testid="stHorizontalBlock"] hr {
+        border-top: 2px solid rgba(255, 140, 0, 0.3) !important;
+        margin: 24px 0 !important;
+    }
+    
+    /* ========== COLUMNS & CONTAINERS mit subtilen Borders ========== */
+    div[data-testid="column"] {
+        padding: 12px !important;
+    }
+    
+    /* ========== SIDEBAR - Dunkler als Hauptapp aber gut lesbar ========== */
+    section[data-testid="stSidebar"] {
+        min-width: 300px !important;
+        background: linear-gradient(180deg, #bcc0c6 0%, #adb2b8 100%) !important;
+        padding: 1.5rem 1rem !important;
+    }
+    
+    /* Sidebar Buttons - Card-Stil mit schwarzer Schattierung */
+    section[data-testid="stSidebar"] .stButton > button {
+        width: 100% !important;
+        text-align: left !important;
+        padding: 14px 18px !important;
+        margin: 8px 0 !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f5f7f9 100%) !important;
+        border: 2px solid rgba(200, 210, 220, 0.6) !important;
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        color: #1a202c !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    /* Shimmer-Effekt (Lichtstrahl) mit Orange */
+    section[data-testid="stSidebar"] .stButton > button::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: -100% !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.3), transparent) !important;
+        transition: left 0.5s !important;
+    }
+    
+    /* Hover-Effekt mit Shimmer */
+    section[data-testid="stSidebar"] .stButton > button:hover::before {
+        left: 100% !important;
+    }
+    
+    section[data-testid="stSidebar"] .stButton > button:hover {
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 5px solid #ff8c00 !important;
+        border-color: #ff8c00 !important;
+        color: #1a202c !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Aktiver Button (Primary) - NUR ORANGE AKZENT mit schwarzer Schattierung */
+    section[data-testid="stSidebar"] .stButton > button[kind="primary"],
+    section[data-testid="stSidebar"] .stButton > button[data-baseweb="button"][class*="primary"] {
+        background: linear-gradient(135deg, #ffffff 0%, #f5f7f9 100%) !important;
+        border: 2px solid rgba(200, 210, 220, 0.6) !important;
+        border-left: 6px solid #ff8c00 !important;
+        color: #1a202c !important;
+        font-weight: 700 !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Pulse-Animation für aktiven Button mit schwarzer Schattierung */
+    @keyframes sidebarButtonPulse {
+        0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.15); }
+        50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3), 0 10px 16px rgba(0, 0, 0, 0.2); }
+    }
+    
+    section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover,
+    section[data-testid="stSidebar"] .stButton > button[data-baseweb="button"][class*="primary"]:hover {
+        animation: sidebarButtonPulse 2s ease-in-out infinite !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+        border-left: 7px solid #ff8c00 !important;
+    }
+    
+    /* Section Titles - Card-Stil mit ORANGE Akzent */
+    section[data-testid="stSidebar"] div[style*="text-transform: uppercase"] {
+        margin-top: 20px !important;
+        padding: 12px 16px !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%) !important;
+        border-left: 4px solid #ff8c00 !important;
+        border-radius: 10px !important;
+        color: #1a202c !important;
+        font-weight: 700 !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.12), 0 10px 10px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    /* Sidebar Divider/Trennlinien */
+    section[data-testid="stSidebar"] hr {
+        border-top: 2px solid rgba(255, 140, 0, 0.3) !important;
+        margin: 20px 0 !important;
+        box-shadow: 0 10px 16px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    /* Sidebar Text - dunkle Schrift mit gutem Kontrast */
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] span,
+    section[data-testid="stSidebar"] div,
+    section[data-testid="stSidebar"] label {
+        color: #1a202c !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Sidebar Selectbox/Input - Card-Stil mit weißem Hintergrund */
+    section[data-testid="stSidebar"] .stSelectbox > div > div,
+    section[data-testid="stSidebar"] .stTextInput > div > div > input,
+    section[data-testid="stSidebar"] .stNumberInput > div > div > input {
+        background: linear-gradient(135deg, #ffffff 0%, #f5f7f9 100%) !important;
+        border: 1px solid rgba(200, 210, 220, 0.6) !important;
+        border-left: 3px solid #ff8c00 !important;
+        border-radius: 12px !important;
+        color: #1a202c !important;
+        font-weight: 600 !important;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08) !important;
+    }
+    
+    /* ========== STREAMLIT OPTIONSMENÜ (3 Punkte rechts oben) + SETTINGS DIALOG - SCHWARZE SCHRIFT ========== */
+    /* Header & Toolbar */
+    header[data-testid="stHeader"],
+    header[data-testid="stHeader"] *,
+    [data-testid="stToolbar"],
+    [data-testid="stDecoration"],
+    .main .block-container header {
+        background-color: #d8dce1 !important;
+    }
+    
+    /* Menu Button Icon (3 Punkte) - ALLE VARIANTEN */
+    button[kind="header"],
+    button[kind="headerNoPadding"],
+    button[data-testid="stHeaderActionButton"],
+    button[aria-label*="Settings"],
+    button[aria-label*="menu"],
+    header button,
+    header button svg,
+    header button svg path,
+    [data-testid="stToolbar"] button,
+    [data-testid="stToolbar"] button svg {
+        color: #1a202c !important;
+        fill: #1a202c !important;
+        stroke: #1a202c !important;
+    }
+    
+    /* Dropdown Menu Container - ALLE VARIANTEN */
+    [data-testid="stMainMenu"],
+    [data-testid="stMainMenuPopover"],
+    ul[data-testid="main-menu-list"],
+    div[role="menu"],
+    div[role="dialog"],
+    .stPopover,
+    div[class*="viewerBadge"],
+    nav[role="navigation"] {
+        background-color: #ffffff !important;
+        border: 2px solid #c8d2dc !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Menu Items - TEXT IN SCHWARZ - ALLE VARIANTEN */
+    [data-testid="stMainMenu"] *,
+    [data-testid="stMainMenuPopover"] *,
+    ul[data-testid="main-menu-list"] *,
+    ul[data-testid="main-menu-list"] li,
+    ul[data-testid="main-menu-list"] li *,
+    ul[data-testid="main-menu-list"] a,
+    ul[data-testid="main-menu-list"] span,
+    ul[data-testid="main-menu-list"] button,
+    ul[data-testid="main-menu-list"] div,
+    div[role="menu"] *,
+    div[role="menu"] button,
+    div[role="menu"] a,
+    div[role="menu"] span,
+    div[role="menu"] div,
+    div[role="menuitem"],
+    div[role="menuitem"] *,
+    li[role="menuitem"],
+    li[role="menuitem"] *,
+    nav[role="navigation"] *,
+    .stPopover *,
+    .stPopover span,
+    .stPopover a,
+    .stPopover button {
+        color: #1a202c !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Menu Items Container */
+    ul[data-testid="main-menu-list"] li,
+    div[role="menuitem"],
+    li[role="menuitem"] {
+        padding: 10px 16px !important;
+        transition: background-color 0.2s ease !important;
+        border-radius: 8px !important;
+        margin: 4px 8px !important;
+    }
+    
+    /* Menu Items Hover */
+    ul[data-testid="main-menu-list"] li:hover,
+    ul[data-testid="main-menu-list"] li:hover *,
+    div[role="menuitem"]:hover,
+    div[role="menuitem"]:hover *,
+    li[role="menuitem"]:hover,
+    li[role="menuitem"]:hover *,
+    div[role="menu"] button:hover,
+    div[role="menu"] a:hover {
+        background-color: #f7f9fc !important;
+        color: #ff8c00 !important;
+    }
+    
+    /* Spezielle Streamlit View Badge & Deploy Button */
+    .viewerBadge,
+    .viewerBadge *,
+    .viewerBadge_container,
+    .viewerBadge_container *,
+    [class*="viewerBadge"],
+    [class*="viewerBadge"] * {
+        color: #1a202c !important;
+        fill: #1a202c !important;
+    }
+    
+    /* ========== SETTINGS DIALOG & MODAL - SCHWARZE SCHRIFT ========== */
+    /* Settings Dialog Container */
+    section[role="dialog"],
+    section[role="dialog"] *,
+    [data-testid="stModal"],
+    [data-testid="stModal"] *,
+    .stModal,
+    .stModal *,
+    div[class*="Modal"],
+    div[class*="Modal"] *,
+    div[class*="ModalDialog"],
+    div[class*="ModalDialog"] *,
+    div[class*="ModalBody"],
+    div[class*="ModalBody"] * {
+        color: #000000 !important;
+    }
+    
+    /* Settings Dialog Überschriften */
+    section[role="dialog"] h1,
+    section[role="dialog"] h2,
+    section[role="dialog"] h3,
+    [data-testid="stModal"] h1,
+    [data-testid="stModal"] h2,
+    [data-testid="stModal"] h3,
+    div[class*="Modal"] h1,
+    div[class*="Modal"] h2,
+    div[class*="Modal"] h3 {
+        color: #000000 !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Settings Dialog Text & Labels */
+    section[role="dialog"] p,
+    section[role="dialog"] span,
+    section[role="dialog"] label,
+    section[role="dialog"] div,
+    [data-testid="stModal"] p,
+    [data-testid="stModal"] span,
+    [data-testid="stModal"] label,
+    [data-testid="stModal"] div {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Settings Checkboxes & Radio Labels */
+    section[role="dialog"] input[type="checkbox"] + label,
+    section[role="dialog"] input[type="radio"] + label,
+    [data-testid="stModal"] input[type="checkbox"] + label,
+    [data-testid="stModal"] input[type="radio"] + label {
+        color: #000000 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    with st.sidebar:
+        # Benutzermenü GANZ OBEN - ÜBER dem ersten Strich
+        try:
+            from user_menu import render_user_menu
+            render_user_menu()
+        except Exception as e:
+            # Fallback auf altes System
+            try:
+                from intro_screen import show_user_info
+                show_user_info()
+            except:
+                pass
+        
+        st.markdown("---")
+        
+        # === MODERNE SIDEBAR NAVIGATION (BEHANCE-STIL) ===
+        
+        # Initialisierung
+        if 'active_page' not in st.session_state:
+            st.session_state.active_page = 'input'
+        
+        # Hauptmenü Sektion
+        st.markdown('<div style="color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0; margin-top: 10px;">HAUPTMENÜ</div>', unsafe_allow_html=True)
+        
+        main_menu = [
+            {"icon": "", "label": get_text_gui("menu_item_input"), "key": "input"},
+            {"icon": "", "label": TEXTS.get("menu_item_solar_calculator", "Solar Calculator"), "key": "solar_calculator"},
+            {"icon": "", "label": "3D PV-Visualisierung", "key": "3d_view"},
+            {"icon": "", "label": get_text_gui("menu_item_heatpump"), "key": "heatpump"},
+            {"icon": "", "label": get_text_gui("menu_item_analysis"), "key": "analysis"},
+        ]
+        
+        for item in main_menu:
+            is_active = st.session_state.active_page == item['key']
+            button_type = "primary" if is_active else "secondary"
+            
+            # Button direkt - kein HTML
+            if st.button(f"{item['icon']}  {item['label']}", key=f"nav_btn_{item['key']}", use_container_width=True, type=button_type):
+                # Nur Rerun wenn wirklich eine ANDERE Seite gewählt wurde
+                if st.session_state.active_page != item['key']:
+                    st.session_state.active_page = item['key']
+                    st.session_state.selected_page_key_sui = item['key']
+                    st.session_state.nav_event = True
+                    st.rerun()
+        
+        st.markdown("---")
+        
+        # Business Sektion
+        st.markdown('<div style="color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0;">BUSINESS</div>', unsafe_allow_html=True)
+        
+        business_menu = [
+            {"icon": "", "label": get_text_gui("menu_item_crm"), "key": "crm"},
+            {"icon": "", "label": get_text_gui("menu_item_doc_output"), "key": "doc_output"},
+            {"icon": "", "label": get_text_gui("menu_item_admin"), "key": "admin"},
+        ]
+        
+        for item in business_menu:
+            is_active = st.session_state.active_page == item['key']
+            button_type = "primary" if is_active else "secondary"
+            
+            if st.button(f"{item['icon']}  {item['label']}", key=f"nav_btn_{item['key']}", use_container_width=True, type=button_type):
+                # Nur Rerun wenn wirklich eine ANDERE Seite gewählt wurde
+                if st.session_state.active_page != item['key']:
+                    st.session_state.active_page = item['key']
+                    st.session_state.selected_page_key_sui = item['key']
+                    st.session_state.nav_event = True
+                    st.rerun()
+        
+        st.markdown("---")
+        
+        # Tools Sektion
+        st.markdown('<div style="color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0;">TOOLS</div>', unsafe_allow_html=True)
+        
+        tools_menu = [
+            {"icon": "", "label": get_text_gui("menu_item_quick_calc"), "key": "quick_calc"},
+            {"icon": "", "label": get_text_gui("menu_item_options"), "key": "options"},
+            {"icon": "", "label": get_text_gui("menu_item_info_platform"), "key": "info_platform"},
+        ]
+        
+        for item in tools_menu:
+            is_active = st.session_state.active_page == item['key']
+            button_type = "primary" if is_active else "secondary"
+            
+            if st.button(f"{item['icon']}  {item['label']}", key=f"nav_btn_{item['key']}", use_container_width=True, type=button_type):
+                # Nur Rerun wenn wirklich eine ANDERE Seite gewählt wurde
+                if st.session_state.active_page != item['key']:
+                    st.session_state.active_page = item['key']
+                    st.session_state.selected_page_key_sui = item['key']
+                    st.session_state.nav_event = True
+                    st.rerun()
+        
+        # === JOB MANAGER - AKTIVE JOBS TRACKING ===
+        try:
+            from core_integration import get_job_manager, is_feature_enabled
+            
+            if is_feature_enabled('jobs'):
+                job_mgr = get_job_manager()
+                
+                if job_mgr and 'active_pdf_jobs' in st.session_state and st.session_state['active_pdf_jobs']:
+                    st.markdown("---")
+                    st.markdown('<div style="color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px 0 8px 0;"> AKTIVE JOBS</div>', unsafe_allow_html=True)
+                    
+                    # Tracke aktive Jobs
+                    active_jobs = []
+                    completed_jobs = []
+                    
+                    for job_id in st.session_state['active_pdf_jobs']:
+                        result = job_mgr.poll(job_id)
+                        
+                        if not result:
+                            continue
+                        
+                        status = result.status.value if hasattr(result.status, 'value') else str(result.status)
+                        
+                        if status == 'completed':
+                            completed_jobs.append((job_id, result))
+                        elif status in ['running', 'pending', 'queued']:
+                            active_jobs.append((job_id, result))
+                    
+                    # Zeige aktive Jobs mit Progress
+                    for job_id, result in active_jobs:
+                        status = result.status.value if hasattr(result.status, 'value') else str(result.status)
+                        status_emoji = ' ' if status == 'running' else ' '
+                        
+                        st.caption(f"{status_emoji} Job {job_id[:8]}...")
+                        
+                        if result.progress > 0:
+                            st.progress(result.progress, text=result.progress_message or f"{int(result.progress * 100)}%")
+                        else:
+                            st.caption(f"Status: {status}")
+                    
+                    # Zeige completed Jobs mit Download
+                    for job_id, result in completed_jobs:
+                        st.success(f" Job {job_id[:8]}... fertig!")
+                        
+                        # Download-Button für PDF
+                        if result.result and isinstance(result.result, dict):
+                            pdf_path = result.result.get('pdf_path')
+                            filename = result.result.get('filename', 'angebot.pdf')
+                            
+                            if pdf_path and Path(pdf_path).exists():
+                                with open(pdf_path, 'rb') as f:
+                                    pdf_bytes = f.read()
+                                
+                                st.download_button(
+                                    label=" PDF downloaden",
+                                    data=pdf_bytes,
+                                    file_name=filename,
+                                    mime="application/pdf",
+                                    key=f"download_job_{job_id}",
+                                    use_container_width=True
+                                )
+                        
+                        # Entferne completed Job aus active Liste nach 30 Sekunden
+                        # (User hat Zeit zum Download)
+                    
+                    # Auto-Refresh bei laufenden Jobs
+                    if active_jobs:
+                        time.sleep(2)
+                        st.rerun()
+        
+        except Exception as e:
+            pass  # Silently fail wenn Job Manager nicht verfügbar
+        
+        # Setze selected_page_key für Kompatibilität
+        selected_page_key = st.session_state.active_page
+        
+        # === ENDE MODERNE NAVIGATION ===
+        if st.session_state.get('nav_lock_enabled', True):
+            # Halte einen Verlauf der zuletzt gerenderten Seite (kann für Debug/weitere Heuristiken genutzt werden)
+            if 'last_rendered_page_key' not in st.session_state:
+                st.session_state.last_rendered_page_key = selected_page_key
+
+            prev_key = st.session_state.get('selected_page_key_prev', selected_page_key)
+
+            if st.session_state.get('nav_event', False):
+                # Echte Nutzer-Navigation: übernehmen und als stabil markieren
+                st.session_state.nav_event = False
+                st.session_state.selected_page_key_prev = selected_page_key
+            else:
+                # Kein explizites Navigationsevent: aktuelle Auswahl akzeptieren und als stabil betrachten,
+                # um unerwünschtes "Zurückspringen" zu vermeiden (z.B. nach Button-Klicks innerhalb einer Seite).
+                if selected_page_key != prev_key:
+                    st.session_state.selected_page_key_prev = selected_page_key
+
+            # Merke die zuletzt gerenderte Seite
+            st.session_state.last_rendered_page_key = selected_page_key
+
+        if st.session_state.get('context_menu_company_switch_open'):
+            st.markdown("---")
+            st.subheader("Unternehmen wechseln")
+            companies: list[dict[str, Any]] = []
+            if database_module and callable(getattr(database_module, 'list_companies', None)):
+                try:
+                    companies = database_module.list_companies()
+                except Exception as err:
+                    st.warning(f"Fehler beim Laden der Unternehmen: {err}")
+            ids: list[int | None] = [None]
+            labels: list[str] = ["Bitte wählen"]
+            name_lookup: dict[int | None, str] = {None: "Bitte wählen"}
+            for comp in companies:
+                comp_id = comp.get('id')
+                if comp_id is None:
+                    continue
+                try:
+                    comp_id_int = int(comp_id)
+                except Exception:
+                    continue
+                title = (comp.get('name') or '').strip() or f"Firma #{comp_id_int}"
+                ids.append(comp_id_int)
+                labels.append(f"{title} (ID {comp_id_int})")
+                name_lookup[comp_id_int] = title
+
+            active_company_id_val = st.session_state.get('active_company_id')
+            if active_company_id_val is not None and active_company_id_val not in name_lookup and database_module and callable(getattr(database_module, 'get_company', None)):
+                try:
+                    active_company = database_module.get_company(active_company_id_val)
+                    if active_company and active_company.get('name'):
+                        name_lookup[active_company_id_val] = active_company['name']
+                except Exception:
+                    pass
+
+            current_selection = st.session_state.get('context_menu_company_selection')
+            if current_selection not in ids:
+                current_selection = None
+                st.session_state.context_menu_company_selection = None
+
+            can_select_company = len(ids) > 1
+            if can_select_company:
+                try:
+                    current_index = ids.index(current_selection)
+                except ValueError:
+                    current_index = 0
+                selected_index = st.selectbox(
+                    "Firma auswählen",
+                    options=list(range(len(labels))),
+                    index=current_index if 0 <= current_index < len(labels) else 0,
+                    format_func=lambda idx: labels[idx] if 0 <= idx < len(labels) else labels[0],
+                    key="context_menu_company_select_index")
+                st.session_state.context_menu_company_selection = ids[selected_index]
+            else:
+                st.info("Keine Unternehmen gefunden. Bitte im Admin-Bereich anlegen.")
+
+            if active_company_id_val is not None:
+                st.caption(f"Aktuell aktiv: {name_lookup.get(active_company_id_val, f'ID {active_company_id_val}')}")
+
+            apply_col, cancel_col = st.columns(2)
+            if apply_col.button("Übernehmen", key="context_menu_company_apply", disabled=not can_select_company):
+                selected_id = st.session_state.get('context_menu_company_selection')
+                if selected_id is None:
+                    st.warning("Bitte zuerst eine Firma auswählen.")
+                else:
+                    try:
+                        if database_module and callable(getattr(database_module, "save_admin_setting", None)):
+                            database_module.save_admin_setting('active_company_id', selected_id)
+                        st.session_state.active_company_id = selected_id
+                        st.session_state.context_menu_company_switch_open = False
+                        st.toast(f"Aktives Unternehmen: {name_lookup.get(selected_id, f'ID {selected_id}')}")
+                        request_rerun()
+                    except Exception as err:
+                        st.error(f"Unternehmen konnte nicht gesetzt werden: {err}")
+            if cancel_col.button("Abbrechen", key="context_menu_company_cancel"):
+                st.session_state.context_menu_company_switch_open = False
+                request_rerun()
+
+        if st.session_state.get('context_menu_note_modal_open'):
+            st.markdown("---")
+            st.subheader("Notiz hinzufügen")
+            note_text = st.text_area("Notiz", key="context_menu_note_input", height=140)
+            save_col, cancel_col = st.columns(2)
+            if save_col.button("Speichern", key="context_menu_note_save", disabled=not bool(note_text.strip())):
+                cleaned = note_text.strip()
+                if cleaned:
+                    notes = st.session_state.get('context_notes', [])
+                    notes.append({
+                        "text": cleaned,
+                        "created_at": datetime.now().isoformat(),
+                    })
+                    if len(notes) > 100:
+                        notes = notes[-100:]
+                    st.session_state.context_notes = notes
+                    st.session_state.context_menu_note_modal_open = False
+                    st.session_state.context_menu_note_input = ""
+                    st.toast("Notiz gespeichert.")
+                    request_rerun()
+            if cancel_col.button("Abbrechen", key="context_menu_note_cancel"):
+                st.session_state.context_menu_note_modal_open = False
+                st.session_state.context_menu_note_input = ""
+                request_rerun()
+
+        if st.session_state.get('context_notes'):
+            with st.expander("Gespeicherte Notizen", expanded=False):
+                for idx, note in enumerate(reversed(st.session_state.context_notes[-5:])):
+                    if idx:
+                        st.divider()
+                    timestamp = (note.get('created_at') or '').replace('T', ' ')[:19]
+                    if timestamp:
+                        st.caption(timestamp)
+                    st.write(note.get('text', ''))
+
+        if st.session_state.get('context_menu_debug_enabled'):
+            st.markdown("---")
+            st.caption("Debug-Informationen")
+            debug_payload = {
+                "current_page": st.session_state.get("selected_page_key_sui"),
+                "nav_history": st.session_state.get("nav_history", [])[-10:],
+                "active_company_id": st.session_state.get("active_company_id"),
+                "preferred_doc_tab": st.session_state.get("context_menu_doc_output_preferred_tab"),
+            }
+            st.json(debug_payload)
+
+    drawer_position = st.session_state.get("app_drawer_position")
+    query_params: Dict[str, Any] = {}
+    if drawer_position is None:
+        if hasattr(st, "query_params"):
+            try:
+                query_params = dict(st.query_params)
+            except Exception:
+                query_params = {}
+        else:
+            try:
+                query_params = dict(st.experimental_get_query_params())  # pragma: no cover - legacy fallback
+            except Exception:
+                query_params = {}
+        candidate = query_params.get("drawer") or query_params.get("drawer_pos")
+        if isinstance(candidate, list):
+            candidate = candidate[0] if candidate else None
+        drawer_position = str(candidate).lower() if candidate else "left"
+    if not isinstance(drawer_position, str):
+        drawer_position = "left"
+    drawer_position = drawer_position.lower()
+    if drawer_position not in {"right", "left"}:
+        drawer_position = "left"
+    st.session_state["app_drawer_position"] = drawer_position
+
+    drawer_classes = f"app-drawer app-drawer--collapsed app-drawer--align-{drawer_position}"
+    initial_icon = "&rsaquo;" if drawer_position == "left" else "&lsaquo;"
+
+    st.markdown(
+        """
+        <style>
+        #app-main-drawer {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 0;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            gap: 0;
+            -webkit-align-items: stretch;
+            -ms-flex-align: stretch;
+            align-items: stretch;
+            z-index: 9999;
+        }
+        #app-main-drawer.app-drawer--align-left {
+            -ms-flex-direction: row;
+            -webkit-flex-direction: row;
+            flex-direction: row;
+        }
+        #app-main-drawer.app-drawer--align-right {
+            -ms-flex-direction: row-reverse;
+            -webkit-flex-direction: row-reverse;
+            flex-direction: row-reverse;
+            left: auto;
+            right: 0;
+        }
+        #app-main-drawer.app-drawer--anchored {
+            position: fixed;
+        }
+        #app-main-drawer .app-drawer__handle {
+            pointer-events: auto;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0.85rem 0.9rem;
+            border-radius: 0 18px 18px 0;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            border-right: none;
+            background: rgba(15, 23, 42, 0.82);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+            color: #f8fafc;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-size: 0.68rem;
+            font-weight: 600;
+            box-shadow: 0 10px 32px rgba(15, 23, 42, 0.28);
+        }
+        #app-main-drawer.app-drawer--align-right .app-drawer__handle {
+            border-left: none;
+            border-right: 1px solid rgba(148, 163, 184, 0.35);
+            border-radius: 18px 0 0 18px;
+        }
+        #app-main-drawer .app-drawer__panel {
+            width: min(420px, 86vw);
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            background: rgba(15, 23, 42, 0.92);
+            -webkit-backdrop-filter: blur(28px);
+            backdrop-filter: blur(28px);
+            border-radius: 0 24px 24px 0;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            border-left: none;
+            box-shadow: 0 10px 32px rgba(15, 23, 42, 0.28);
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.32s ease, opacity 0.26s ease;
+            overflow: hidden;
+        }
+        #app-main-drawer.app-drawer--align-right .app-drawer__panel {
+            border-right: none;
+            border-left: 1px solid rgba(148, 163, 184, 0.35);
+            border-radius: 24px 0 0 24px;
+            transform: translateX(-100%);
+        }
+        #app-main-drawer.app-drawer--expanded .app-drawer__panel {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True)
+
+    st.markdown(
+        f"""
+        <div class="{drawer_classes}" id="app-main-drawer" data-position="{drawer_position}">
+            <button type="button" class="app-drawer__handle" id="app-main-drawer-handle" aria-expanded="false" aria-controls="app-main-drawer-panel" title="Drawer öffnen">
+                <span class="app-drawer__handle-icon" aria-hidden="true">{initial_icon}</span>
+                <span class="app-drawer__handle-text">Drawer</span>
+            </button>
+            <aside class="app-drawer__panel" id="app-main-drawer-panel" aria-hidden="true">
+                <header class="app-drawer__panel-header">
+                    <span class="app-drawer__panel-title">Drawer</span>
+                    <button type="button" class="app-drawer__close" id="app-main-drawer-close" aria-label="Drawer schließen">&times;</button>
+                </header>
+                <div class="app-drawer__panel-content">
+                    <div class="app-drawer__placeholder">Noch keine Inhalte</div>
+                </div>
+            </aside>
+        </div>
+        """,
+        unsafe_allow_html=True)
+
+    st.markdown(
+        """
+        <script>
+        (function() {
+            const doc = document;
+            const drawer = doc.getElementById('app-main-drawer');
+            const handle = doc.getElementById('app-main-drawer-handle');
+            const closeButton = doc.getElementById('app-main-drawer-close');
+            const panel = doc.getElementById('app-main-drawer-panel');
+            if (!drawer || !handle || !panel) { return; }
+            if (drawer.dataset.bound === 'true') { return; }
+
+            const position = drawer.dataset.position || 'right';
+
+            const alignToSidebar = () => {
+                const sidebarSection = doc.querySelector('section[data-testid="stSidebar"]') || doc.querySelector('div[data-testid="stSidebar"]');
+                if (!sidebarSection) {
+                    if (position === 'left') {
+                        drawer.style.left = '0';
+                        drawer.style.right = '';
+                    } else {
+                        drawer.style.right = '0';
+                        drawer.style.left = '';
+                    }
+                    drawer.style.bottom = '1.5rem';
+                    return;
+                }
+                const rect = sidebarSection.getBoundingClientRect();
+                if (position === 'left') {
+                    drawer.style.left = `${Math.round(rect.right)}px`;
+                    drawer.style.right = '';
+                } else {
+                    const rightOffset = Math.round(window.innerWidth - rect.left);
+                    drawer.style.right = `${rightOffset}px`;
+                    drawer.style.left = '';
+                }
+                drawer.style.bottom = '1.5rem';
+            };
+
+            if (window.__appDrawerResizeHandler) {
+                window.removeEventListener('resize', window.__appDrawerResizeHandler);
+            }
+            window.__appDrawerResizeHandler = alignToSidebar;
+            window.addEventListener('resize', alignToSidebar);
+
+            if (window.__appDrawerMutationObserver) {
+                window.__appDrawerMutationObserver.disconnect();
+            }
+            window.__appDrawerMutationObserver = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                    if (mutation.type === 'childList') {
+                        alignToSidebar();
+                        break;
+                    }
+                }
+            });
+            window.__appDrawerMutationObserver.observe(doc.body, { childList: true, subtree: true });
+
+            requestAnimationFrame(alignToSidebar);
+
+            let expanded = false;
+
+            const updateState = (nextState) => {
+                expanded = nextState;
+                drawer.classList.toggle('app-drawer--expanded', expanded);
+                drawer.classList.toggle('app-drawer--collapsed', !expanded);
+                panel.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+                handle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                const icon = handle.querySelector('.app-drawer__handle-icon');
+                if (icon) {
+                    if (position === 'left') {
+                        icon.textContent = expanded ? '\\u2039' : '\\u203A';
+                    } else {
+                        icon.textContent = expanded ? '\\u203A' : '\\u2039';
+                    }
+                }
+            };
+
+            const toggleDrawer = () => updateState(!expanded);
+            const closeDrawer = () => updateState(false);
+
+            handle.addEventListener('click', toggleDrawer);
+            handle.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    toggleDrawer();
+                }
+            });
+
+            if (closeButton) {
+                closeButton.addEventListener('click', closeDrawer);
+            }
+
+            doc.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeDrawer();
+                }
+            });
+
+            drawer.dataset.bound = 'true';
+        })();
+        </script>
+        """,
+        unsafe_allow_html=True)
+
+    if import_errors:
+        with st.sidebar:
+            st.markdown("---")
+            st.subheader(get_text_gui("import_errors_title"))
+            for error_msg in import_errors:
+                st.error(error_msg)
+            st.markdown("---")
+
+    #  LIVE-KOSTEN-VORSCHAU - IMMER SICHTBAR WENN BERECHNUNGEN VORHANDEN
+    render_live_cost_preview()
+
+    # Profil-Editor anzeigen (falls aktiviert)
+    if st.session_state.get('show_profile_editor'):
+        from user_menu import render_profile_editor
+        render_profile_editor()
+        return  # Stoppt weitere Rendering
+
+    # Seiten-Rendering basierend auf Auswahl
+    if selected_page_key == "input":
+        # MODERNE HEADER IM SCREENSHOT-STIL (Phase 7)
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">
+                Stammdaten & Kalkulation
+            </h1>
+            <p style="color: #4a5568; margin-top: 0.5rem; font-size: 1rem; font-weight: 400;">
+                Geben Sie die Projektdaten ein und starten Sie die Berechnung
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if data_input_module and callable(getattr(data_input_module, 'render_data_input', None)):
+            data_input_module.render_data_input(TEXTS)
+        else:
+            st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_input", "Eingabemodul nicht verfügbar.")))
+
+    elif selected_page_key == "analysis":
+        # MODERNE HEADER IM SCREENSHOT-STIL (Phase 7)
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 16px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">
+                Ergebnis-Analyse
+            </h1>
+            <p style="color: #4a5568; margin-top: 0.5rem; font-size: 1rem; font-weight: 400;">
+                Detaillierte Auswertung Ihrer Solaranlage
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if analysis_module and callable(getattr(analysis_module, 'render_analysis', None)):
+            try:
+                analysis_module.render_analysis(TEXTS, st.session_state.get("calculation_results"))
+                
+                # === [FIX] MASTER-FIX: Alle Charts verfügbar machen ===
+                try:
+                    from MASTER_FIX import apply_master_fix
+                    apply_master_fix()
+                except Exception as e_master_fix:
+                    # Silent fail - nicht kritisch
+                    import logging
+                    logging.warning(f"MASTER-FIX konnte nicht angewendet werden: {e_master_fix}")
+                
+            except Exception as e_render_analysis:
+                st.error(f"Fehler beim Rendern des Analyse-Tabs: {e_render_analysis}")
+                st.text_area("Traceback Analysis:", tb_module.format_exc(), height=200)
+        else:
+            st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_analysis", "Analysemodul nicht verfügbar.")))
+
+    elif selected_page_key == "admin":
+        required_modules_for_admin_render = [admin_panel_module, database_module, product_db_module, calculations_module]
+        if all(m is not None for m in required_modules_for_admin_render) and callable(getattr(admin_panel_module, 'render_admin_panel', None)):
+            admin_kwargs_pass = {
+                "texts": TEXTS,
+                "get_db_connection_func": getattr(database_module, 'get_db_connection', None),
+                "save_admin_setting_func": getattr(database_module, 'save_admin_setting', None),
+                "load_admin_setting_func": getattr(database_module, 'load_admin_setting', None),
+                "parse_price_matrix_csv_func": lambda *args: None,  # Deprecated - using MatrixLoader now
+                "parse_price_matrix_excel_func": lambda *args: None,  # Deprecated - using MatrixLoader now
+                "list_products_func": getattr(product_db_module, 'list_products', None),
+                "add_product_func": getattr(product_db_module, 'add_product', None),
+                "update_product_func": getattr(product_db_module, 'update_product', None),
+                "delete_product_func": getattr(product_db_module, 'delete_product', None),
+                "get_product_by_id_func": getattr(product_db_module, 'get_product_by_id', None),
+                "get_product_by_model_name_func": getattr(product_db_module, 'get_product_by_model_name', None),
+                "list_product_categories_func": getattr(product_db_module, 'list_product_categories', None),
+                "db_list_companies_func": getattr(database_module, 'list_companies', None),
+                "db_add_company_func": getattr(database_module, 'add_company', None),
+                "db_get_company_by_id_func": getattr(database_module, 'get_company', None),
+                "db_update_company_func": getattr(database_module, 'update_company', None),
+                "db_delete_company_func": getattr(database_module, 'delete_company', None),
+                "db_set_default_company_func": getattr(database_module, 'set_default_company', None),
+                "db_add_company_document_func": getattr(database_module, 'add_company_document', None),
+                "db_list_company_documents_func": getattr(database_module, 'list_company_documents', None),
+                "db_delete_company_document_func": getattr(database_module, 'delete_company_document', None)
+            }
+            all_critical_funcs_valid = True
+            for func_name_key, func_obj in admin_kwargs_pass.items():
+                 if func_name_key.endswith('_func'):
+                     is_callable_admin = callable(func_obj)
+                     if func_name_key in ["parse_price_matrix_csv_func", "parse_price_matrix_excel_func", "get_db_connection_func", "save_admin_setting_func", "load_admin_setting_func"]:
+                         if not is_callable_admin:
+                             all_critical_funcs_valid = False
+            if not all_critical_funcs_valid:
+                 st.error("Einige Kernfunktionen für das Admin-Panel (DB-Zugriff oder Parser) konnten nicht geladen werden. Bitte Terminal prüfen.")
+            else:
+                try:
+                    admin_panel_module.render_admin_panel(**admin_kwargs_pass) # type: ignore
+                except Exception as e_render_admin:
+                    st.error(f"Fehler im Admin-Panel: {e_render_admin}")
+                    st.text_area("Traceback Admin:", tb_module.format_exc(), height=200)
+        else:
+            missing_modules_admin_list = [name for name, mod in [("Admin-Panel", admin_panel_module), ("Datenbank", database_module), ("Produkt-DB", product_db_module), ("Berechnungen", calculations_module)] if not mod]
+            st.warning(get_text_gui("module_unavailable_details", f"Admin-Panel oder dessen Abhängigkeiten ({', '.join(missing_modules_admin_list)}) nicht verfügbar."))
+
+    elif selected_page_key == "doc_output":
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                PDF-Angebote
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Erstellen und verwalten Sie Ihre Angebotsdokumente
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # CSS für PDF-Tabs mit orangen Akzenten und Schatteneffekten
+        st.markdown("""
+        <style>
+        /* Tab-Container transparent (kein schwarzer Hintergrund) */
+        .stTabs [data-baseweb="tab-list"] {
+            background: transparent !important;
+            gap: 8px;
+        }
+        
+        /* Tab-Buttons mit weißem Hintergrund, Schatten und orangen Akzenten */
+        .stTabs [data-baseweb="tab-list"] button {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border: 2px solid transparent !important;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 14px 24px !important;
+            font-weight: 700 !important;
+            color: #2d3748 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.06) !important;
+            margin-right: 4px !important;
+        }
+        
+        /* Hover-Effekt */
+        .stTabs [data-baseweb="tab-list"] button:hover {
+            border-color: rgba(255, 140, 0, 0.4) !important;
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Aktiver Tab mit orangen Akzenten */
+        .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+            border-color: #ff8c00 !important;
+            border-bottom: 4px solid #ff8c00 !important;
+            color: #ff8c00 !important;
+            box-shadow: 0 10px 16px rgba(255, 140, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 140, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Tab-Content ohne schwarzen Hintergrund */
+        .stTabs [data-baseweb="tab-panel"] {
+            background: transparent !important;
+            padding: 20px 0 !important;
+            border: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        # Tabs für PDF-Ausgabe erstellen - VEREINFACHT (Professional PDF Features sind jetzt in Standard PDF integriert)
+        # Multi-Angebote Tab wieder eingefügt
+        tab_single_pdf, tab_pdf_preview, tab_multi_offers = st.tabs([
+            " PDF-Ausgabe",
+            " PDF-Vorschau",
+            " Multi-Firmen-Angebote"
+        ])
+
+        with tab_single_pdf:
+            if doc_output_module and database_module and product_db_module and callable(getattr(doc_output_module, 'render_pdf_ui', None)):
+                project_data_doc = st.session_state.get('project_data', {})
+                calc_results_doc = st.session_state.get("calculation_results", {})
+
+                # Erweiterte Validierung der Daten
+                project_valid = (project_data_doc and
+                               project_data_doc.get('project_details',{}).get('module_quantity'))
+                calc_results_valid = (calc_results_doc and
+                                    isinstance(calc_results_doc, dict) and
+                                    len(calc_results_doc) > 0)
+
+                if not project_valid or not calc_results_valid:
+                    st.info(" **PDF-Generierung benötigt vollständige Projekt- und Berechnungsdaten**")
+                    st.markdown("""
+                    **Fehlende Daten:**
+                    - {} Projektdaten (Module, Wechselrichter, etc.)
+                    - {} Berechnungsergebnisse (Ertrag, Kosten, etc.)
+                    
+                    **Nächste Schritte:**
+                    1. Gehen Sie zur **Dateneingabe** und vervollständigen Sie das Projekt
+                    2. Führen Sie in der **Analysestufe** eine Berechnung durch
+                    3. Kehren Sie dann zur PDF-Generierung zurück
+                    """.format("" if not project_valid else "",
+                             "" if not calc_results_valid else ""))
+                else:
+                    # Zusätzliche Validierung: Stelle sicher, dass calc_results_doc nicht leer ist
+                    if not calc_results_doc or len(calc_results_doc) == 0:
+                        # Versuche, die Daten aus der Session State zu laden
+                        calc_results_doc = st.session_state.get("calculation_results", {})
+                        if not calc_results_doc:
+                            st.error(" **Berechnungsdaten nicht verfügbar**")
+                            st.info("Bitte führen Sie zuerst eine Berechnung in der Analysestufe durch.")
+                            return
+
+                    pdf_ui_kwargs_pass = {
+                        "texts": TEXTS, "project_data": project_data_doc, "analysis_results": calc_results_doc,
+                        "load_admin_setting_func": getattr(database_module, 'load_admin_setting', None),
+                        "save_admin_setting_func": getattr(database_module, 'save_admin_setting', None),
+                        "list_products_func": getattr(product_db_module, 'list_products', None),
+                        "get_product_by_id_func": getattr(product_db_module, 'get_product_by_id', None),
+                        "get_active_company_details_func": getattr(database_module, 'get_active_company', None),
+                        "db_list_company_documents_func": getattr(database_module, 'list_company_documents', None)
+                    }
+                    critical_funcs_for_pdf_check = [ val for key, val in pdf_ui_kwargs_pass.items() if key.endswith("_func") ]
+                    if not all(f is not None and callable(f) for f in critical_funcs_for_pdf_check):
+                         st.error("Einige Kernfunktionen für die PDF-Ausgabe konnten nicht geladen werden oder sind nicht aufrufbar.")
+                    else:
+                        try:
+                            doc_output_module.render_pdf_ui(**pdf_ui_kwargs_pass) # type: ignore
+                        except Exception as e_render_pdf:
+                            st.error(f"Fehler beim Rendern der PDF UI: {e_render_pdf}")
+                            st.text_area("Traceback PDF UI:", tb_module.format_exc(), height=200)
+            else:
+                st.warning(get_text_gui("module_unavailable_details", "PDF-Ausgabemodul oder dessen Abhängigkeiten sind nicht verfügbar."))
+
+
+
+        # === PDF-VORSCHAU TAB ===
+        with tab_pdf_preview:
+            st.subheader(" Live PDF-Vorschau & Bearbeitung")
+
+            # PDF-Vorschau Modul importieren und verwenden
+            try:
+                from pdf_preview import (
+                    PDF_PREVIEW_AVAILABLE,
+                    render_pdf_preview_interface)
+
+                if not PDF_PREVIEW_AVAILABLE:
+                    # Shim-Modul zeigt hilfreiche Meldung mit Schritt-für-Schritt-Anleitung
+                    render_pdf_preview_interface()
+                else:
+                    # HAUPT-PDF-VORSCHAU-FUNKTIONALITÄT
+                    project_data_preview = st.session_state.get('project_data', {})
+                    calc_results_preview = st.session_state.get("calculation_results", {})
+
+                    if not project_data_preview or not calc_results_preview:
+                        st.info("ℹ Bitte führen Sie zuerst eine Projektanalyse durch, um die PDF-Vorschau zu nutzen.")
+                        st.markdown("###  Was bietet die PDF-Vorschau?")
+
+                        col_feature1, col_feature2 = st.columns(2)
+                        with col_feature1:
+                            st.markdown("""
+                            ** Live-Vorschau Modi:**
+                            -  Schnellvorschau (erste Seiten)
+                            -  Vollständige Vorschau
+                            -  Seitenweise Navigation
+                            
+                            ** Interaktive Features:**
+                            -  Automatische Aktualisierung
+                            -  Zoom-Funktionen
+                            -  Cache für schnellere Vorschau
+                            """)
+                        with col_feature2:
+                            st.markdown("""
+                            ** Bearbeitungsoptionen:**
+                            -  Template-Auswahl
+                            -  Logo & Bilder anpassen
+                            -  Sektionen ein-/ausblenden
+                            
+                            ** Integration:**
+                            -  Firmenspezifische Vorlagen
+                            -  Live-Diagramm-Updates
+                            -  Dokument-Management
+                            """)
+
+                        # Demo-Vorschau (statisch)
+                        st.markdown("---")
+                        st.markdown("###  Vorschau-Demo")
+
+                        demo_image_placeholder = st.empty()
+                        with demo_image_placeholder:
+                            st.info(" Hier würde Ihre PDF-Vorschau erscheinen...")
+
+                            # Einfacher Platzhalter für die Vorschau
+                            st.markdown("""
+                            ```
+                            
+                               [Ihr Firmenlogo]               
+                                                                 
+                               Photovoltaik-Angebot          
+                                                                 
+                               Kunde: [Kundenname]           
+                               Datum: [Heute]                
+                                                                 
+                               Anlagenleistung: XX kWp       
+                               Investition: XX.XXX €         
+                               Ertrag: XX.XXX kWh/Jahr       
+                                                                 
+                               [Diagramme und Tabellen]      
+                                                                 
+                            
+                            ```
+                            """)
+
+                    else:
+                        # PDF-Vorschau mit echten Daten
+                        try:
+                            active_company = None
+                            if database_module and callable(getattr(database_module, 'get_active_company', None)):
+                                active_company = database_module.get_active_company()
+
+                            if not active_company:
+                                st.warning(" Keine aktive Firma gefunden. Bitte wählen Sie eine Firma im Admin-Panel.")
+                                active_company = {"id": 1, "name": "Standard-Firma"}
+
+                            # PDF-Vorschau Interface aufrufen
+                            render_pdf_preview_interface(
+                                project_data=project_data_preview,
+                                analysis_results=calc_results_preview,
+                                company_info=active_company,
+                                texts=TEXTS,
+                                load_admin_setting_func=getattr(database_module, 'load_admin_setting', None),
+                                save_admin_setting_func=getattr(database_module, 'save_admin_setting', None),
+                                list_products_func=getattr(product_db_module, 'list_products', None),
+                                get_product_by_id_func=getattr(product_db_module, 'get_product_by_id', None),
+                                db_list_company_documents_func=getattr(database_module, 'list_company_documents', None),
+                                active_company_id=active_company.get('id')
+                            )
+
+                        except Exception as e_preview:
+                            st.error(f" Fehler bei der PDF-Vorschau: {e_preview}")
+                            st.markdown("###  Fehlerbehebung:")
+                            st.markdown("""
+                            1. **Überprüfen Sie die Module:** Stellen Sie sicher, dass alle PDF-Module geladen sind
+                            2. **Projektdaten:** Führen Sie eine vollständige Projektanalyse durch
+                            3. **Firmeneinstellungen:** Wählen Sie eine aktive Firma im Admin-Panel
+                            4. **Abhängigkeiten:** Installieren Sie `pip install pymupdf pillow`
+                            """)
+
+                            if st.checkbox(" Detaillierte Fehlermeldung anzeigen", key="preview_debug"):
+                                st.code(tb_module.format_exc())
+
+            except ImportError as e_import:
+                st.error(f" PDF-Vorschau-Modul konnte nicht importiert werden: {e_import}")
+                st.info(" Überprüfen Sie, ob `pdf_preview.py` vorhanden ist und alle Abhängigkeiten installiert sind.")
+
+                # Installations-Hilfe
+                st.markdown("###  Installation der Abhängigkeiten:")
+                st.code("""
+                pip install pymupdf
+                pip install pillow
+                pip install reportlab
+                """)
+
+            except Exception as e_general:
+                st.error(f" Unerwarteter Fehler im PDF-Vorschau-Tab: {e_general}")
+                if st.checkbox(" Debug-Informationen anzeigen", key="preview_general_debug"):
+                    st.code(tb_module.format_exc())
+
+        # Multi-Angebote Tab wieder aktiviert
+        with tab_multi_offers:
+            st.markdown("### Multi-Firmen-Angebotsgenerator (KASKADIEREND) v2.0")
+            
+            # Cache-Buster: Timestamp hinzugefügt
+            from datetime import datetime
+            st.markdown(f"<small>Zuletzt aktualisiert: {datetime.now().strftime('%H:%M:%S')}</small>", unsafe_allow_html=True)
+            
+            # WICHTIG: Kaskadierende Preisberechnung Info
+            st.info(
+                "**[IDEA] Multi-Firmen-Angebote: KASKADIERENDE Preisberechnung**\n\n"
+                "**Wichtig:** Die Preise werden KASKADIEREND berechnet!\n\n"
+                " Firma 1: Haupt-PDF Preis + Basis-Aufschlag %\n\n"
+                " Firma 2: Preis von Firma 1 + Progression %\n\n"
+                " Firma 3: Preis von Firma 2 + Progression %\n\n"
+                " Beispiel: Basis 100.000 €, +5%, +5%\n"
+                "   • Firma 1: 105.000 €\n"
+                "   • Firma 2: 110.250 € (NICHT 110.000!)\n"
+                "   • Firma 3: 115.762,50 € (NICHT 115.000!)\n\n"
+                "**Voraussetzungen:**\n\n"
+                "1⃣ **Mehrere Firmen** konfiguriert im Admin-Panel\n\n"
+                "2⃣ **Vollständige Projektanalyse** durchgeführt\n\n"
+                "3⃣ **Produktauswahl** abgeschlossen\n\n"
+                " Für **Einzel-Firmen-PDFs** nutzen Sie den Tab 'PDF-Ausgabe' oben."
+            )
+            
+            st.markdown("---")
+            
+            # Firmen aus Datenbank laden
+            try:
+                if database_module and callable(getattr(database_module, 'list_companies', None)):
+                    all_firms = database_module.list_companies()
+                    
+                    if not all_firms:
+                        st.warning("Keine Firmen in der Datenbank gefunden. Bitte fügen Sie erst Firmen hinzu.")
+                    else:
+                        # === FIRMEN-AUSWAHL ===
+                        st.markdown("###  Firmen-Auswahl")
+                        
+                        # ERST firm_options definieren (wird im Button gebraucht!)
+                        firm_options = {f"{firm.get('name', 'Unbekannt')} ({firm.get('location', 'Kein Ort')})": firm 
+                                       for firm in all_firms}
+                        
+                        col_select, col_button = st.columns([3, 1])
+                        
+                        with col_select:
+                            st.markdown(f"**Verfügbare Firmen:** {len(all_firms)}")
+                        
+                        with col_button:
+                            if st.button("Alle auswählen", key="select_all_firms_multi"):
+                                st.session_state.multi_pdf_selected_firms = list(firm_options.keys())
+                                st.rerun()
+                        
+                        selected_firm_names = st.multiselect(
+                            "Firmen auswählen",
+                            options=list(firm_options.keys()),
+                            default=st.session_state.get('multi_pdf_selected_firms', []),
+                            key="multi_pdf_selected_firms",
+                            help="Wählen Sie die Firmen aus, für die Angebote erstellt werden sollen"
+                        )
+                        
+                        # Konvertiere Namen zu Firmen-Objekten
+                        selected_firms = [firm_options[name] for name in selected_firm_names]
+                        
+                        if selected_firms:
+                            st.success(f"{len(selected_firms)} Firma(n) ausgewählt")
+                            
+                            st.markdown("---")
+                            
+                            # === PREIS-EINSTELLUNGEN ===
+                            st.markdown("###Preis-Modifikation")
+                            
+                            col1, col2 = st.columns(2)
+                            
+                            with col1:
+                                base_modifier = st.slider(
+                                    "Basis-Aufschlag (%)",
+                                    min_value=0,
+                                    max_value=50,
+                                    value=15,
+                                    step=1,
+                                    key="multi_pdf_base_modifier",
+                                    help="Grundlegender Preisaufschlag für alle Multi-PDFs"
+                                )
+                            
+                            with col2:
+                                progression = st.slider(
+                                    "[STATS] Progressions-Faktor (%)",
+                                    min_value=0,
+                                    max_value=20,
+                                    value=5,
+                                    step=1,
+                                    key="multi_pdf_progression",
+                                    help="Zusätzlicher Aufschlag pro weiterer Firma"
+                                )
+                            
+                            st.markdown("---")
+                            
+                            # === PDF-INHALTSOPTIONEN ===
+                            st.markdown("### PDF-Inhalte & Features")
+                            
+                            col1, col2, col3 = st.columns(3)
+                            
+                            with col1:
+                                st.markdown("**Diagramme & Visualisierungen:**")
+                                include_charts = st.checkbox(
+                                    "Diagramme einbinden",
+                                    value=True,
+                                    key="multi_pdf_include_charts",
+                                    help="Ertragsprognose, Eigenverbrauch, etc."
+                                )
+                                
+                                if include_charts:
+                                    chart_type = st.selectbox(
+                                        "Diagramm-Stil",
+                                        options=["Modern", "Klassisch", "Minimal"],
+                                        key="multi_pdf_chart_style"
+                                    )
+                                    
+                                    include_energy_flow = st.checkbox(
+                                        "Energiefluss-Diagramm",
+                                        value=True,
+                                        key="multi_pdf_energy_flow"
+                                    )
+                                    
+                                    include_yield_chart = st.checkbox(
+                                        "Jahresertrag-Diagramm",
+                                        value=True,
+                                        key="multi_pdf_yield_chart"
+                                    )
+                                    
+                                    include_savings_chart = st.checkbox(
+                                        "Einsparungen-Chart",
+                                        value=True,
+                                        key="multi_pdf_savings_chart"
+                                    )
+                                
+                                # NEU: Erweiterte Ausgabe für Multi-PDF
+                                st.markdown("---")
+                                st.markdown("**Erweiterte Ausgabe:**")
+                                append_additional_pages = st.checkbox(
+                                    " Zusätzliche Angebotsseiten anhängen",
+                                    value=False,
+                                    key="multi_pdf_append_additional",
+                                    help="Fügt detaillierte Berechnungen, Diagramme und individuelle Inhalte hinzu"
+                                )
+                                
+                                if append_additional_pages:
+                                    include_all_docs = st.checkbox(
+                                        " Datenblätter & Dokumente anhängen",
+                                        value=True,
+                                        key="multi_pdf_include_all_docs",
+                                        help="Produktdatenblätter und Firmendokumente"
+                                    )
+                            
+                            with col2:
+                                st.markdown("** Wirtschaftlichkeit:**")
+                                include_roi = st.checkbox(
+                                    "ROI-Analyse",
+                                    value=True,
+                                    key="multi_pdf_include_roi",
+                                    help="Return on Investment Berechnung"
+                                )
+                                
+                                include_payback = st.checkbox(
+                                    "Amortisationszeit",
+                                    value=True,
+                                    key="multi_pdf_include_payback",
+                                    help="Break-Even Berechnung"
+                                )
+                                
+                                include_cashflow = st.checkbox(
+                                    "Cash-Flow Projektion",
+                                    value=False,
+                                    key="multi_pdf_include_cashflow",
+                                    help="20-Jahres Cash-Flow Prognose"
+                                )
+                                
+                                include_sensitivity = st.checkbox(
+                                    "Sensitivitätsanalyse",
+                                    value=False,
+                                    key="multi_pdf_include_sensitivity",
+                                    help="Verschiedene Szenarien"
+                                )
+                            
+                            with col3:
+                                st.markdown("**Technische Details:**")
+                                include_tech_specs = st.checkbox(
+                                    "Technische Spezifikationen",
+                                    value=True,
+                                    key="multi_pdf_tech_specs",
+                                    help="Detaillierte Produktdaten"
+                                )
+                                
+                                include_installation = st.checkbox(
+                                    "Installationsplan",
+                                    value=False,
+                                    key="multi_pdf_installation",
+                                    help="Montageübersicht"
+                                )
+                                
+                                include_warranty = st.checkbox(
+                                    "Garantie-Informationen",
+                                    value=True,
+                                    key="multi_pdf_warranty",
+                                    help="Herstellergarantien"
+                                )
+                                
+                                include_maintenance = st.checkbox(
+                                    "Wartungshinweise",
+                                    value=False,
+                                    key="multi_pdf_maintenance",
+                                    help="Wartungsempfehlungen"
+                                )
+                            
+                            st.markdown("---")
+                            
+                            # === ZUSÄTZLICHE OPTIONEN ===
+                            with st.expander(" Erweiterte Optionen", expanded=False):
+                                col1, col2 = st.columns(2)
+                                
+                                with col1:
+                                    st.markdown("** Design & Layout:**")
+                                    
+                                    page_format = st.selectbox(
+                                        "Seitenformat",
+                                        options=["A4 Hochformat", "A4 Querformat"],
+                                        key="multi_pdf_page_format"
+                                    )
+                                    
+                                    color_scheme = st.selectbox(
+                                        "Farbschema",
+                                        options=["Standard", "Blau", "Grün", "Orange"],
+                                        key="multi_pdf_color_scheme"
+                                    )
+                                    
+                                    include_page_numbers = st.checkbox(
+                                        "Seitenzahlen",
+                                        value=True,
+                                        key="multi_pdf_page_numbers"
+                                    )
+                                
+                                with col2:
+                                    st.markdown("** Zahlungsmodalitäten:**")
+                                    
+                                    include_payment_terms = st.checkbox(
+                                        "Zahlungsbedingungen einbinden",
+                                        value=True,
+                                        key="multi_pdf_payment_terms"
+                                    )
+                                    
+                                    if include_payment_terms:
+                                        payment_variant = st.selectbox(
+                                            "Zahlungsvariante",
+                                            options=["Standard (50/50)", "30/30/40", "Vollzahlung"],
+                                            key="multi_pdf_payment_variant"
+                                        )
+                                    
+                                    include_financing = st.checkbox(
+                                        "Finanzierungsoptionen",
+                                        value=False,
+                                        key="multi_pdf_financing"
+                                    )
+                            
+                            st.markdown("---")
+                            
+                            # === PRODUKT-ROTATION ===
+                            st.markdown("###  Produkt-Rotation")
+                            
+                            st.info(
+                                "**Automatische Marken-Rotation:** Jede Firma erhält automatisch andere "
+                                "Produkt-Marken. Die Spezifikationen (Leistung, Kapazität) bleiben gleich."
+                            )
+                            
+                            strict_rotation = st.checkbox(
+                                "Strikte Rotation (Fehler bei Marken-Erschöpfung)",
+                                value=False,
+                                key="multi_pdf_strict_rotation",
+                                help="Bei deaktiviert: Erlaube Duplikate mit anderen Modellen"
+                            )
+                            
+                            st.markdown("---")
+                            
+                            # === PDF-GENERIERUNG ===
+                            st.markdown("### PDF-Generierung starten")
+                            
+                            # Hole Session State Daten
+                            project_data = st.session_state.get('project_data', {})
+                            analysis_results = st.session_state.get('analysis_results', {})
+                            
+                            # PRODUKTE aus project_data holen (RICHTIGE Feldnamen!)
+                            pv_module_id = project_data.get('project_details', {}).get('selected_module_id')
+                            inverter_id = project_data.get('project_details', {}).get('selected_inverter_id')
+                            battery_id = project_data.get('project_details', {}).get('selected_storage_id')
+                            
+                            # Lade Produkte aus Datenbank
+                            pv_module = None
+                            inverter = None
+                            battery = None
+                            
+                            if product_db_module and callable(getattr(product_db_module, 'get_product_by_id', None)):
+                                try:
+                                    if pv_module_id:
+                                        pv_module = product_db_module.get_product_by_id(pv_module_id)
+                                    if inverter_id:
+                                        inverter = product_db_module.get_product_by_id(inverter_id)
+                                    if battery_id:
+                                        battery = product_db_module.get_product_by_id(battery_id)
+                                except Exception as e:
+                                    st.error(f"Fehler beim Laden der Produkte: {e}")
+                            
+                            # VALIDIERUNG: Produkte müssen ausgewählt sein!
+                            if not pv_module:
+                                st.error("**FEHLER:** Kein PV-Modul ausgewählt! Bitte gehen Sie zum Tab ' Produktauswahl' und wählen Sie ein PV-Modul aus.")
+                                st.stop()
+                            
+                            if not inverter:
+                                st.error("**FEHLER:** Kein Wechselrichter ausgewählt! Bitte gehen Sie zum Tab ' Produktauswahl' und wählen Sie einen Wechselrichter aus.")
+                                st.stop()
+                            
+                            # Sammle alle Optionen
+                            pdf_options = {
+                                'include_charts': include_charts,
+                                'chart_style': chart_type if include_charts else None,
+                                'include_energy_flow': include_energy_flow if include_charts else False,
+                                'include_yield_chart': include_yield_chart if include_charts else False,
+                                'include_savings_chart': include_savings_chart if include_charts else False,
+                                'include_roi': include_roi,
+                                'include_payback': include_payback,
+                                'include_cashflow': include_cashflow,
+                                'include_sensitivity': include_sensitivity,
+                                'include_tech_specs': include_tech_specs,
+                                'include_installation': include_installation,
+                                'include_warranty': include_warranty,
+                                'include_maintenance': include_maintenance,
+                                'page_format': page_format,
+                                'color_scheme': color_scheme,
+                                'include_page_numbers': include_page_numbers,
+                                'include_payment_terms': include_payment_terms,
+                                'include_financing': include_financing,
+                                # NEU: Erweiterte Ausgabe Optionen
+                                'append_additional_pages_after_main6': st.session_state.get('multi_pdf_append_additional', False),
+                                'include_all_documents': st.session_state.get('multi_pdf_include_all_docs', False) if st.session_state.get('multi_pdf_append_additional', False) else False
+                            }
+                            
+                            # Generierungs-Button
+                            if st.button(
+                                f"{len(selected_firms)} Multi-PDF(s) generieren",
+                                type="primary",
+                                use_container_width=True,
+                                key="generate_multi_pdfs_btn"
+                            ):
+                                with st.spinner(f"⏳ Generiere {len(selected_firms)} Angebote..."):
+                                    try:
+                                        # Standard-Produkte aus Session State
+                                        standard_products = {
+                                            'pv_modules': pv_module,
+                                            'inverters': inverter,
+                                            'battery_storage': battery
+                                        }
+                                        
+                                        company_info = st.session_state.get('company_info', {})
+                                        
+                                        # Generiere Multi-PDFs
+                                        from pdf_template_engine.dynamic_overlay import generate_multi_offer_pdfs
+                                        import zipfile
+                                        import io
+                                        from datetime import datetime
+                                        
+                                        results = generate_multi_offer_pdfs(
+                                            selected_firms=selected_firms,
+                                            standard_products=standard_products,
+                                            project_data=project_data,
+                                            analysis_results=analysis_results,
+                                            company_info=company_info,
+                                            profit_margin=st.session_state.get('profit_margin', 0),
+                                            modifier_pct=base_modifier,
+                                            progression_pct=progression,
+                                            pdf_options=pdf_options,
+                                            additional_pdf=None
+                                        )
+                                        
+                                        if not results:
+                                            st.error("Keine PDFs konnten generiert werden!")
+                                            st.warning("**BITTE KONSOLE PRÜFEN!** Dort stehen die Fehlerdetails.")
+                                            st.info("Häufige Ursachen:\n"
+                                                   "- Produkte können nicht aus DB geladen werden\n"
+                                                   "- Produkt-Rotation schlägt fehl (keine Alternativen gefunden)\n"
+                                                   "- Preis-Berechnung schlägt fehl")
+                                        else:
+                                            st.success(f"{len(results)} PDF(s) erfolgreich generiert!")
+                                            
+                                            # Erstelle ZIP-Archiv
+                                            zip_buffer = io.BytesIO()
+                                            
+                                            # Extrahiere Kundendaten für Dateinamen
+                                            customer_data = project_data.get('customer_details', {}) or project_data.get('customer_data', {})
+                                            anrede = customer_data.get('salutation') or customer_data.get('anrede') or customer_data.get('title', 'Kunde')
+                                            nachname = customer_data.get('last_name') or customer_data.get('nachname') or customer_data.get('name', 'Unbekannt')
+                                            
+                                            # Anlagengröße aus analysis_results
+                                            anlagengroesse_kwp = analysis_results.get('system_size_kwp', analysis_results.get('total_capacity_kwp', 0))
+                                            anlagengroesse = f"{anlagengroesse_kwp:.1f}kWp".replace('.', ',') if anlagengroesse_kwp > 0 else 'PV'
+                                            
+                                            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                                                
+                                                for idx, (firm_name, pdf_bytes) in enumerate(results, start=1):
+                                                    # Format: anrede_nachname_angebot_anlagengröße_firma.pdf (mit Index für Eindeutigkeit)
+                                                    safe_anrede = "".join(c for c in anrede if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    safe_nachname = "".join(c for c in nachname if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    safe_firma = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    
+                                                    filename = f"{idx:02d}_{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}_{safe_firma}.pdf"
+                                                    zip_file.writestr(filename, pdf_bytes)
+                                            
+                                            zip_bytes = zip_buffer.getvalue()
+                                            
+                                            # Download-Button für ZIP
+                                            st.download_button(
+                                                label=f"Alle {len(results)} PDFs herunterladen (ZIP)",
+                                                data=zip_bytes,
+                                                file_name=f"Multi_Angebote_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
+                                                mime="application/zip",
+                                                use_container_width=True
+                                            )
+                                            
+                                            # Optional: Einzelne Download-Buttons
+                                            with st.expander("Einzelne PDFs herunterladen", expanded=False):
+                                                for idx, (firm_name, pdf_bytes) in enumerate(results, start=1):
+                                                    safe_anrede = "".join(c for c in anrede if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    safe_nachname = "".join(c for c in nachname if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    safe_firma = "".join(c for c in firm_name if c.isalnum() or c in (' ', '-', '_')).strip().replace(' ', '_')
+                                                    
+                                                    filename = f"{idx:02d}_{safe_anrede}_{safe_nachname}_Angebot_{anlagengroesse}_{safe_firma}.pdf"
+                                                    
+                                                    st.download_button(
+                                                        label=f"{firm_name}",
+                                                        data=pdf_bytes,
+                                                        file_name=filename,
+                                                        mime="application/pdf",
+                                                        key=f"download_{safe_firma}"
+                                                    )
+                                    
+                                    except Exception as e:
+                                        st.error(f"Fehler bei Multi-PDF Generierung: {e}")
+                                        import traceback
+                                        with st.expander("Fehlerdetails", expanded=False):
+                                            st.code(tb_module.format_exc())
+                        else:
+                            st.warning("Bitte wählen Sie mindestens 1 Firma aus!")
+                else:
+                    st.error("Datenbank-Modul nicht verfügbar")
+            
+            except ImportError:
+                st.error("Firmendatenbank-Modul nicht gefunden")
+            except Exception as e:
+                st.error(f"Fehler beim Laden der Firmen: {e}")
+                import traceback
+                with st.expander("Fehlerdetails", expanded=False):
+                    st.code(tb_module.format_exc())
+
+    elif selected_page_key == "monitoring":
+        # Monitoring Dashboard
+        st.header("Überwachung & Diagnose")
+        
+        try:
+            from monitoring_dashboard import render_monitoring_dashboard
+            from app_health_monitor import health_monitor, get_health_status
+            
+            # MODERNE KPI-CARDS mit Gradients (Phase 7)
+            health_status = get_health_status()
+            current = health_status.get('current', {})
+            
+            # Shadcn-ui Cards für KPIs
+            from components.shadcn_ui_integration import card
+            
+            col1, col2, col3, col4 = st.columns(4)
+            
+            with col1:
+                status = current.get('status', 'UNKNOWN')
+                status_color = {"HEALTHY": "green", "DEGRADED": "yellow", "CRITICAL": "red", "OFFLINE": "gray"}.get(status, "gray")
+                card(
+                    title="Status",
+                    description=status,
+                    variant=status_color,
+                    key="kpi_status"
+                )
+            
+            with col2:
+                error_rate = current.get('error_rate', 0) * 100
+                card(
+                    title="Fehlerrate",
+                    description=f"{error_rate:.1f}%",
+                    variant="orange" if error_rate > 5 else "green",
+                    key="kpi_error_rate"
+                )
+            
+            with col3:
+                perf_score = current.get('performance_score', 0)
+                card(
+                    title="Performance",
+                    description=f"{perf_score:.1f}/5.0",
+                    variant="blue",
+                    key="kpi_performance"
+                )
+            
+            with col4:
+                quality_score = current.get('code_quality_score', 0)
+                card(
+                    title="Code-Qualität",
+                    description=f"{quality_score:.0f}/100",
+                    variant="purple",
+                    key="kpi_quality"
+                )
+            
+            st.markdown("---")
+            
+            # Render full monitoring dashboard
+            render_monitoring_dashboard()
+            
+            # Control buttons
+            st.markdown("---")
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                if st.button(" Rescan Application", use_container_width=True):
+                    with st.spinner("Scanne Anwendung... Dies kann einige Sekunden dauern."):
+                        try:
+                            from app_diagnostics import scan_and_report
+                            scan_and_report()
+                            
+                            # Lade und zeige Ergebnisse
+                            import json
+                            from pathlib import Path
+                            scan_file = Path("code_analysis_report.json")
+                            if scan_file.exists():
+                                with open(scan_file, 'r', encoding='utf-8') as f:
+                                    report = json.load(f)
+                                
+                                st.success(f"✅ Scan abgeschlossen! {report.get('total_issues', 0)} Issues gefunden.")
+                                
+                                # Zeige schnelle Zusammenfassung
+                                severity = report.get('severity_breakdown', {})
+                                if severity:
+                                    summary_parts = []
+                                    if severity.get('CRITICAL', 0) > 0:
+                                        summary_parts.append(f"🔴 {severity['CRITICAL']} Kritisch")
+                                    if severity.get('HIGH', 0) > 0:
+                                        summary_parts.append(f"🟠 {severity['HIGH']} Hoch")
+                                    if severity.get('MEDIUM', 0) > 0:
+                                        summary_parts.append(f"🟡 {severity['MEDIUM']} Mittel")
+                                    
+                                    if summary_parts:
+                                        st.info(" | ".join(summary_parts))
+                            else:
+                                st.warning("Scan-Report wurde nicht gefunden.")
+                        except Exception as e:
+                            st.error(f"Fehler beim Scannen: {e}")
+                            import traceback
+                            with st.expander("Fehlerdetails"):
+                                st.code(traceback.format_exc())
+                    st.rerun()
+            
+            with col2:
+                if st.button(" Generate Health Report", use_container_width=True):
+                    st.session_state['show_health_report'] = True
+                
+                if st.session_state.get('show_health_report', False):
+                    report = health_monitor.generate_health_report()
+                    
+                    # Extrahiere Daten aus Report
+                    current = report.get('current_status', {})
+                    trends = report.get('trends', {})
+                    recommendations = report.get('recommendations', [])
+                    
+                    # Container mit weißem Hintergrund
+                    st.markdown("""
+                        <style>
+                        .health-report-card {
+                            background: white;
+                            padding: 1.5rem;
+                            border-radius: 8px;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                            border-left: 4px solid #16a34a;
+                            margin: 1rem 0;
+                        }
+                        .health-metric {
+                            background: #f8fafc;
+                            padding: 1rem;
+                            border-radius: 6px;
+                            margin-bottom: 0.5rem;
+                        }
+                        .health-recommendation {
+                            background: #fef3c7;
+                            padding: 1rem;
+                            border-radius: 6px;
+                            border-left: 3px solid #f59e0b;
+                            margin-top: 1rem;
+                        }
+                        </style>
+                    """, unsafe_allow_html=True)
+                    
+                    with st.container():
+                        st.markdown('<div class="health-report-card">', unsafe_allow_html=True)
+                        st.markdown("### 📊 Health Report")
+                        st.caption(f"Generiert: {report.get('generated_at', '')}")
+                        
+                        # Metrics in Columns
+                        m1, m2, m3, m4 = st.columns(4)
+                        
+                        with m1:
+                            st.markdown('<div class="health-metric">', unsafe_allow_html=True)
+                            st.caption("STATUS")
+                            status = current.get('status', 'UNKNOWN')
+                            if status == 'CRITICAL':
+                                st.markdown(f'<div style="color: #dc2626; font-size: 1.25rem; font-weight: 700; margin: 0;">{status}</div>', unsafe_allow_html=True)
+                            else:
+                                st.markdown(f'<div style="color: #16a34a; font-size: 1.25rem; font-weight: 700; margin: 0;">{status}</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        with m2:
+                            st.markdown('<div class="health-metric">', unsafe_allow_html=True)
+                            st.caption("FEHLERRATE")
+                            st.markdown(f'<div style="font-size: 1.25rem; font-weight: 700; margin: 0;">{current.get("error_rate", 0)}%</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        with m3:
+                            st.markdown('<div class="health-metric">', unsafe_allow_html=True)
+                            st.caption("PERFORMANCE")
+                            st.markdown(f'<div style="font-size: 1.25rem; font-weight: 700; margin: 0;">{current.get("performance_score", 0)}/5.0</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        with m4:
+                            st.markdown('<div class="health-metric">', unsafe_allow_html=True)
+                            st.caption("SPEICHER")
+                            st.markdown(f'<div style="font-size: 1.25rem; font-weight: 700; margin: 0;">{round(current.get("memory_usage_mb", 0), 1)} MB</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Empfehlungen
+                        if recommendations:
+                            st.markdown("""
+                            <div class="health-recommendation">
+                                <div style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">💡 Empfehlungen:</div>
+                            """, unsafe_allow_html=True)
+                            for rec in recommendations:
+                                st.markdown(f'<div style="font-size: 0.8rem; margin-left: 0.5rem;">• {rec}</div>', unsafe_allow_html=True)
+                            st.markdown('</div>', unsafe_allow_html=True)
+                        
+                        # Footer
+                        uptime = round(current.get('uptime_seconds', 0), 1)
+                        st.caption(f"Uptime: {uptime}s | Trends: Fehlerrate {trends.get('error_rate', 'stable')} | Performance {trends.get('performance', 'stable')}")
+                        st.markdown('</div>', unsafe_allow_html=True)
+            
+            with col3:
+                monitoring_active = health_status.get('monitoring_active', False)
+                if monitoring_active:
+                    if st.button("⏸ Stop Monitoring", key="stop_monitoring_btn", use_container_width=True):
+                        try:
+                            from app_health_monitor import stop_health_monitoring
+                            stop_health_monitoring()
+                            
+                            # Session state aufräumen
+                            if 'monitoring_started' in st.session_state:
+                                del st.session_state['monitoring_started']
+                            
+                            st.success("✅ Monitoring gestoppt!")
+                            
+                            # Sofort neu laden
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"❌ Fehler beim Stoppen: {e}")
+                            import traceback
+                            with st.expander("📋 Fehlerdetails"):
+                                st.code(traceback.format_exc())
+                else:
+                    if st.button("▶ Start Monitoring", key="start_monitoring_btn", use_container_width=True):
+                        try:
+                            from app_health_monitor import start_health_monitoring
+                            start_health_monitoring(interval=60)
+                            
+                            # Session state setzen für sofortiges Feedback
+                            if 'monitoring_started' not in st.session_state:
+                                st.session_state['monitoring_started'] = True
+                            
+                            st.success("✅ Monitoring gestartet! (Intervall: 60 Sekunden)")
+                            
+                            # Sofort neu laden
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"❌ Fehler beim Starten: {e}")
+                            import traceback
+                            with st.expander("📋 Fehlerdetails"):
+                                st.code(traceback.format_exc())
+        
+        except ImportError as e:
+            st.error(f"Monitoring module not available: {e}")
+            st.info("Please ensure monitoring_dashboard.py, app_health_monitor.py, app_tracing.py, and app_evaluation.py are present.")
+        except Exception as e:
+            st.error(f"Error loading monitoring dashboard: {e}")
+            import traceback
+            with st.expander("Error Details"):
+                st.code(traceback.format_exc())
+
+    elif selected_page_key == "quick_calc":
+        # A.G.E.N.T. - Autonomous AI Expert System
+        # Check for voice mode activation
+        if st.session_state.get('voice_mode'):
+            st.info(" **Sprachsteuerung aktiviert!** Sprechen Sie Ihre Anfrage.")
+            # Add voice input handling here if speech_recognition available
+            try:
+                import speech_recognition as sr
+                recognizer = sr.Recognizer()
+                with sr.Microphone() as source:
+                    st.write("Höre zu...")
+                    audio = recognizer.listen(source, timeout=5)
+                    try:
+                        text = recognizer.recognize_google(audio, language='de-DE')
+                        st.session_state['voice_input'] = text
+                        st.success(f"Erkannt: {text}")
+                    except sr.UnknownValueError:
+                        st.error("Sprache konnte nicht verstanden werden")
+                    except sr.RequestError:
+                        st.error("Spracherkennung nicht verfügbar")
+            except ImportError:
+                st.warning("Spracherkennung nicht installiert. Bitte installieren Sie 'SpeechRecognition' und 'pyaudio'.")
+            
+            st.session_state['voice_mode'] = False
+        
+        # Use agent_ui module if available, fallback to quick_calc for backward compatibility
+        if agent_ui_module and callable(getattr(agent_ui_module, 'render_agent_menu', None)):
+            agent_ui_module.render_agent_menu() # type: ignore
+        elif quick_calc_module and callable(getattr(quick_calc_module, 'render_quick_calc', None)):
+            st.header(get_text_gui("menu_item_quick_calc"))
+            quick_calc_module.render_quick_calc(TEXTS, module_name=get_text_gui("menu_item_quick_calc")) # type: ignore
+        else:
+            st.header(get_text_gui("menu_item_quick_calc"))
+            st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_quick_calc","A.G.E.N.T. nicht verfügbar.")))
+
+    elif selected_page_key == "crm":
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                CRM & Kundenverwaltung
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Verwalten Sie Ihre Kunden und Projekte
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # CSS für CRM-Tabs mit orangen Akzenten und Schatteneffekten
+        st.markdown("""
+        <style>
+        /* Tab-Container transparent (kein schwarzer Hintergrund) */
+        .stTabs [data-baseweb="tab-list"] {
+            background: transparent !important;
+            gap: 8px;
+        }
+        
+        /* Tab-Buttons mit weißem Hintergrund, Schatten und orangen Akzenten */
+        .stTabs [data-baseweb="tab-list"] button {
+            background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%) !important;
+            border: 2px solid transparent !important;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 14px 24px !important;
+            font-weight: 700 !important;
+            color: #2d3748 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.06) !important;
+            margin-right: 4px !important;
+        }
+        
+        /* Hover-Effekt */
+        .stTabs [data-baseweb="tab-list"] button:hover {
+            border-color: rgba(255, 140, 0, 0.4) !important;
+            box-shadow: 0 10px 12px rgba(255, 140, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Aktiver Tab mit orangen Akzenten */
+        .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%) !important;
+            border-color: #ff8c00 !important;
+            border-bottom: 4px solid #ff8c00 !important;
+            color: #ff8c00 !important;
+            box-shadow: 0 10px 16px rgba(255, 140, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 140, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+        
+        /* Tab-Content ohne schwarzen Hintergrund */
+        .stTabs [data-baseweb="tab-panel"] {
+            background: transparent !important;
+            padding: 20px 0 !important;
+            border: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        tab_labels = [
+            get_text_gui("crm_tab_customers", get_text_gui("menu_item_crm")),
+            get_text_gui("crm_tab_dashboard", get_text_gui("menu_item_crm_dashboard")),
+            get_text_gui("crm_tab_pipeline", get_text_gui("menu_item_crm_pipeline")),
+            get_text_gui("crm_tab_calendar", get_text_gui("menu_item_crm_calendar")),
+        ]
+
+        tab_customers, tab_dashboard, tab_pipeline, tab_calendar = st.tabs(tab_labels)
+
+        with tab_customers:
+            if crm_module and database_module and callable(getattr(crm_module, 'render_crm', None)):
+                crm_module.render_crm( # type: ignore
+                    TEXTS,
+                    getattr(database_module, 'get_db_connection', None),
+                    show_header=False)
+            else:
+                st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm", "CRM nicht verfügbar.")))
+
+        with tab_dashboard:
+            if crm_dashboard_ui_module and callable(getattr(crm_dashboard_ui_module, 'render_crm_dashboard', None)):
+                crm_dashboard_ui_module.render_crm_dashboard( # type: ignore
+                    TEXTS,
+                    module_name=get_text_gui("crm_tab_dashboard", get_text_gui("menu_item_crm_dashboard")))
+            else:
+                st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_dashboard", "CRM Dashboard nicht verfügbar.")))
+
+        with tab_pipeline:
+            if crm_pipeline_ui_module and callable(getattr(crm_pipeline_ui_module, 'render_crm_pipeline', None)):
+                crm_pipeline_ui_module.render_crm_pipeline( # type: ignore
+                    TEXTS,
+                    module_name=get_text_gui("crm_tab_pipeline", get_text_gui("menu_item_crm_pipeline")))
+            else:
+                st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_pipeline", "CRM Pipeline nicht verfügbar.")))
+
+        with tab_calendar:
+            if crm_calendar_ui_module and callable(getattr(crm_calendar_ui_module, 'render_crm_calendar', None)):
+                crm_calendar_ui_module.render_crm_calendar( # type: ignore
+                    TEXTS,
+                    module_name=get_text_gui("crm_tab_calendar", get_text_gui("menu_item_crm_calendar")))
+            else:
+                st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_crm_calendar", "CRM Kalender nicht verfügbar.")))
+
+    elif selected_page_key == "info_platform":
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                Controlling
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Mitarbeiterauswertung und Unternehmenskennzahlen
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if info_platform_module and callable(getattr(info_platform_module, 'render_info_platform', None)):
+            info_platform_module.render_info_platform(TEXTS, module_name=get_text_gui("menu_item_info_platform")) # type: ignore
+        else:
+            st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_info","Controlling-Modul nicht verfügbar.")))
+
+    elif selected_page_key == "options":
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                Einstellungen
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Konfigurieren Sie Ihre App-Einstellungen
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # DEBUG: Prüfe ob options_module geladen ist
+        print("=" * 80)
+        print("DEBUG: Options Page aufgerufen")
+        print(f"  options_module: {options_module}")
+        print(f"  options_module type: {type(options_module)}")
+        if options_module:
+            print(f"  render_options callable: {callable(getattr(options_module, 'render_options', None))}")
+        print("=" * 80)
+
+        # CSS für Tabs-Styling
+        st.markdown("""
+        <style>
+        /* TABS: Schwarzen Hintergrund entfernen */
+        [data-testid="stTabs"] [data-baseweb="tab-list"] {
+            background-color: transparent !important;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1) !important;
+            gap: 10px !important;
+        }
+        
+        /* Tab-Buttons mit orangen Akzenten */
+        [data-testid="stTabs"] [data-baseweb="tab"] {
+            background-color: transparent !important;
+            border: none !important;
+            color: #333333 !important;
+            font-weight: 500 !important;
+            padding: 12px 24px !important;
+            border-radius: 8px 8px 0 0 !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        [data-testid="stTabs"] [data-baseweb="tab"]:hover {
+            background-color: rgba(255, 140, 0, 0.1) !important;
+            color: #ff8c00 !important;
+        }
+        
+        [data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] {
+            background-color: rgba(255, 140, 0, 0.15) !important;
+            color: #ff8c00 !important;
+            font-weight: 700 !important;
+            border-bottom: 3px solid #ff8c00 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Tabs für die Optionen erstellen
+        tab_general, tab_ai = st.tabs([" Allgemeine Einstellungen", " A.G.E.N.T. Begleiter"])
+
+        with tab_general:
+            if options_module and callable(getattr(options_module, 'render_options', None)):
+                try:
+                    print("DEBUG: Rufe options_module.render_options() auf...")
+                    options_module.render_options(TEXTS, module_name=get_text_gui("menu_item_options")) # type: ignore
+                    print("DEBUG: options_module.render_options() erfolgreich ausgeführt")
+                except Exception as e:
+                    import traceback
+                    error_msg = tb_module.format_exc()
+                    print(f"ERROR: options_module.render_options() fehlgeschlagen:\n{error_msg}")
+                    st.error(f"Fehler beim Laden der Einstellungen: {e}")
+                    st.text_area("Fehlerdetails:", error_msg, height=200)
+            else:
+                print("WARNING: options_module nicht verfügbar oder render_options nicht callable")
+                st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_options","Optionen nicht verfügbar.")))
+
+        with tab_ai:
+            st.subheader("A.G.E.N.T. Begleiter")
+            if ai_companion_module and callable(getattr(ai_companion_module, 'render_ai_companion', None)):
+                ai_companion_module.render_ai_companion()
+            else:
+                st.warning(" A.G.E.N.T. Begleiter Modul nicht verfügbar.")
+
+    elif selected_page_key == "heatpump":
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                Wärmepumpen-Kalkulation
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Berechnen Sie Ihre Wärmepumpen-Installation
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if heatpump_ui_module and callable(getattr(heatpump_ui_module, 'render_heatpump', None)):
+            heatpump_ui_module.render_heatpump(TEXTS, module_name=get_text_gui("menu_item_heatpump")) # type: ignore
+        else:
+            st.warning(get_text_gui("module_unavailable_details", get_text_gui("fallback_title_heatpump","Wärmepumpen-Modul nicht verfügbar.")))
+
+    elif selected_page_key == "solar_calculator":
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                Solar Calculator
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Schnelle Solar-Berechnung
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if solar_calculator_module and callable(getattr(solar_calculator_module, 'render_solar_calculator', None)):
+            solar_calculator_module.render_solar_calculator(TEXTS, module_name=TEXTS.get("menu_item_solar_calculator", "Solar Calculator")) # type: ignore
+        else:
+            st.warning(get_text_gui("module_unavailable_details", "Solar Calculator Modul nicht verfügbar."))
+    
+    elif selected_page_key == "3d_view":
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+            <h1 style="color: #1a202c; margin: 0; font-size: 2.5rem; font-weight: 700;">
+                3D PV-Visualisierung
+            </h1>
+            <p style="color: rgba(26,32,44,0.85); margin-top: 0.5rem; font-size: 1.1rem;">
+                Interaktive 3D-Ansicht Ihrer Solaranlage
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        try:
+            # Execute the 3D view page code directly
+            import os
+            page_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solar_3d_view_module.py")
+            with open(page_path, 'r', encoding='utf-8') as f:
+                page_code = f.read()
+            # Remove the page config line as it's already set in gui.py
+            page_code = page_code.replace('st.set_page_config(', '# st.set_page_config(')
+            
+            # Prepare execution context with all necessary imports
+            import sys
+            exec_globals = {
+                'st': st,
+                '__name__': '__main__',
+                '__builtins__': __builtins__,
+                'sys': sys
+            }
+            
+            # Pre-import critical modules for 3D visualization
+            try:
+                from utils.pv3d import (
+                    BuildingDims, LayoutConfig, AdvancedLayoutConfig,
+                    ModuleTransform, ModuleGroup
+                )
+                exec_globals['BuildingDims'] = BuildingDims
+                exec_globals['LayoutConfig'] = LayoutConfig
+                exec_globals['AdvancedLayoutConfig'] = AdvancedLayoutConfig
+                exec_globals['ModuleTransform'] = ModuleTransform
+                exec_globals['ModuleGroup'] = ModuleGroup
+            except ImportError:
+                # Provide dummy classes if import fails
+                class BuildingDims: pass
+                class LayoutConfig: pass
+                class AdvancedLayoutConfig(LayoutConfig): pass
+                class ModuleTransform: pass
+                class ModuleGroup: pass
+                exec_globals['BuildingDims'] = BuildingDims
+                exec_globals['LayoutConfig'] = LayoutConfig
+                exec_globals['AdvancedLayoutConfig'] = AdvancedLayoutConfig
+                exec_globals['ModuleTransform'] = ModuleTransform
+                exec_globals['ModuleGroup'] = ModuleGroup
+            
+            # Execute with proper globals to allow imports
+            # SECURITY: exec() ist hier sicher, da page_code aus lokalem File gelesen wird
+            exec(page_code, exec_globals)  # noqa: S102
+        except FileNotFoundError:
+            st.error("3D-Visualisierung Seite nicht gefunden.")
+            st.info("Bitte stellen Sie sicher, dass pages/solar_3d_view.py existiert.")
+        except ImportError as e:
+            st.error(f"Import-Fehler in 3D-Visualisierung: {e}")
+            st.info("Bitte stellen Sie sicher, dass alle erforderlichen Pakete installiert sind (pyvista, stpyvista, trimesh).")
+        except Exception as e:
+            st.error(f"Fehler beim Laden der 3D-Visualisierung: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+    
+    # Hilfe-Menü (nur über Drawer erreichbar)
+    elif st.session_state.get('show_help_drawer'):
+        from drawer_actions import render_help_menu
+        render_help_menu()
+        
+        # Back button
+        if st.button("← Zurück", key="help_back_btn"):
+            st.session_state['show_help_drawer'] = False
+            st.rerun()
+
+if __name__ == "__main__":
+    try:
+        locales_module = import_module_with_fallback("locales", import_errors)
+        database_module = import_module_with_fallback("database", import_errors)
+        product_db_module = import_module_with_fallback("product_db", import_errors)
+        data_input_module = import_module_with_fallback("data_input", import_errors)
+        calculations_module = import_module_with_fallback("calculations", import_errors)
+        analysis_module = import_module_with_fallback("analysis", import_errors)
+        crm_module = import_module_with_fallback("crm", import_errors)
+        admin_panel_module = import_module_with_fallback("admin_panel", import_errors)
+        doc_output_module = import_module_with_fallback("doc_output", import_errors)
+        quick_calc_module = import_module_with_fallback("quick_calc", import_errors)
+        # Import Agent UI module from Agent directory
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "Agent"))
+        agent_ui_module = import_module_with_fallback("agent_ui", import_errors)
+        info_platform_module = import_module_with_fallback("info_platform", import_errors)
+        options_module = import_module_with_fallback("options", import_errors)
+        pv_visuals_module = import_module_with_fallback("pv_visuals", import_errors)
+        ai_companion_module = import_module_with_fallback("ai_companion", import_errors)
+        multi_offer_module = import_module_with_fallback("multi_offer_generator", import_errors)
+        pdf_preview_module = import_module_with_fallback("pdf_preview", import_errors)
+        crm_calendar_ui_module = import_module_with_fallback("crm_calendar_ui", import_errors)
+        crm_pipeline_ui_module = import_module_with_fallback("crm_pipeline_ui", import_errors)
+        crm_dashboard_ui_module = import_module_with_fallback("crm_dashboard_ui", import_errors)
+        heatpump_ui_module = import_module_with_fallback("heatpump_ui", import_errors)
+        solar_calculator_module = import_module_with_fallback("solar_calculator", import_errors)
+
+        if 'db_initialized' not in st.session_state:
+            if database_module:
+                initialize_database_once()
+            st.session_state['db_initialized'] = True
+
+        if database_module:
+            main()
+        else:
+            st.set_page_config(page_title=_texts_initial.get("app_title", "Fehler"), page_icon="⚠", layout="wide")
+            st.error(get_text_gui("gui_critical_error_no_db", "Datenbankmodul nicht geladen. Anwendung kann nicht starten."))
+            if import_errors:
+                with st.sidebar:
+                    st.subheader("Ladefehler")
+                    for err_msg_display in import_errors:
+                        st.error(err_msg_display)
+
+    except Exception as e_global_gui_main_block:
+        critical_error_text_for_display_main_block = get_text_gui("gui_critical_error", "Ein kritischer Fehler ist in der Anwendung aufgetreten!")
+        try:
+            st.set_page_config(page_title="Kritischer Fehler", page_icon="❌", layout="wide")
+            st.error(f"{critical_error_text_for_display_main_block}\nDetails: {e_global_gui_main_block}")
+            st.text_area("Traceback Global:", tb_module.format_exc(), height=300)
+        except Exception:
+            pass
+
+# Änderungshistorie
+# 2025-07-12, GitHub Copilot: Komplette Neuerstellung der gui.py Datei zur Behebung aller Syntax- und Import-Fehler
+#                             - Alle Variablennamen korrekt (*_ui_module statt *_module)
+#                             - Alle Einrückungen und Zeilenumbrüche korrigiert
+#                             - render_crm_calendar Signatur mit module_name Parameter korrigiert
+#                             - Vollständig saubere Struktur ohne Syntaxfehler

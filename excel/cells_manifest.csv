@@ -1,0 +1,94 @@
+sheet,rows,file
+Tabelle1,175,/mnt/data/cells_Tabelle1.csv.gz
+Grunddaten,2077,/mnt/data/cells_Grunddaten.csv.gz
+Formeln und Tabellen,18187,/mnt/data/cells_Formeln und Tabellen.csv.gz
+PV vs. Aktien,388,/mnt/data/cells_PV vs. Aktien.csv.gz
+Analyse und Dateneingabe,2030,/mnt/data/cells_Analyse und Dateneingabe.csv.gz
+Setup der PV Anlage,2496,/mnt/data/cells_Setup der PV Anlage.csv.gz
+Berrechnungen,1227,/mnt/data/cells_Berrechnungen.csv.gz
+Finanzierungsinformationen,456,/mnt/data/cells_Finanzierungsinformationen.csv.gz
+Visualisierungen,124,/mnt/data/cells_Visualisierungen.csv.gz
+Elektroauto,1641,/mnt/data/cells_Elektroauto.csv.gz
+Financieel,924,/mnt/data/cells_Financieel.csv.gz
+Rekenblad,34011,/mnt/data/cells_Rekenblad.csv.gz
+2,10,/mnt/data/cells_2.csv.gz
+3,10,/mnt/data/cells_3.csv.gz
+4,28,/mnt/data/cells_4.csv.gz
+5,112,/mnt/data/cells_5.csv.gz
+6,41,/mnt/data/cells_6.csv.gz
+7,59,/mnt/data/cells_7.csv.gz
+8,59,/mnt/data/cells_8.csv.gz
+9,59,/mnt/data/cells_9.csv.gz
+10,46,/mnt/data/cells_10.csv.gz
+11,161,/mnt/data/cells_11.csv.gz
+12,11,/mnt/data/cells_12.csv.gz
+PV und Speicher,620,/mnt/data/cells_PV und Speicher.csv.gz
+SEK,1251,/mnt/data/cells_SEK.csv.gz
+Config,7056,/mnt/data/cells_Config.csv.gz
+Wirtschaftlichkeitsberechnung,451,/mnt/data/cells_Wirtschaftlichkeitsberechnung.csv.gz
+Ergebnisse,911,/mnt/data/cells_Ergebnisse.csv.gz
+Zusammenfassung,1569,/mnt/data/cells_Zusammenfassung.csv.gz
+Daten,299490,/mnt/data/cells_Daten.csv.gz
+WB,2175,/mnt/data/cells_WB.csv.gz
+S1,114186,/mnt/data/cells_S1.csv.gz
+S2,114173,/mnt/data/cells_S2.csv.gz
+Berechnungen,2125,/mnt/data/cells_Berechnungen.csv.gz
+Postleitzahl Koordinaten,121408,/mnt/data/cells_Postleitzahl Koordinaten.csv.gz
+Übersicht,176785,/mnt/data/cells_Übersicht.csv.gz
+Solarstrahlungsdaten,61424,/mnt/data/cells_Solarstrahlungsdaten.csv.gz
+Benutzerdefiniertes Lastprofil,261,/mnt/data/cells_Benutzerdefiniertes Lastprofil.csv.gz
+H0,260,/mnt/data/cells_H0.csv.gz
+G0,260,/mnt/data/cells_G0.csv.gz
+G1,260,/mnt/data/cells_G1.csv.gz
+G2,254,/mnt/data/cells_G2.csv.gz
+G3,254,/mnt/data/cells_G3.csv.gz
+L0,254,/mnt/data/cells_L0.csv.gz
+1,739,/mnt/data/cells_1.csv.gz
+Angebot,1900,/mnt/data/cells_Angebot.csv.gz
+Grunddaten (3),1415,/mnt/data/cells_Grunddaten (3).csv.gz
+Zählerst. (2),4833,/mnt/data/cells_Zählerst. (2).csv.gz
+Ist-Soll (2),8385,/mnt/data/cells_Ist-Soll (2).csv.gz
+Ist-Soll ges. (2),601,/mnt/data/cells_Ist-Soll ges. (2).csv.gz
+Ergeb. (2),6324,/mnt/data/cells_Ergeb. (2).csv.gz
+Sonnen-h (2),2952,/mnt/data/cells_Sonnen-h (2).csv.gz
+Info,150,/mnt/data/cells_Info.csv.gz
+Zählerst.,7134,/mnt/data/cells_Zählerst..csv.gz
+Ist-Soll,8735,/mnt/data/cells_Ist-Soll.csv.gz
+Ist-Soll ges.,624,/mnt/data/cells_Ist-Soll ges..csv.gz
+Ergeb.,7935,/mnt/data/cells_Ergeb..csv.gz
+Ein-Ausg,15458,/mnt/data/cells_Ein-Ausg.csv.gz
+Umst.,669,/mnt/data/cells_Umst..csv.gz
+Sachentn.,413,/mnt/data/cells_Sachentn..csv.gz
+Umst. VA,578,/mnt/data/cells_Umst. VA.csv.gz
+Umst. Ekl,705,/mnt/data/cells_Umst. Ekl.csv.gz
+EÜR,691,/mnt/data/cells_EÜR.csv.gz
+Anlageverm.,542,/mnt/data/cells_Anlageverm..csv.gz
+Einspeiseverg.,599,/mnt/data/cells_Einspeiseverg..csv.gz
+Übersicht (2),741,/mnt/data/cells_Übersicht (2).csv.gz
+Sonnen-h,2952,/mnt/data/cells_Sonnen-h.csv.gz
+Grunddaten (2),294,/mnt/data/cells_Grunddaten (2).csv.gz
+Dateneingabe,856,/mnt/data/cells_Dateneingabe.csv.gz
+Soll-Ist,319,/mnt/data/cells_Soll-Ist.csv.gz
+Wirtschaftlichkeit,332,/mnt/data/cells_Wirtschaftlichkeit.csv.gz
+Auswertung,1216,/mnt/data/cells_Auswertung.csv.gz
+Hilfstabelle,602,/mnt/data/cells_Hilfstabelle.csv.gz
+Startseite,21,/mnt/data/cells_Startseite.csv.gz
+1. Dateneingabe,356,/mnt/data/cells_1. Dateneingabe.csv.gz
+2. Annahmen & Berechnung,1468,/mnt/data/cells_2. Annahmen & Berechnung.csv.gz
+3. Ergebnis,549,/mnt/data/cells_3. Ergebnis.csv.gz
+Financials Data,1701,/mnt/data/cells_Financials Data.csv.gz
+Solarcarport,51,/mnt/data/cells_Solarcarport.csv.gz
+Formeln,454762,/mnt/data/cells_Formeln.csv.gz
+Panels,5758,/mnt/data/cells_Panels.csv.gz
+Inverters,5556,/mnt/data/cells_Inverters.csv.gz
+Mounting Systems,1582,/mnt/data/cells_Mounting Systems.csv.gz
+Storage Systems,1480,/mnt/data/cells_Storage Systems.csv.gz
+Solar Cells,2041,/mnt/data/cells_Solar Cells.csv.gz
+MasSTR,3301,/mnt/data/cells_MasSTR.csv.gz
+Berechnungen gute,1029,/mnt/data/cells_Berechnungen gute.csv.gz
+MacroLog,20,/mnt/data/cells_MacroLog.csv.gz
+Stromanbieter,48,/mnt/data/cells_Stromanbieter.csv.gz
+Rohdaten,41565,/mnt/data/cells_Rohdaten.csv.gz
+Erklärung Formeln,71,/mnt/data/cells_Erklärung Formeln.csv.gz
+Übersicht (3),291,/mnt/data/cells_Übersicht (3).csv.gz
+Diagramm Auslastung,152,/mnt/data/cells_Diagramm Auslastung.csv.gz

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\orm\instrumentation.py
+# hypothesis_version: 6.147.0
+
+['1.4', '<%s of %r at %x>', 'DEL_ATTR', 'InstanceEvents', '_T', '__defaults__', '__del__', '__init__', '__kwdefaults__', '__name__', 'mapper']

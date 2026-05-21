@@ -1,0 +1,4 @@
+# file: C:\Users\win10\Desktop\Bokuk2 - Kopie\controlling\models.py
+# hypothesis_version: 6.147.0
+
+[100, 200, 'AVERAGE', 'Angebot erhalten', 'Angefahrene Termine', 'Criterion', 'DAILY', 'Employee', 'Folgetermin gemacht', 'Kunden terminiert', 'MONTHLY', 'PERCENTAGE', 'PerformanceData', 'Position', 'PositionCriterion', 'QC bestanden', 'QUARTERLY', 'RATIO', 'Report', 'SINCE_START', 'SUM', 'Sonstige Aktivitäten', 'Sonstiges', 'Verkauf', 'WEEKLY', 'YEARLY', 'Zu teuer gewesen', 'all, delete-orphan', 'calculation_method', 'controlling_criteria', 'controlling_reports', 'criterion', 'description', 'employee', 'employees', 'is_standard', 'name', 'performance_data', 'position', 'position_criteria', 'reports']

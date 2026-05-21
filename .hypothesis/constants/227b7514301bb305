@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\connectors\asyncio.py
+# hypothesis_version: 6.147.0
+
+['_adapt_connection', '_connection', '_cursor', '_execute_mutex', '_rows', 'await_', 'dbapi']

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\scatterpolar\_marker.py
+# hypothesis_version: 6.147.0
+
+['_parent', '_validate', 'angle', 'angleref', 'anglesrc', 'autocolorscale', 'cauto', 'cmax', 'cmid', 'cmin', 'color', 'coloraxis', 'colorbar', 'colorscale', 'colorsrc', 'gradient', 'line', 'marker', 'maxdisplayed', 'opacity', 'opacitysrc', 'reversescale', 'scatterpolar', 'scatterpolar.marker', 'showscale', 'size', 'sizemin', 'sizemode', 'sizeref', 'sizesrc', 'skip_invalid', 'standoff', 'standoffsrc', 'symbol', 'symbolsrc']

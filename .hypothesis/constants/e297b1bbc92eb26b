@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\html\Meter.py
+# hypothesis_version: 6.147.0
+
+['HIDDEN', 'Meter', '__init__', '_explicit_args', 'accessKey', 'aria-', 'aria-*', 'children', 'className', 'contentEditable', 'dash_html_components', 'data-', 'data-*', 'dir', 'disable_n_clicks', 'draggable', 'form', 'hidden', 'high', 'id', 'key', 'lang', 'low', 'max', 'min', 'n_clicks', 'n_clicks_timestamp', 'optimum', 'role', 'spellCheck', 'style', 'tabIndex', 'title', 'value']

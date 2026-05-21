@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\dash\dcc\Clipboard.py
+# hypothesis_version: 6.147.0
+
+['Clipboard', '__init__', '_explicit_args', 'children', 'className', 'content', 'dash_core_components', 'html_content', 'id', 'n_clicks', 'style', 'target_id', 'title']

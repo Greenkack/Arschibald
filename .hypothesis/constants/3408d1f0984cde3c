@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\core\signing.py
+# hypothesis_version: 6.147.0
+
+[b'.', b'=', b'django.http.cookies', '%s%s%s', '%s.%s', ',', '-', '.', '0', ':', '^[A-z0-9-_=]*$', 'django.core.signing', 'latin-1', 'sha1', 'sha256', 'signer']

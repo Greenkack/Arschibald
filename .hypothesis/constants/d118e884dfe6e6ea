@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\numpy\lib\nanfunctions.py
+# hypothesis_version: 6.147.0
+
+[100.0, 600, 'Mean of empty slice', 'NaT', 'c', 'dtype', 'fc', 'ignore', 'initial', 'keepdims', 'linear', 'm', 'nanargmax', 'nanargmin', 'nancumprod', 'nancumsum', 'nanmax', 'nanmean', 'nanmedian', 'nanmin', 'nanpercentile', 'nanprod', 'nanquantile', 'nanstd', 'nansum', 'nanvar', 'numpy', 'unsafe', 'where']

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\plotly\graph_objs\histogram2d\__init__.py
+# hypothesis_version: 6.147.0
+
+['._colorbar.ColorBar', '._marker.Marker', '._stream.Stream', '._textfont.Textfont', '._xbins.XBins', '._ybins.YBins', '.colorbar', '.hoverlabel', '.legendgrouptitle']

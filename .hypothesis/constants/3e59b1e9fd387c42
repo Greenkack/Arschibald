@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\prompt_toolkit\history.py
+# hypothesis_version: 6.147.0
+
+[0.5, '+', 'DummyHistory', 'FileHistory', 'History', 'InMemoryHistory', 'ThreadedHistory', 'ab', 'os.PathLike[bytes]', 'os.PathLike[str]', 'rb', 'replace', 'utf-8']

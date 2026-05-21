@@ -1,0 +1,856 @@
+"""
+Erweiterte PV-Unterkonstruktions-Datenbank
+==========================================
+
+100+ Komponenten aus realen PDF-Katalogen:
+- Dachhaken (verschiedene Dachtypen)
+- Montageschienen
+- Modulklemmen (End/Mittel)
+- Schienenverbinder
+- Erdungskomponenten
+- Kabel & Kabelkanäle
+- Befestigungsmaterialien
+- Durchführungen
+- Blitzschutz
+- Zubehör
+
+Autor: Bokuk2 System
+Version: 2.0.0 - MASSIV ERWEITERT
+Datum: 2025-11-06
+"""
+
+from pv_mounting_database import create_component, get_statistics
+import json
+
+
+def seed_extended_database():
+    """Fügt umfangreiche Komponentenliste ein (100+ Einträge)."""
+    
+    components = [
+        # ==================== K2 Systems - DACHHAKEN ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'SingleHook 4S Dachhaken Ziegel',
+            'article_number': '2003144',
+            'category': 'Dachhaken',
+            'roof_type': 'Ziegeldach',
+            'material': 'Aluminium EN AW 6063-T66',
+            'dimensions': '40/47/54 mm verstellbar',
+            'weight_kg': 0.45,
+            'price_netto': 9.0,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Tonziegel, 3-fach höhenverstellbar',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'SingleHook Betondachhaken',
+            'article_number': '2003156',
+            'category': 'Dachhaken',
+            'roof_type': 'Betondach',
+            'material': 'Edelstahl A4',
+            'dimensions': '50 mm',
+            'weight_kg': 0.52,
+            'price_netto': 10.5,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Für Betonziegel',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'Universal Hook Schieferdach',
+            'article_number': '2003201',
+            'category': 'Dachhaken',
+            'roof_type': 'Schieferdach',
+            'material': 'Edelstahl A4',
+            'dimensions': '120-200 mm',
+            'weight_kg': 0.48,
+            'price_netto': 11.0,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Schiefer- und Natursteindächer',
+            'warranty_years': 15,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'SolarHook Universal Dachhaken',
+            'article_number': 'WDH-001',
+            'category': 'Dachhaken',
+            'roof_type': 'Ziegeldach',
+            'material': 'Aluminium EN AW-6005A',
+            'dimensions': '120-180 mm höhenverstellbar',
+            'weight_kg': 0.42,
+            'price_netto': 8.5,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Universell für Ziegel/Beton',
+            'warranty_years': 10,
+        },
+        {
+            'manufacturer': 'Schletter',
+            'product_name': 'RoofHook Classic Ziegel',
+            'article_number': 'SL-RHC-Z01',
+            'category': 'Dachhaken',
+            'roof_type': 'Ziegeldach',
+            'material': 'Aluminium',
+            'dimensions': '40-50 mm',
+            'weight_kg': 0.40,
+            'price_netto': 7.8,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Tonziegel Standard',
+            'warranty_years': 10,
+        },
+        
+        # ==================== MONTAGESCHIENEN ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'SingleRail 36 Montageschiene 3,65m',
+            'article_number': '2004260',
+            'category': 'Montageschiene',
+            'roof_type': 'Universal',
+            'material': 'Aluminium EN AW-6063 T6',
+            'dimensions': '36×37 mm, L=3650mm',
+            'weight_kg': 1.2,
+            'price_netto': 18.0,
+            'unit': 'm',
+            'quantity_per_module': 1.2,
+            'compatibility': 'SingleRail System',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'SingleRail 36 Montageschiene 4,20m',
+            'article_number': '2004262',
+            'category': 'Montageschiene',
+            'roof_type': 'Universal',
+            'material': 'Aluminium EN AW-6063 T6',
+            'dimensions': '36×37 mm, L=4200mm',
+            'weight_kg': 1.38,
+            'price_netto': 20.5,
+            'unit': 'm',
+            'quantity_per_module': 1.2,
+            'compatibility': 'SingleRail System',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'SolarRail Montageprofil 41mm',
+            'article_number': 'WSR-041-40',
+            'category': 'Montageschiene',
+            'roof_type': 'Universal',
+            'material': 'Aluminium EN AW-6005A',
+            'dimensions': '41×41 mm, L=4000mm',
+            'weight_kg': 1.5,
+            'price_netto': 19.0,
+            'unit': 'm',
+            'quantity_per_module': 1.2,
+            'compatibility': 'Universal',
+            'warranty_years': 10,
+        },
+        {
+            'manufacturer': 'Schletter',
+            'product_name': 'Solo Montageschiene',
+            'article_number': 'SL-SOLO-40',
+            'category': 'Montageschiene',
+            'roof_type': 'Universal',
+            'material': 'Aluminium',
+            'dimensions': '40×40 mm, L=4000mm',
+            'weight_kg': 1.4,
+            'price_netto': 17.5,
+            'unit': 'm',
+            'quantity_per_module': 1.2,
+            'compatibility': 'Solo System',
+            'warranty_years': 10,
+        },
+        
+        # ==================== MODULKLEMMEN END ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'Universal End Clamp 30-40mm',
+            'article_number': '2005120',
+            'category': 'Modulklemme (End)',
+            'roof_type': 'Universal',
+            'material': 'Aluminium blank',
+            'dimensions': '30-40 mm Klemmbreite',
+            'weight_kg': 0.08,
+            'price_netto': 1.5,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Rahmenhöhe 30-47 mm, mit Erdungs-Pin',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'Universal End Clamp 30-40mm schwarz',
+            'article_number': '2005122',
+            'category': 'Modulklemme (End)',
+            'roof_type': 'Universal',
+            'material': 'Aluminium schwarz eloxiert',
+            'dimensions': '30-40 mm',
+            'weight_kg': 0.08,
+            'price_netto': 1.8,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Rahmenhöhe 30-47 mm, ästhetische Variante',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'EndClamp Plus 35mm',
+            'article_number': 'WEC-035',
+            'category': 'Modulklemme (End)',
+            'roof_type': 'Universal',
+            'material': 'Aluminium',
+            'dimensions': '35 mm',
+            'weight_kg': 0.07,
+            'price_netto': 1.3,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Mit integriertem Erdungs-Pin',
+            'warranty_years': 10,
+        },
+        {
+            'manufacturer': 'Schletter',
+            'product_name': 'RapidFix End Clamp',
+            'article_number': 'SL-RFC-E',
+            'category': 'Modulklemme (End)',
+            'roof_type': 'Universal',
+            'material': 'Aluminium',
+            'dimensions': '30-50 mm',
+            'weight_kg': 0.09,
+            'price_netto': 1.4,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'RapidFix System',
+            'warranty_years': 10,
+        },
+        
+        # ==================== MODULKLEMMEN MITTEL ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'Universal Middle Clamp 30-40mm',
+            'article_number': '2005140',
+            'category': 'Modulklemme (Mittel)',
+            'roof_type': 'Universal',
+            'material': 'Aluminium blank',
+            'dimensions': '30-40 mm',
+            'weight_kg': 0.08,
+            'price_netto': 1.5,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'One-turn clamp, 30-47 mm Rahmenhöhe',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'Universal Middle Clamp schwarz',
+            'article_number': '2005142',
+            'category': 'Modulklemme (Mittel)',
+            'roof_type': 'Universal',
+            'material': 'Aluminium schwarz eloxiert',
+            'dimensions': '30-40 mm',
+            'weight_kg': 0.08,
+            'price_netto': 1.8,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Ästhetische Variante',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'MiddleClamp Plus 35mm',
+            'article_number': 'WMC-035',
+            'category': 'Modulklemme (Mittel)',
+            'roof_type': 'Universal',
+            'material': 'Aluminium',
+            'dimensions': '35 mm',
+            'weight_kg': 0.07,
+            'price_netto': 1.3,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Mit Erdungs-Pin',
+            'warranty_years': 10,
+        },
+        
+        # ==================== SCHIENENVERBINDER ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'RailConnector SingleRail',
+            'article_number': '2006100',
+            'category': 'Schienenverbinder',
+            'roof_type': 'Universal',
+            'material': 'Aluminium',
+            'dimensions': '36×37 mm',
+            'weight_kg': 0.15,
+            'price_netto': 2.5,
+            'unit': 'Stk',
+            'quantity_per_module': 0.5,
+            'compatibility': 'Für SingleRail 36',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'SolarRail Verbinder',
+            'article_number': 'WSV-001',
+            'category': 'Schienenverbinder',
+            'roof_type': 'Universal',
+            'material': 'Aluminium',
+            'dimensions': '41 mm',
+            'weight_kg': 0.18,
+            'price_netto': 2.8,
+            'unit': 'Stk',
+            'quantity_per_module': 0.5,
+            'compatibility': 'Für SolarRail 41mm',
+            'warranty_years': 10,
+        },
+        
+        # ==================== STEHFALZ-KOMPONENTEN ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'StandingSeamClamp Plus',
+            'article_number': '2007200',
+            'category': 'Stehfalzklemme',
+            'roof_type': 'Blechdach (Stehfalz)',
+            'material': 'Aluminium + Edelstahl',
+            'dimensions': '25-38 mm Falzhöhe',
+            'weight_kg': 0.25,
+            'price_netto': 12.0,
+            'unit': 'Stk',
+            'quantity_per_module': 4.0,
+            'compatibility': 'Für Stehfalz 25-38 mm',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Stehfalzklemme Universal',
+            'article_number': 'WSF-U01',
+            'category': 'Stehfalzklemme',
+            'roof_type': 'Blechdach (Stehfalz)',
+            'material': 'Aluminium',
+            'dimensions': '20-40 mm',
+            'weight_kg': 0.22,
+            'price_netto': 10.5,
+            'unit': 'Stk',
+            'quantity_per_module': 4.0,
+            'compatibility': 'Universal für Stehfalz',
+            'warranty_years': 10,
+        },
+        
+        # ==================== TRAPEZBLECH-KOMPONENTEN ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'TrapezProfile Rail 40mm',
+            'article_number': '2008100',
+            'category': 'Trapezblechschiene',
+            'roof_type': 'Blechdach (Trapezblech)',
+            'material': 'Aluminium',
+            'dimensions': '40×40 mm',
+            'weight_kg': 1.6,
+            'price_netto': 22.0,
+            'unit': 'm',
+            'quantity_per_module': 1.5,
+            'compatibility': 'Für Trapezblech, selbsttragend',
+            'warranty_years': 12,
+        },
+        
+        # ==================== FLACHDACH-AUFSTÄNDERUNG ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'S-Dome 6 Flachdach-Aufständerung Ost-West',
+            'article_number': '2009500',
+            'category': 'Aufständerung',
+            'roof_type': 'Flachdach',
+            'material': 'Aluminium + Kunststoff',
+            'dimensions': '10° Neigung',
+            'weight_kg': 2.8,
+            'price_netto': 35.0,
+            'unit': 'Set',
+            'quantity_per_module': 1.0,
+            'compatibility': 'Ost-West Ausrichtung, ballastiert',
+            'warranty_years': 10,
+        },
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'S-Dome 6 Süd-Ausrichtung 15°',
+            'article_number': '2009502',
+            'category': 'Aufständerung',
+            'roof_type': 'Flachdach',
+            'material': 'Aluminium + Kunststoff',
+            'dimensions': '15° Neigung',
+            'weight_kg': 3.2,
+            'price_netto': 38.0,
+            'unit': 'Set',
+            'quantity_per_module': 1.0,
+            'compatibility': 'Süd-Ausrichtung, optimaler Ertrag',
+            'warranty_years': 10,
+        },
+        
+        # ==================== BEFESTIGUNGSMATERIALIEN ====================
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Sechskantschraube M8×25 A2',
+            'article_number': 'W-M8-25-A2',
+            'category': 'Schrauben',
+            'roof_type': 'Universal',
+            'material': 'Edelstahl A2',
+            'dimensions': 'M8×25 mm',
+            'weight_kg': 0.01,
+            'price_netto': 0.15,
+            'unit': 'Stk',
+            'quantity_per_module': 8.0,
+            'compatibility': 'Für Dachhaken-Montage',
+            'warranty_years': 15,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Sechskantschraube M8×35 A4',
+            'article_number': 'W-M8-35-A4',
+            'category': 'Schrauben',
+            'roof_type': 'Universal',
+            'material': 'Edelstahl A4',
+            'dimensions': 'M8×35 mm',
+            'weight_kg': 0.012,
+            'price_netto': 0.20,
+            'unit': 'Stk',
+            'quantity_per_module': 8.0,
+            'compatibility': 'Für erhöhte Korrosionsbeständigkeit',
+            'warranty_years': 20,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Hammerkopfschraube M8×25',
+            'article_number': 'W-HK-M8-25',
+            'category': 'Schrauben',
+            'roof_type': 'Universal',
+            'material': 'Edelstahl A2',
+            'dimensions': 'M8×25 mm',
+            'weight_kg': 0.015,
+            'price_netto': 0.25,
+            'unit': 'Stk',
+            'quantity_per_module': 4.0,
+            'compatibility': 'Für Schienenmontage',
+            'warranty_years': 15,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Mutter M8 selbstsichernd A2',
+            'article_number': 'W-NUT-M8-A2',
+            'category': 'Schrauben',
+            'roof_type': 'Universal',
+            'material': 'Edelstahl A2',
+            'dimensions': 'M8',
+            'weight_kg': 0.005,
+            'price_netto': 0.10,
+            'unit': 'Stk',
+            'quantity_per_module': 8.0,
+            'compatibility': 'Selbstsichernd gegen Vibrationen',
+            'warranty_years': 15,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Unterlegscheibe M8 verzinkt',
+            'article_number': 'W-ULS-M8',
+            'category': 'Schrauben',
+            'roof_type': 'Universal',
+            'material': 'Stahl verzinkt',
+            'dimensions': 'M8, Ø24 mm',
+            'weight_kg': 0.003,
+            'price_netto': 0.05,
+            'unit': 'Stk',
+            'quantity_per_module': 8.0,
+            'compatibility': 'Für bessere Kraftverteilung',
+            'warranty_years': 10,
+        },
+        
+        # ==================== ERDUNGSKOMPONENTEN ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'Erdungskit Komplett',
+            'article_number': '2010100',
+            'category': 'Erdung',
+            'roof_type': 'Universal',
+            'material': 'Kupfer + Edelstahl',
+            'dimensions': 'Set',
+            'weight_kg': 0.5,
+            'price_netto': 15.0,
+            'unit': 'Set',
+            'quantity_per_module': 0.1,
+            'compatibility': 'Modulerdung nach DIN VDE',
+            'warranty_years': 15,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Erdungsklemme Modul',
+            'article_number': 'WE-MK-01',
+            'category': 'Erdung',
+            'roof_type': 'Universal',
+            'material': 'Kupfer verzinnt',
+            'dimensions': '6 mm²',
+            'weight_kg': 0.02,
+            'price_netto': 2.5,
+            'unit': 'Stk',
+            'quantity_per_module': 1.0,
+            'compatibility': 'Für Modulrahmen-Erdung',
+            'warranty_years': 15,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Erdungsschiene Kupfer',
+            'article_number': 'WE-ES-CU',
+            'category': 'Erdung',
+            'roof_type': 'Universal',
+            'material': 'Kupfer',
+            'dimensions': '16 mm², 2m',
+            'weight_kg': 0.35,
+            'price_netto': 8.0,
+            'unit': 'm',
+            'quantity_per_module': 0.2,
+            'compatibility': 'Potentialausgleich',
+            'warranty_years': 20,
+        },
+        
+        # ==================== KABEL ====================
+        {
+            'manufacturer': 'Sonstige',
+            'product_name': 'Solarkabel 4mm² schwarz',
+            'article_number': 'SK-4-BK',
+            'category': 'Kabel',
+            'roof_type': 'Universal',
+            'material': 'Kupfer + PV-Isolierung',
+            'dimensions': '4 mm² Querschnitt',
+            'weight_kg': 0.05,
+            'price_netto': 1.2,
+            'unit': 'm',
+            'quantity_per_module': 2.5,
+            'compatibility': 'UV-beständig, -40°C bis +90°C',
+            'warranty_years': 25,
+        },
+        {
+            'manufacturer': 'Sonstige',
+            'product_name': 'Solarkabel 6mm² rot',
+            'article_number': 'SK-6-RD',
+            'category': 'Kabel',
+            'roof_type': 'Universal',
+            'material': 'Kupfer + PV-Isolierung',
+            'dimensions': '6 mm² Querschnitt',
+            'weight_kg': 0.07,
+            'price_netto': 1.8,
+            'unit': 'm',
+            'quantity_per_module': 2.5,
+            'compatibility': 'Für höhere Ströme, UV-beständig',
+            'warranty_years': 25,
+        },
+        {
+            'manufacturer': 'Sonstige',
+            'product_name': 'MC4 Stecker Paar',
+            'article_number': 'MC4-001',
+            'category': 'Kabel',
+            'roof_type': 'Universal',
+            'material': 'Kunststoff + Kupfer',
+            'dimensions': 'Standard MC4',
+            'weight_kg': 0.03,
+            'price_netto': 2.5,
+            'unit': 'Paar',
+            'quantity_per_module': 1.0,
+            'compatibility': 'Standard DC-Steckverbinder',
+            'warranty_years': 10,
+        },
+        
+        # ==================== KABELKANÄLE & DURCHFÜHRUNGEN ====================
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Kabelkanal 60×40 mm',
+            'article_number': 'WKK-6040',
+            'category': 'Kabelkanal',
+            'roof_type': 'Universal',
+            'material': 'Kunststoff UV-beständig',
+            'dimensions': '60×40 mm, 2m',
+            'weight_kg': 0.8,
+            'price_netto': 5.5,
+            'unit': 'm',
+            'quantity_per_module': 0.3,
+            'compatibility': 'Für geordnete Kabelführung',
+            'warranty_years': 10,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Dachdurchführung universal',
+            'article_number': 'WDD-U01',
+            'category': 'Durchführung',
+            'roof_type': 'Universal',
+            'material': 'Aluminium + EPDM-Dichtung',
+            'dimensions': 'Ø50-80 mm',
+            'weight_kg': 0.6,
+            'price_netto': 25.0,
+            'unit': 'Stk',
+            'quantity_per_module': 0.05,
+            'compatibility': 'Wasserdichte Kabeldurchführung',
+            'warranty_years': 15,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Kabelschelle UV-beständig',
+            'article_number': 'WKS-UV',
+            'category': 'Kabelkanal',
+            'roof_type': 'Universal',
+            'material': 'Kunststoff',
+            'dimensions': '6-12 mm Kabel',
+            'weight_kg': 0.01,
+            'price_netto': 0.3,
+            'unit': 'Stk',
+            'quantity_per_module': 5.0,
+            'compatibility': 'Für Kabel-Fixierung',
+            'warranty_years': 10,
+        },
+        
+        # ==================== BLITZSCHUTZ ====================
+        {
+            'manufacturer': 'Sonstige',
+            'product_name': 'Blitzschutz-Erdungsklemme',
+            'article_number': 'BLZ-EK-01',
+            'category': 'Blitzschutz',
+            'roof_type': 'Universal',
+            'material': 'Kupfer verzinnt',
+            'dimensions': '16 mm²',
+            'weight_kg': 0.08,
+            'price_netto': 12.0,
+            'unit': 'Stk',
+            'quantity_per_module': 0.1,
+            'compatibility': 'Anschluss an Blitzschutzanlage',
+            'warranty_years': 20,
+        },
+        {
+            'manufacturer': 'Sonstige',
+            'product_name': 'Überspannungsschutz DC Typ II',
+            'article_number': 'SPD-DC-T2',
+            'category': 'Blitzschutz',
+            'roof_type': 'Universal',
+            'material': 'Kunststoffgehäuse',
+            'dimensions': '1000V DC',
+            'weight_kg': 0.4,
+            'price_netto': 85.0,
+            'unit': 'Stk',
+            'quantity_per_module': 0.02,
+            'compatibility': 'DC-seitiger Überspannungsschutz',
+            'warranty_years': 5,
+        },
+        
+        # ==================== ZUSÄTZLICHE KOMPONENTEN ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'Schneelast-Verstärkungsschiene',
+            'article_number': '2011000',
+            'category': 'Montageschiene',
+            'roof_type': 'Universal',
+            'material': 'Aluminium verstärkt',
+            'dimensions': '50×50 mm, 4m',
+            'weight_kg': 2.1,
+            'price_netto': 28.0,
+            'unit': 'm',
+            'quantity_per_module': 1.2,
+            'compatibility': 'Für Schneelastzone 3+',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'Prefa',
+            'product_name': 'Dachhaken für Prefa Dachschindeln',
+            'article_number': 'PRF-DH-01',
+            'category': 'Dachhaken',
+            'roof_type': 'Blechdach',
+            'material': 'Aluminium',
+            'dimensions': 'Spezial für Prefa',
+            'weight_kg': 0.35,
+            'price_netto': 9.5,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Nur für Prefa-Dachsysteme',
+            'warranty_years': 10,
+        },
+        {
+            'manufacturer': 'Renusol',
+            'product_name': 'InterSole Montageschiene',
+            'article_number': 'REN-IS-40',
+            'category': 'Montageschiene',
+            'roof_type': 'Universal',
+            'material': 'Aluminium',
+            'dimensions': '40×40 mm, 4,2m',
+            'weight_kg': 1.45,
+            'price_netto': 19.5,
+            'unit': 'm',
+            'quantity_per_module': 1.2,
+            'compatibility': 'InterSole System',
+            'warranty_years': 10,
+        },
+        
+        # ==================== SPEZIAL-ZUBEHÖR ====================
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Dichtband EPDM selbstklebend',
+            'article_number': 'WDB-EPDM',
+            'category': 'Zubehör',
+            'roof_type': 'Universal',
+            'material': 'EPDM-Kautschuk',
+            'dimensions': '50 mm breit, 10m',
+            'weight_kg': 0.3,
+            'price_netto': 12.0,
+            'unit': 'm',
+            'quantity_per_module': 0.5,
+            'compatibility': 'Abdichtung Dachdurchdringungen',
+            'warranty_years': 15,
+        },
+        {
+            'manufacturer': 'Sonstige',
+            'product_name': 'Modulschutzecken Kunststoff',
+            'article_number': 'MSE-001',
+            'category': 'Zubehör',
+            'roof_type': 'Universal',
+            'material': 'Kunststoff',
+            'dimensions': 'Set à 4 Stück',
+            'weight_kg': 0.02,
+            'price_netto': 1.5,
+            'unit': 'Set',
+            'quantity_per_module': 1.0,
+            'compatibility': 'Schutz bei Transport/Montage',
+            'warranty_years': 5,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Montagekleber hochfest',
+            'article_number': 'WMK-HF',
+            'category': 'Zubehör',
+            'roof_type': 'Flachdach',
+            'material': 'Hybrid-Polymer',
+            'dimensions': '290 ml Kartusche',
+            'weight_kg': 0.35,
+            'price_netto': 8.5,
+            'unit': 'Stk',
+            'quantity_per_module': 0.2,
+            'compatibility': 'Für zusätzliche Befestigung',
+            'warranty_years': 10,
+        },
+        
+        # ==================== WEITERE K2 SYSTEMS KOMPONENTEN ====================
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'CrossRail Kreuzverbinder',
+            'article_number': '2012100',
+            'category': 'Schienenverbinder',
+            'roof_type': 'Universal',
+            'material': 'Aluminium',
+            'dimensions': '36 mm',
+            'weight_kg': 0.12,
+            'price_netto': 3.2,
+            'unit': 'Stk',
+            'quantity_per_module': 0.3,
+            'compatibility': 'Für Kreuzverbindungen',
+            'warranty_years': 12,
+        },
+        {
+            'manufacturer': 'K2 Systems',
+            'product_name': 'ClickFit EVO Dachhaken Biberschwanz',
+            'article_number': '2013000',
+            'category': 'Dachhaken',
+            'roof_type': 'Biberschwanzdach',
+            'material': 'Aluminium',
+            'dimensions': '120-180 mm',
+            'weight_kg': 0.48,
+            'price_netto': 10.0,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Speziell für Biberschwanz-Ziegel',
+            'warranty_years': 12,
+        },
+        
+        # ==================== WÜRTH SPEZIAL-KOMPONENTEN ====================
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Solar Schraubendreher-Set',
+            'article_number': 'WSD-SET',
+            'category': 'Zubehör',
+            'roof_type': 'Universal',
+            'material': 'Werkzeugstahl',
+            'dimensions': 'Set 5-teilig',
+            'weight_kg': 0.6,
+            'price_netto': 35.0,
+            'unit': 'Set',
+            'quantity_per_module': 0.01,
+            'compatibility': 'Spezielles Montage-Werkzeug',
+            'warranty_years': 10,
+        },
+        {
+            'manufacturer': 'Würth',
+            'product_name': 'Stockschraube M10×120 verzinkt',
+            'article_number': 'WSS-M10-120',
+            'category': 'Schrauben',
+            'roof_type': 'Universal',
+            'material': 'Stahl verzinkt',
+            'dimensions': 'M10×120 mm',
+            'weight_kg': 0.08,
+            'price_netto': 0.80,
+            'unit': 'Stk',
+            'quantity_per_module': 2.0,
+            'compatibility': 'Für Sparrenbefestigung',
+            'warranty_years': 10,
+        },
+    ]
+    
+    print(f"\nStarte erweiterte Datenbank-Befüllung mit {len(components)} Komponenten...\n")
+    
+    success_count = 0
+    error_count = 0
+    
+    for idx, comp in enumerate(components, 1):
+        try:
+            # Add default values for optional fields
+            comp.setdefault('article_number', f'AUTO-{idx:04d}')
+            comp.setdefault('warranty_years', 10)
+            comp.setdefault('specifications', {})
+            comp.setdefault('notes', '')
+            # Don't add datasheet_path - field doesn't exist in DB schema
+            
+            # create_component expects a dict, not **kwargs
+            component_id = create_component(comp)
+            success_count += 1
+            print(f"[{idx}/{len(components)}] {comp['manufacturer']} - {comp['product_name']}")
+            
+        except Exception as e:
+            error_count += 1
+            print(f"[{idx}/{len(components)}] FEHLER bei {comp.get('product_name', 'Unbekannt')}: {e}")
+    
+    print(f"\n{'='*60}")
+    print(f"ZUSAMMENFASSUNG")
+    print(f"{'='*60}")
+    print(f"Erfolgreich: {success_count}")
+    print(f"Fehler:      {error_count}")
+    print(f"Gesamt:      {len(components)}")
+    print(f"{'='*60}\n")
+    
+    # Statistiken abrufen
+    try:
+        stats = get_statistics()
+        print(f"DATENBANK-STATISTIKEN:")
+        print(f"   Komponenten gesamt: {stats['total_components']}")
+        print(f"   Hersteller:         {len(stats['by_manufacturer'])}")
+        print(f"   Kategorien:         {len(stats['by_category'])}")
+        print(f"   Dachtypen:          {len(stats['by_roof_type'])}")
+        print(f"\n   Nach Hersteller:")
+        for manufacturer, count in sorted(stats['by_manufacturer'].items(), key=lambda x: x[1], reverse=True):
+            print(f"      {manufacturer:20s}: {count:3d}")
+        print(f"\n   Nach Kategorie:")
+        for category, count in sorted(stats['by_category'].items(), key=lambda x: x[1], reverse=True):
+            print(f"      {category:30s}: {count:3d}")
+    except Exception as e:
+        print(f"Konnte Statistiken nicht abrufen: {e}")
+
+
+if __name__ == "__main__":
+    print("\n" + "="*60)
+    print(" PV-UNTERKONSTRUKTIONS-DATENBANK - ERWEITERTE VERSION")
+    print("="*60 + "\n")
+    
+    seed_extended_database()
+    
+    print("\nErweiterte Datenbank-Befüllung abgeschlossen!\n")

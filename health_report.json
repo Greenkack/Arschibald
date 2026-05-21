@@ -1,0 +1,44 @@
+{
+  "generated_at": "2025-12-14T17:03:36.928989",
+  "current_status": {
+    "timestamp": "2025-12-14T17:03:36.927683",
+    "status": "CRITICAL",
+    "error_rate": 0.0,
+    "performance_score": 5.0,
+    "code_quality_score": 0,
+    "active_errors": 0,
+    "total_operations": 0,
+    "uptime_seconds": 4.2552056312561035,
+    "memory_usage_mb": 627.86328125
+  },
+  "trends": {
+    "error_rate": "stable",
+    "performance": "stable"
+  },
+  "recent_metrics": [
+    {
+      "timestamp": "2025-12-14T17:03:36.802420",
+      "status": "CRITICAL",
+      "error_rate": 0.0,
+      "performance_score": 5.0,
+      "code_quality_score": 0,
+      "active_errors": 0,
+      "total_operations": 0,
+      "uptime_seconds": 4.129942417144775,
+      "memory_usage_mb": 627.84765625
+    }
+  ],
+  "alerts": [
+    {
+      "timestamp": "2025-12-14T17:03:36.802420",
+      "status": "CRITICAL",
+      "error_rate": 0.0,
+      "performance_score": 5.0,
+      "code_quality_score": 0,
+      "message": "Application in CRITICAL state"
+    }
+  ],
+  "recommendations": [
+    "Code quality issues detected - run app_diagnostics.py and fix issues"
+  ]
+}

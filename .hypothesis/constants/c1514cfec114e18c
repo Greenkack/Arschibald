@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\rebuilder.py
+# hypothesis_version: 6.147.0
+
+['.', '=', 'Arguments', 'Comprehension', 'ExceptHandler', 'GenExprFor', 'Keyword', 'ListCompFor', 'MatchCase', 'T_Doc', '_ForT', '_FunctionT', '_WithT', 'arguments', 'ast.AsyncFunctionDef', 'ast.ClassDef', 'ast.FunctionDef', 'ast.Module', 'async', 'class', 'col_offset', 'comprehension', 'def', 'end_col_offset', 'end_lineno', 'excepthandler', 'keyword', 'lineno', 'match_case', 'metaclass', 'visit_']

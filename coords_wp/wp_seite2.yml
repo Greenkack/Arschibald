@@ -1,0 +1,25 @@
+# Wärmepumpe Seite 2 (Kosten & Förderung)
+Text: {{hp_costs_header}}
+Position: (100, 730, 500, 760)
+Schriftart: Helvetica-Bold
+Schriftgröße: 16
+Farbe: 0
+----------------------------------------
+Text: {{hp_line_items_table}}
+Position: (100, 660, 500, 710)
+Schriftart: Helvetica
+Schriftgröße: 9
+Farbe: 0
+----------------------------------------
+Text: {{hp_subsidy_block}}
+Position: (100, 560, 500, 640)
+Schriftart: Helvetica
+Schriftgröße: 10
+Farbe: 0
+----------------------------------------
+Text: {{hp_total_block}}
+Position: (100, 500, 500, 555)
+Schriftart: Helvetica-Bold
+Schriftgröße: 11
+Farbe: 0
+----------------------------------------

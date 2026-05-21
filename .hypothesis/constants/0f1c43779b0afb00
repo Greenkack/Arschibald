@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\db\models\functions\text.py
+# hypothesis_version: 6.147.0
+
+[' || ', '%(expressions)s', '(%(expressions)s)', 'ASCII', 'CHAR', 'CHAR_LENGTH', 'CHR', 'CONCAT', 'CONCAT_WS', 'INSTR', 'LEFT', 'LENGTH', 'LOWER', 'LPAD', 'LTRIM', 'MD5', 'ORD', 'REPEAT', 'REPLACE', 'REVERSE', 'RIGHT', 'RPAD', 'RTRIM', 'SHA1', 'SHA224', 'SHA256', 'SHA384', 'SHA512', 'STRPOS', 'SUBSTR', 'SUBSTRING', 'TRIM', 'UNICODE', 'UPPER', 'chr', 'length', 'lower', 'ltrim', 'md5', 'ord', 'output_field', 'resolve_expression', 'reverse', 'rtrim', 'sha1', 'sha224', 'sha256', 'sha384', 'sha512', 'trim', 'upper']

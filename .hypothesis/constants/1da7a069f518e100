@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\django\core\mail\message.py
+# hypothesis_version: 6.147.0
+
+[998, ', ', '/', '@', 'Cc', 'Content-Disposition', 'Date', 'EmailAlternative', 'EmailAttachment', 'From', 'Invalid address "%s"', 'Message-ID', 'Reply-To', 'Subject', 'To', 'alternative', 'ascii', 'attachment', 'bcc', 'cc', 'content', 'date', 'filename', 'from', 'message', 'message-id', 'mimetype', 'mixed', 'plain', 'rb', 'reply-to', 'resent-bcc', 'resent-cc', 'resent-from', 'resent-sender', 'resent-to', 'rfc822', 'sender', 'subject', 'surrogateescape', 'text', 'text/', 'to', 'utf-8']

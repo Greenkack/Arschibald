@@ -1,0 +1,194 @@
+//-------------------------------------------------------------------
+// Part of interaktiv.shop | www.interaktiv.net
+// Projektspezifische JS-Funktionen
+//-------------------------------------------------------------------
+
+// Allgemeine Config-Variablen
+
+var ianbootstrapbpoint ;
+var ianshopconfig = {
+
+	navialignchange: 0 ,
+	autosuggestwidth: 0 ,
+	autosuggestheight: 0 ,
+	autosuggestpname: '' ,
+	autosuggestdelay: 0 ,
+	counterpixelid: '' ,
+	scartheadnoshow: 0 ,
+	scartlistnomsg: 0 ,
+	scartdetailnomsg: 0 ,
+	scartmsgwidth: 0 ,
+	scartmsgheight: 400 ,
+	scartimgtyp: 'gif' ,
+	dialogtxtwidth: 0 ,
+	dialogtxtheight: 0 ,
+	messagetxtwidth: 0 ,
+	messagetxtheight: 0 ,
+	cookiesecure: true ,
+	cookiesamesite: 'None'  
+} ;
+
+// Google Opt-Out
+
+var googleDisableStr = 'ga-disable-' + 'UA-59276521-1' ;
+
+if ( $.cookie(googleDisableStr) == 'true' ) { 
+	window[googleDisableStr] = true;
+}
+
+function gaOptout() {
+
+	$.cookie( googleDisableStr , 'true', { expires:7300 , domain:'heizungsdiscount24.de' , path:'/' } ) ;
+	window[googleDisableStr] = true ; 
+}
+
+// Warenkorb aktualisieren
+
+function doUpdateScart(source,form,action,back) {
+	
+	var monchek = $("#os_scshort_content").text().match(/(\d+)/) ;
+	var moninit = monchek ? monchek[0] : "0" ;
+	$("#os_scshort_content_small").html( moninit ) ;
+}
+
+// Bootstrap Breakpoint
+
+function findBootstrapEnvironment() {
+
+	var envValues = ["xs", "sm", "md", "lg"];
+	var $el = $('<div>');
+	$el.appendTo($('body'));
+
+	for ( var i = envValues.length - 1; i >= 0; i-- ) {
+        
+		var envVal = envValues[i];
+		$el.addClass('hidden-'+envVal);
+		
+		if ($el.is(':hidden')) {
+			$el.remove();
+			return envValues[i]
+		}
+    	} ;
+}
+
+// Autostart
+
+$(document).ready(function() {
+
+	ianbootstrapbpoint = findBootstrapEnvironment() ;
+	//if ( window.console ) console.log(ianbootstrapbpoint) ;
+
+	//Mobilversionen
+	if ( ianbootstrapbpoint == "xs" || ianbootstrapbpoint == "sm" ) {
+
+		//Angepasste Einstellungen
+		if ( ianbootstrapbpoint == "xs" ) {
+			ianshopconfig.scartdetailnomsg = 0 ;
+			ianshopconfig.scartlistnomsg   = 0 ;
+		}
+
+		//Footer Navi
+		if ( ianbootstrapbpoint == "xs" ) {
+		
+			$(".os_foot_navi_con").hide() ;
+			$(".os_foot_navi_tit").click(function() {
+			
+				$(".os_foot_navi_con").hide() ;
+				
+				if ( $(this).hasClass("os_foot_navi_act") ) {
+				
+					$(".os_foot_navi_tit").removeClass("os_foot_navi_act") ;
+					
+				} else {	
+					
+					$(".os_foot_navi_tit").removeClass("os_foot_navi_act") ;
+					$(this).addClass("os_foot_navi_act") ;
+					var navt = $(this).attr("data-target") ;
+					$("#" + navt).show() ;
+				}
+			}) ;
+		}
+	}
+
+	//Off-Canvas
+	$("#os_headxs_prod_link").click( function(){
+		$("#os_headxs_prod").toggleClass("active") ;
+		$("body > section , body > header , body > footer , body > div").toggleClass("active") ;
+	});
+
+	//Side-Label
+	$("#os_sideright").ianappsidelable({}) ;
+
+	//Popup Warenkorb
+	$('#os_order_payment').submit( function() {
+
+		MessageOverlay('','<br><br><b>Bitte warten</b> ... Ihr Warenkorb wird aktualisiert ...') ;
+	});
+
+	//Popup Bestellung
+	$('#os_order_last').submit( function() {
+
+		MessageOverlay('','<br><br><b>Bitte warten</b> ... Ihre Bestellung wird ausgeführt ...') ;
+	});
+
+	//AutoSearch
+	if ( $("#sbbo").length ) {
+
+		$("#sbbo").autocomplete( ajaxpath + "?plugin=searchautobo" + "&wkid=" + scartsession , {
+
+			delay:500,
+ 			width:700,
+ 			scrollHeight:500,
+ 			minChars:5,
+ 			max:5,
+			matchSubset:false,
+			matchContains:false,
+ 			cacheLength:100,
+ 			selectFirst:false
+		}) ;
+
+		$("#sbbo").change( function() {
+			$(".ac_results ul").unbind() ;
+		}) ;
+	}
+
+	//LastViewd
+	if ( $.cookie("interaktivshoplast") !== undefined ) {
+
+		$("#os_app_prodlast_button").css('display','inline-block') ;
+
+		$('#os_app_prodlast_button').click(function(){
+
+			if ( $("#os_app_prodlast_content").is(':hidden') ) {
+
+				$('#os_app_prodlast_button').hide() ;
+				$("#os_app_prodlast_content .data").hide() ;
+				$("#os_app_prodlast_content").show() ;
+
+				$.get(
+					syspathshop + "?application=prodlast&amount=5&wkid=" + scartsession ,
+					function(data){
+
+						$("#os_app_prodlast_content .data").html(data).show() ;
+					}
+				); 
+
+				$("body, html").animate( { scrollTop: $('.os_foot_main').offset().top - 20 } , 400 ) ;
+
+			} else {
+
+				$("#os_app_prodlast_content .data").hide() ;
+				$("#os_app_prodlast_content").hide() ;
+			}
+		});
+	}
+
+	//Awin
+	var getpara = getUrlVars() ;
+	if ( getpara['awc'] ) {
+		$.cookie('interaktivshopawc', getpara['awc'] , { expires: 30 , path: '/' , secure: true , sameSite: 'None' });
+	}
+
+});
+
+//END

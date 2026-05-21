@@ -1,0 +1,89 @@
+/**
+ * Feature Toggle Demo Styles
+ */
+
+.feature-toggle-demo {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.feature-toggle-demo .card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feature-toggle-demo h1 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.feature-toggle-demo h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.feature-toggle-demo code {
+  background: var(--surface-100);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: var(--primary-color);
+}
+
+.feature-toggle-demo .p-card {
+  height: 100%;
+}
+
+.feature-toggle-demo .p-card .p-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.feature-toggle-demo .p-card .p-card-content {
+  padding-top: 1rem;
+}
+
+.feature-toggle-demo .p-message {
+  margin: 0;
+}
+
+.feature-toggle-demo .p-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .feature-toggle-demo {
+    padding: 1rem;
+  }
+
+  .feature-toggle-demo .card {
+    padding: 1rem;
+  }
+
+  .feature-toggle-demo h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .feature-toggle-demo .card {
+    background: var(--surface-900);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .feature-toggle-demo code {
+    background: var(--surface-800);
+  }
+}

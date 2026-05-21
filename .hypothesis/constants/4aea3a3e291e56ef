@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\trio\testing\_check_streams.py
+# hypothesis_version: 6.147.0
+
+[b'1', b'123', b'2', b'x', b'xyzzy', b'y', 1.5, 100, 4096, 16834, 'ArgsT', 'Res1', 'Res2', 'little', 'receiver starting', 'waiter sleeping', 'waiter wokeup']

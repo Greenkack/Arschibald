@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\_pytest\config\findpaths.py
+# hypothesis_version: 6.147.0
+
+['-', '.cfg', '.ini', '.pytest.ini', '.toml', '::', 'ini_options', 'pyproject.toml', 'pytest', 'pytest.ini', 'setup.cfg', 'setup.py', 'tool', 'tool:pytest', 'tox.ini', 'utf-8']

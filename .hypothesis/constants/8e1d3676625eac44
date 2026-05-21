@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\narwhals\expr.py
+# hypothesis_version: 6.147.0
+
+[0.0, 1e-09, 'Expr', 'PS', 'R', 'abs_tol', 'average', 'backward', 'both', 'dense', 'forward', 'literal', 'max', 'min', 'n', 'nans_equal', 'ordinal', 'rel_tol']

@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\astroid\_ast.py
+# hypothesis_version: 6.147.0
+
+['!=', '%', '&', '*', '**', '+', '-', '/', '//', '<', '<<', '<=', '<type_comment>', '==', '>', '>=', '>>', '@', '^', 'and', 'func_type', 'in', 'is', 'is not', 'not', 'not in', 'or', '|', '~']

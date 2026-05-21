@@ -1,0 +1,39 @@
+    const overlay = document.getElementById('overlay');
+
+    const loadImg = (entries, observer) => {
+        entries.forEach((entries) => {
+            if (entries.isIntersecting) {
+                entries.target.classList.add('animateHover');
+            } else {
+                entries.target.classList.remove('animateHover')
+            }
+        })
+    }
+    const observer = new IntersectionObserver(loadImg, {
+        root: null,
+        rootMargin: '-100px 50px',
+        threshold: 0.8
+    });
+    observer.observe(overlay);
+    // Funktion, um zu überprüfen, ob ein Element im sichtbaren Bereich des Viewports ist
+    function isVisible(elm) {
+        // Holt die Position und Größe des Elements relativ zum Viewport
+        const rect = elm.getBoundingClientRect();
+        // Bestimmt die Höhe des sichtbaren Bereichs im Browserfenster
+        const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+        // Gibt true zurück, wenn das Element im sichtbaren Bereich liegt
+        // (also nicht vollständig oberhalb oder unterhalb des Viewports)
+        return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+    }
+    // Wartet, bis der DOM vollständig geladen ist
+    window.addEventListener('DOMContentLoaded', (ev0) => {
+        // Fügt einen Scroll-Event-Listener hinzu
+        window.addEventListener('scroll', (ev1) => {
+            // Geht alle Elemente mit der Klasse "paused" durch
+            document.querySelectorAll(".paused").forEach(elm => {
+                // Wenn das Element sichtbar ist, entferne die Klasse "paused"
+                if (isVisible(elm))
+                    elm.classList.remove("paused");
+            })
+        });
+    });

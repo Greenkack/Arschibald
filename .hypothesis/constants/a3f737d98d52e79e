@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\openpyxl\chart\shapes.py
+# hypothesis_version: 6.147.0
+
+['auto', 'black', 'blackGray', 'blackWhite', 'clr', 'gradFill', 'gray', 'grayWhite', 'hidden', 'invGray', 'ln', 'ltGray', 'noFill', 'pattFill', 'prstGeom', 'scene3d', 'solidFill', 'sp3d', 'spPr', 'white', 'xfrm']

@@ -1,0 +1,157 @@
+.visualization-3d-page {
+  padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 30px;
+}
+
+.page-header h1 {
+  color: var(--primary-color);
+  margin: 0 0 10px 0;
+}
+
+.page-header p {
+  color: var(--text-color-secondary);
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.visualization-3d-content {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 20px;
+}
+
+.configuration-card {
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.configuration-card h3 {
+  margin: 0 0 20px 0;
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--surface-border);
+  padding-bottom: 10px;
+}
+
+.config-section {
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.config-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.config-section h4 {
+  margin: 0 0 15px 0;
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.form-field .p-dropdown,
+.form-field .p-inputnumber,
+.form-field .p-slider {
+  width: 100%;
+}
+
+.info-box {
+  background: var(--surface-ground);
+  padding: 15px;
+  border-radius: 6px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.info-box p {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.info-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.info-box li {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+
+.preset-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.preset-button {
+  padding: 12px 16px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.preset-button:hover {
+  background: var(--primary-color-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.preset-button:active {
+  transform: translateY(0);
+}
+
+.viewer-container {
+  min-height: 600px;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .visualization-3d-content {
+    grid-template-columns: 1fr;
+  }
+
+  .configuration-card {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .visualization-3d-page {
+    padding: 10px;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .page-header p {
+    font-size: 1rem;
+  }
+
+  .preset-buttons {
+    flex-direction: column;
+  }
+}

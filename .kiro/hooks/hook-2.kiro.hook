@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Hook 2",
+  "description": "A hook that triggers on file edits to Python files and asks the agent to review the changes",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review the changes made to this Python file and provide feedback on code quality, potential issues, and suggestions for improvement."
+  }
+}

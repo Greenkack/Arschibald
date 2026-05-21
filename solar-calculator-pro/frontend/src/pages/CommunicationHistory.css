@@ -1,0 +1,113 @@
+.communication-history-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: var(--text-color);
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--text-color-secondary);
+  font-size: 1.1rem;
+}
+
+.customer-selector-card {
+  margin-bottom: 2rem;
+}
+
+.customer-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.customer-selector label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.customer-dropdown {
+  min-width: 300px;
+}
+
+.customer-info {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: auto;
+  color: var(--text-color-secondary);
+}
+
+.customer-info span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.no-customer-selected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.no-customer-selected h3 {
+  margin: 1rem 0 0.5rem 0;
+  color: var(--text-color);
+}
+
+.no-customer-selected p {
+  margin: 0;
+  color: var(--text-color-secondary);
+}
+
+/* Tab styling */
+.p-tabview {
+  background: transparent;
+}
+
+.p-tabview .p-tabview-panels {
+  background: transparent;
+  padding: 0;
+}
+
+.p-tabview .p-tabview-panel {
+  padding: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .communication-history-page {
+    padding: 1rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .customer-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .customer-dropdown {
+    width: 100%;
+  }
+
+  .customer-info {
+    margin-left: 0;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

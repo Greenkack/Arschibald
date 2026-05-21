@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\sqlalchemy\log.py
+# hypothesis_version: 6.147.0
+
+['%s.%s', '.', 'Identified', 'InstanceLogger', '_IT', 'debug', 'echo', 'exc_info', 'logger', 'sqlalchemy', 'stacklevel']

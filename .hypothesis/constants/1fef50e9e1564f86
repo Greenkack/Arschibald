@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\numpy\lib\stride_tricks.py
+# hypothesis_version: 6.147.0
+
+['C', 'broadcast_arrays', 'broadcast_shapes', 'broadcast_to', 'multi_index', 'numpy', 'readonly', 'refs_ok', 'shape', 'strides', 'zerosize_ok']

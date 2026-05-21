@@ -1,0 +1,144 @@
+/* System Configuration Manager Styles */
+
+.system-configuration-manager {
+  padding: 1rem;
+}
+
+.system-configuration-manager .card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.system-configuration-manager h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.system-configuration-manager .p-datatable {
+  font-size: 0.9rem;
+}
+
+.system-configuration-manager .p-datatable .p-datatable-thead > tr > th {
+  background: var(--surface-100);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.system-configuration-manager .p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
+}
+
+.system-configuration-manager .p-tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.system-configuration-manager .p-toolbar {
+  background: transparent;
+  border: none;
+  padding: 0 0 1rem 0;
+}
+
+.system-configuration-manager .p-tabview .p-tabview-nav {
+  background: transparent;
+  border-bottom: 2px solid var(--surface-border);
+}
+
+.system-configuration-manager .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  background: transparent;
+  border: none;
+  color: var(--text-color-secondary);
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.system-configuration-manager .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.system-configuration-manager .p-tabview .p-tabview-panels {
+  background: transparent;
+  padding: 1.5rem 0;
+}
+
+.system-configuration-manager .p-dialog .field {
+  margin-bottom: 1.5rem;
+}
+
+.system-configuration-manager .p-dialog .field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.system-configuration-manager .p-dialog .field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.system-configuration-manager .p-dialog .field-checkbox label {
+  margin-bottom: 0;
+}
+
+.system-configuration-manager .flex {
+  display: flex;
+}
+
+.system-configuration-manager .flex-column {
+  flex-direction: column;
+}
+
+.system-configuration-manager .gap-2 {
+  gap: 0.5rem;
+}
+
+.system-configuration-manager .gap-3 {
+  gap: 1rem;
+}
+
+.system-configuration-manager .w-full {
+  width: 100%;
+}
+
+.system-configuration-manager .mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .system-configuration-manager .card {
+    padding: 1rem;
+  }
+  
+  .system-configuration-manager h2 {
+    font-size: 1.5rem;
+  }
+  
+  .system-configuration-manager .p-datatable {
+    font-size: 0.8rem;
+  }
+  
+  .system-configuration-manager .p-datatable .p-datatable-thead > tr > th,
+  .system-configuration-manager .p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.5rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .system-configuration-manager .card {
+    background: var(--surface-card);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}

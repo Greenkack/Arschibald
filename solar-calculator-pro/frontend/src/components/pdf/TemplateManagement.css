@@ -1,0 +1,122 @@
+/* Template Management Styles */
+
+.template-management {
+  width: 100%;
+}
+
+.template-management .p-toolbar {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.table-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.template-table {
+  border-radius: 8px;
+}
+
+.template-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.template-name-cell i {
+  color: var(--primary-color);
+}
+
+.template-actions {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: flex-end;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.edit-form .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-form .form-field label {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .table-header .p-input-icon-left {
+    width: 100%;
+  }
+  
+  .table-header .p-input-icon-left input {
+    width: 100%;
+  }
+  
+  .toolbar-left,
+  .toolbar-right {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .toolbar-left .p-button,
+  .toolbar-right .p-button {
+    width: 100%;
+  }
+  
+  .template-actions {
+    flex-wrap: wrap;
+  }
+}
+
+/* DataTable Customization */
+.template-table .p-datatable-thead > tr > th {
+  background: var(--surface-100);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.template-table .p-datatable-tbody > tr:hover {
+  background: var(--surface-100);
+}
+
+.template-table .p-datatable-tbody > tr.p-highlight {
+  background: var(--primary-50);
+  color: var(--primary-color);
+}
+
+/* Tag Customization */
+.template-table .p-tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}

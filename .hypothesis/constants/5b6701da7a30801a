@@ -1,0 +1,4 @@
+# file: C:\Users\win10\AppData\Roaming\Python\Python312\site-packages\prompt_toolkit\formatted_text\base.py
+# hypothesis_version: 6.147.0
+
+['AnyFormattedText', 'FormattedText', 'MagicFormattedText', 'NotImplementedOrNone', 'OneStyleAndTextTuple', 'StyleAndTextTuples', 'Template', 'is_formatted_text', 'merge_formatted_text', 'to_formatted_text', '{0}', '{}']

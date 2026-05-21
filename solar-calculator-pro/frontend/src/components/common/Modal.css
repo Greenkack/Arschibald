@@ -1,0 +1,33 @@
+.custom-modal .p-dialog-header {
+  background: var(--surface-section);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--surface-border);
+  padding: 1.25rem;
+}
+
+.custom-modal .p-dialog-content {
+  background: var(--surface-card);
+  color: var(--text-color);
+  padding: 1.5rem;
+}
+
+.custom-modal .p-dialog-footer {
+  background: var(--surface-section);
+  border-top: 1px solid var(--surface-border);
+  padding: 1rem 1.25rem;
+}
+
+.custom-modal .p-dialog-header-icon {
+  color: var(--text-color);
+}
+
+.custom-modal .p-dialog-header-icon:hover {
+  background: var(--surface-hover);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .custom-modal {
+    width: 90vw !important;
+  }
+}

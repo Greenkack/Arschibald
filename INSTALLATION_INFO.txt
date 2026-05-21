@@ -1,0 +1,25 @@
+BOKUK2 SOLAR CALCULATOR - INSTALLATION
+
+Dieses Setup installiert die vollständige Bokuk2 Solar Calculator Anwendung.
+
+Was wird installiert:
+- Python 3.13 Embedded Runtime
+- Alle erforderlichen Python-Pakete (194 Pakete)
+- Bokuk2 Solar Calculator Anwendung
+- Alle PDF-Templates und Koordinaten
+- Alle Assets und Konfigurationsdateien
+- Start-Scripts für einfachen Zugang
+
+Nach der Installation:
+1. Starten Sie die Anwendung über das Desktop-Icon oder Startmenü
+2. Die App öffnet sich automatisch im Browser
+3. Standard-URL: http://localhost:8501
+
+Systemanforderungen:
+- Windows 10 oder höher (64-bit)
+- Mindestens 4 GB RAM
+- Mindestens 2 GB freier Festplattenspeicher
+
+Support:
+- GitHub: https://github.com/Greenkack/Arschibald
+- Email: support@bokuk2.com
