@@ -1,6 +1,7 @@
 # locales.py
 import json
 import os
+from functools import lru_cache
 
 # Importiere die globale Fehlerliste aus app_status.py
 try:
@@ -13,6 +14,8 @@ except ImportError:
 
 
 # Funktion zum Laden der Übersetzungen
+# Cache translations in memory to prevent expensive disk I/O on every UI rerender
+@lru_cache(maxsize=32)
 def load_translations(lang_code: str = 'de') -> dict[str, str] | None:
     """Lädt Übersetzungsdaten aus einer JSON-Datei für den gegebenen Sprachcode."""
     # KORREKTUR: `global_import_errors` ist jetzt direkt verfügbar, kein erneuter Import von `gui` nötig.
