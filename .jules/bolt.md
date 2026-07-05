@@ -1,0 +1,3 @@
+## 2026-07-05 - [Caching DB queries in Streamlit]
+**Learning:** `load_heatpump_components` in `heatpump_pricing.py` was being called repeatedly to build the heatpump configurations, hitting the SQLite DB each time for identical product listings. While local SQLite queries are fast (~0.5ms), aggregating them over many component checks scales linearly and consumes unnecessary IO.
+**Action:** Use Streamlit's `@st.cache_data(ttl=3600)` on functions that fetch static or slowly-changing catalog data from the DB to drastically reduce latency and avoid N+1 or repetitive query bottlenecks on rerenders.

@@ -18,6 +18,8 @@ import logging
 from dataclasses import asdict, dataclass
 from typing import Any
 
+import streamlit as st
+
 try:
     from product_db import (
         calculate_price_by_method,
@@ -706,6 +708,7 @@ def _norm(s: str) -> str:
     return (s or "").strip().lower()
 
 
+@st.cache_data(ttl=3600)
 def load_heatpump_components() -> dict[str, list[ComponentCost]]:
     """Lädt Produkte aus der DB und klassifiziert sie in Haupt- / Zubehörgruppen.
     Erwartet, dass in der products Tabelle Preise in `price_euro` und Arbeitsstunden
