@@ -12,6 +12,7 @@ from typing import Any
 
 import numpy as np
 import requests  # Für HTTP-Anfragen an PVGIS
+import streamlit as st
 
 from financial_calculations import calculate_final_price
 
@@ -2796,6 +2797,36 @@ def convert_orientation_to_pvgis_azimuth(orientation_text: str | None) -> int:
     return 0  # Fallback auf Süd
 
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def _get_pvgis_data_api_call(
+    latitude: float,
+    longitude: float,
+    peak_power_kwp: float,
+    tilt: int,
+    azimuth: int,
+    system_loss_percent: float = 14.0
+) -> dict[str, Any]:
+    """Helper function to make the API call with only hashable parameters and caching."""
+    base_url = "https://re.jrc.ec.europa.eu/api/seriescalc"
+    params = {
+        "lat": latitude,
+        "lon": longitude,
+        "peakpower": peak_power_kwp,
+        "loss": system_loss_percent,
+        "pvtechchoice": "crystSi",
+        "mountingplace": "building",
+        "angle": tilt,
+        "aspect": azimuth,
+        "outputformat": "json",
+        "browser": 0,  # Wichtig, um HTML-Antworten zu vermeiden
+    }
+
+    response = requests.get(
+        base_url, params=params, timeout=25
+    )  # Timeout von 25 Sekunden
+    response.raise_for_status()  # Löst HTTPError für 4xx/5xx Status Codes
+    return response.json()
+
 def get_pvgis_data(
     latitude: float,
     longitude: float,
@@ -2836,39 +2867,17 @@ def get_pvgis_data(
         # Bereinigt
         return None
 
-    base_url = "https://re.jrc.ec.europa.eu/api/seriescalc"
-    params = {
-        "lat": latitude,
-        "lon": longitude,
-        "peakpower": peak_power_kwp,
-        "loss": system_loss_percent,
-        "pvtechchoice": "crystSi",
-        "mountingplace": "building",
-        "angle": tilt,
-        "aspect": azimuth,
-        "outputformat": "json",
-        "browser": 0,  # Wichtig, um HTML-Antworten zu vermeiden
-    }
-
-    # if debug_mode_enabled: # Bereinigt
-    #     try:
-    #         prepared_request = requests.Request('GET', base_url, params=params).prepare()
-    #         print(f"PVGIS Anfrage URL: {prepared_request.url}")
-    #     except Exception as e_prep:
-    #         print(f"PVGIS: Fehler Vorbereitung Request-URL: {e_prep}")
-
     error_msg_pvgis = ""  # Initialisiere Fehlermeldung
 
     try:
-        response = requests.get(
-            base_url, params=params, timeout=25
-        )  # Timeout von 25 Sekunden
-
-        # if debug_mode_enabled: print(f"PVGIS Response Status Code:
-        # {response.status_code}") # Bereinigt
-
-        response.raise_for_status()  # Löst HTTPError für 4xx/5xx Status Codes
-        data = response.json()
+        data = _get_pvgis_data_api_call(
+            latitude=latitude,
+            longitude=longitude,
+            peak_power_kwp=peak_power_kwp,
+            tilt=tilt,
+            azimuth=azimuth,
+            system_loss_percent=system_loss_percent
+        )
 
         # if debug_mode_enabled: # Bereinigt
         #     try:
