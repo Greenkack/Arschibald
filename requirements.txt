@@ -71,7 +71,7 @@ narwhals==2.3.0
 nodeenv==1.9.1
 numexpr==2.11.0
 numpy==2.3.2
-numpy-financial==1.0.0
+
 openpyxl==3.1.5
 orjson==3.11.3
 packaging==25.0

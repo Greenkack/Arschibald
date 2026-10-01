@@ -19,7 +19,6 @@ import math
 from typing import Any
 
 import numpy as np
-import numpy_financial as npf
 
 # Konstanten
 LIFESPAN_YEARS = 25
@@ -229,8 +228,9 @@ def calculate_net_present_value(investment: float,
     period = max(1, int(years))
     rate = safe_float(discount_rate, DISCOUNT_RATE)
 
-    cash_flows = [savings] * period
-    return npf.npv(rate, cash_flows) - investment_val
+    # Native Python NPV Berechnung zur Vermeidung der langsamen numpy_financial.npv Methode
+    npv = sum(savings / (1 + rate)**t for t in range(period))
+    return npv - investment_val
 
 
 def calculate_irr(investment: float,
@@ -256,9 +256,23 @@ def calculate_irr(investment: float,
 
     cash_flows = [-investment_val] + [savings] * period
 
+    # Native Python IRR Berechnung (Newton-Raphson) zur Vermeidung von numpy_financial
     try:
-        irr_result = npf.irr(cash_flows)
-        return safe_float(irr_result * 100, 0.0)
+        rate = 0.1  # Initial guess
+        max_iter = 100
+        tol = 1e-6
+        for _ in range(max_iter):
+            npv = sum(cf / (1 + rate)**t for t, cf in enumerate(cash_flows))
+            derivative = sum(-t * cf / (1 + rate)**(t + 1) for t, cf in enumerate(cash_flows) if t > 0)
+
+            if derivative == 0:
+                return 0.0
+
+            new_rate = rate - npv / derivative
+            if abs(new_rate - rate) < tol:
+                return safe_float(new_rate * 100, 0.0)
+            rate = new_rate
+        return 0.0
     except BaseException:
         return 0.0
 
