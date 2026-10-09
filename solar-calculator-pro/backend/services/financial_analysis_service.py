@@ -6,7 +6,8 @@ Implements comprehensive financial calculations for solar projects
 import numpy as np
 from typing import List, Tuple, Optional, Dict
 from datetime import datetime
-import numpy_financial as npf
+# Bolt: Optimierung - Ersetze O(N^3) numpy_financial mit O(N) financial_tools
+from financial_tools import calculate_npv, calculate_irr, calculate_mirr
 
 from ..models.financial_schemas import (
     FinancialAnalysisRequest,
@@ -229,7 +230,7 @@ class FinancialAnalysisService:
         cash_flow_array.extend([cf.net_cash_flow for cf in cash_flows])
         
         # Calculate NPV
-        npv = npf.npv(discount_rate, cash_flow_array)
+        npv = calculate_npv(discount_rate, cash_flow_array)
         
         # Calculate present value of benefits and costs
         pv_benefits = sum(
@@ -267,13 +268,13 @@ class FinancialAnalysisService:
         
         try:
             # Calculate IRR
-            irr = npf.irr(cash_flow_array)
+            irr = calculate_irr(cash_flow_array)
             irr_percent = irr * 100
             
             # Calculate Modified IRR (MIRR)
             finance_rate = request.discount_rate / 100
             reinvest_rate = request.discount_rate / 100
-            mirr = npf.mirr(cash_flow_array, finance_rate, reinvest_rate)
+            mirr = calculate_mirr(cash_flow_array, finance_rate, reinvest_rate)
             mirr_percent = mirr * 100
             
             irr_exceeds_discount_rate = irr_percent > request.discount_rate

@@ -313,3 +313,55 @@ def calculate_contracting_costs(base_fee: float,
         "kosten_pro_kwh_effektiv": round(annual_total / consumed_kwh if consumed_kwh > 0 else 0, 4),
         "laufzeit_jahre": period_years
     }
+
+# Bolt: Optimierung - O(N) Implementierungen als Ersatz für O(N^3) numpy_financial
+def calculate_npv(rate: float, cashflows: list) -> float:
+    """
+    Berechnet den Nettobarwert (NPV - Net Present Value) einer Investition.
+    Ersetzt numpy_financial.npv zur Leistungssteigerung.
+    """
+    return sum(cf / ((1 + rate) ** i) for i, cf in enumerate(cashflows))
+
+def calculate_irr(cashflows: list, max_iter: int = 1000, tol: float = 1e-6, guess: float = 0.1) -> float:
+    """
+    Berechnet den internen Zinsfuß (IRR - Internal Rate of Return) mittels
+    Newton-Raphson-Verfahren. Ersetzt numpy_financial.irr zur Vermeidung
+    von Performance-Engpässen (O(N^3)).
+    """
+    rate = guess
+    for _ in range(max_iter):
+        f = sum(cf / ((1 + rate) ** t) for t, cf in enumerate(cashflows))
+        f_prime = sum(-t * cf / ((1 + rate) ** (t + 1)) for t, cf in enumerate(cashflows))
+
+        if abs(f_prime) < 1e-12:
+            return float("nan")
+
+        new_rate = rate - f / f_prime
+        if abs(new_rate - rate) < tol:
+            return new_rate
+        rate = new_rate
+
+    return float("nan")
+
+def calculate_mirr(cashflows: list, finance_rate: float, reinvest_rate: float) -> float:
+    """
+    Berechnet den modifizierten internen Zinsfuß (MIRR).
+    Ersetzt numpy_financial.mirr.
+    """
+    n = len(cashflows) - 1
+    if n < 1:
+        return float("nan")
+
+    positive_cf = [cf if cf > 0 else 0 for cf in cashflows]
+    negative_cf = [cf if cf < 0 else 0 for cf in cashflows]
+
+    pv_negative = sum(cf / ((1 + finance_rate) ** i) for i, cf in enumerate(negative_cf))
+    fv_positive = sum(cf * ((1 + reinvest_rate) ** (n - i)) for i, cf in enumerate(positive_cf))
+
+    if pv_negative == 0:
+        return float("nan")
+
+    try:
+        return (fv_positive / abs(pv_negative)) ** (1 / n) - 1
+    except:
+        return float("nan")

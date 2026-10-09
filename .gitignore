@@ -24,3 +24,4 @@
 /tools/*.pdf
 /data/imports/module_pdfs/**/*.pdf
 node_modules
+__pycache__/
