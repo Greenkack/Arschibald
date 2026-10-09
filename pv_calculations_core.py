@@ -19,7 +19,8 @@ import math
 from typing import Any
 
 import numpy as np
-import numpy_financial as npf
+# Bolt: Optimierung - Ersetze O(N^3) numpy_financial mit O(N) financial_tools
+from financial_tools import calculate_npv, calculate_irr, calculate_mirr
 
 # Konstanten
 LIFESPAN_YEARS = 25
@@ -230,7 +231,7 @@ def calculate_net_present_value(investment: float,
     rate = safe_float(discount_rate, DISCOUNT_RATE)
 
     cash_flows = [savings] * period
-    return npf.npv(rate, cash_flows) - investment_val
+    return calculate_npv(rate, cash_flows) - investment_val
 
 
 def calculate_irr(investment: float,
@@ -257,7 +258,7 @@ def calculate_irr(investment: float,
     cash_flows = [-investment_val] + [savings] * period
 
     try:
-        irr_result = npf.irr(cash_flows)
+        irr_result = calculate_irr(cash_flows)
         return safe_float(irr_result * 100, 0.0)
     except BaseException:
         return 0.0

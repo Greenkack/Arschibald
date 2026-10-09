@@ -24,7 +24,8 @@ Version: 1.1 (AI-Fully-Implemented)
 
 from typing import Any
 
-import numpy_financial as npf  # Benötigt: pip install numpy-financial
+# Bolt: Optimierung - Ersetze O(N^3) numpy_financial mit O(N) financial_tools
+from financial_tools import calculate_npv, calculate_irr, calculate_mirr
 
 # --- Globale Annahmen für Berechnungen (können in Settings ausgelagert werden) ---
 LIFESPAN_YEARS = 25  # Lebensdauer der Anlage in Jahren
@@ -60,7 +61,7 @@ def calculate_net_present_value(
         annual_savings: float) -> float:
     """Berechnet den Kapitalwert (NPV) der Investition."""
     cash_flows = [annual_savings] * LIFESPAN_YEARS
-    return npf.npv(DISCOUNT_RATE, cash_flows) - investment
+    return calculate_npv(DISCOUNT_RATE, cash_flows) - investment
 
 
 def calculate_internal_rate_of_return(
@@ -71,7 +72,7 @@ def calculate_internal_rate_of_return(
         return 0.0
     cash_flows = [-investment] + [annual_savings] * LIFESPAN_YEARS
     try:
-        return npf.irr(cash_flows) * 100
+        return calculate_irr(cash_flows) * 100
     except Exception:
         return 0.0
 
@@ -176,13 +177,13 @@ def calculate_npv(cashflows: list[float], discount_rate: float) -> float:
     """11. Nettobarwert (NPV) """
     # npf.npv erwartet die Rate als ersten Parameter und dann die Cashflows.
     # Die Initialinvestition ist oft der erste (negative) Cashflow.
-    return npf.npv(discount_rate, cashflows)
+    return calculate_npv(discount_rate, cashflows)
 
 
 def calculate_irr(cashflows: list[float]) -> float:
     """12. Interner Zinsfuß (IRR) """
     try:
-        return npf.irr(cashflows) * 100
+        return calculate_irr(cashflows) * 100
     except BaseException:
         return 0.0
 
@@ -522,7 +523,7 @@ def calculate_profitability_index(
     """Berechnet den Rentabilitätsindex."""
     if investment <= 0:
         return 0.0
-    npv_of_future_cash_flows = npf.npv(
+    npv_of_future_cash_flows = calculate_npv(
         DISCOUNT_RATE, [annual_savings] * LIFESPAN_YEARS)
     return npv_of_future_cash_flows / investment
 

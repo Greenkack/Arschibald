@@ -4269,9 +4269,9 @@ def perform_calculations(
 
     # Interner Zinsfuß (IRR)
     try:
-        import numpy_financial as npf
+        from financial_tools import calculate_npv, calculate_irr, calculate_mirr
 
-        irr_val = npf.irr(
+        irr_val = calculate_irr(
             cash_flows_initial_investment
         )  # Benötigt Cashflows inkl. initialer Investition
         results["irr_percent"] = (
