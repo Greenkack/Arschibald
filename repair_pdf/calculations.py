@@ -10,6 +10,23 @@ import pandas as pd
 import numpy as np
 import json
 import math
+
+def _calculate_irr_newton(cash_flows, guess=0.1, max_iter=1000, tol=1e-6):
+    if not cash_flows or len(cash_flows) < 2: return float('nan')
+    def npv(r): return sum(cf / (1 + r)**i for i, cf in enumerate(cash_flows))
+
+    # Simple secant method which is more robust than Newton when derivative is hard
+    r0 = guess
+    r1 = guess + 0.05
+    for _ in range(max_iter):
+        f0 = npv(r0)
+        f1 = npv(r1)
+        if abs(f1) < tol: return r1
+        if f1 == f0: break
+        r2 = r1 - f1 * (r1 - r0) / (f1 - f0)
+        r0, r1 = r1, r2
+
+    return float('nan')
 from typing import Dict, Any, List, Optional, Union, Tuple
 from datetime import datetime
 import traceback
@@ -3382,26 +3399,13 @@ def perform_calculations(
 
     # Interner Zinsfuß (IRR)
     try:
-        import numpy_financial as npf
-
-        irr_val = npf.irr(
-            cash_flows_initial_investment
-        )  # Benötigt Cashflows inkl. initialer Investition
+        irr_val = _calculate_irr_newton(cash_flows_initial_investment)
         results["irr_percent"] = (
             irr_val * 100
             if irr_val is not None and not (math.isnan(irr_val) or math.isinf(irr_val))
             else float("nan")
         )
-    except ImportError:
-        results["irr_percent"] = float("nan")
-        errors_list.append(
-            texts.get(
-                "warn_numpy_financial_missing_for_irr",
-                "Hinweis: numpy_financial nicht installiert, IRR kann nicht berechnet werden.")
-        )
-    except (
-        Exception
-    ) as e_irr_calc:  # Fängt auch ValueError von npf.irr ab, wenn keine Lösung gefunden
+    except (Exception) as e_irr_calc:
         results["irr_percent"] = float("nan")
         errors_list.append(
             (

@@ -16,12 +16,26 @@ Portiert aus kalkulationen.py mit Sicherheits- und Performance-Optimierungen.
 from __future__ import annotations
 
 import math
+
+def _calculate_irr_newton(cash_flows, guess=0.1, max_iter=1000, tol=1e-6):
+    if not cash_flows or len(cash_flows) < 2: return float('nan')
+    def npv(r): return sum(cf / (1 + r)**i for i, cf in enumerate(cash_flows))
+
+    # Simple secant method which is more robust than Newton when derivative is hard
+    r0 = guess
+    r1 = guess + 0.05
+    for _ in range(max_iter):
+        f0 = npv(r0)
+        f1 = npv(r1)
+        if abs(f1) < tol: return r1
+        if f1 == f0: break
+        r2 = r1 - f1 * (r1 - r0) / (f1 - f0)
+        r0, r1 = r1, r2
+
+    return float('nan')
 from typing import Any
 
 import numpy as np
-import numpy_financial as npf
-
-# Konstanten
 LIFESPAN_YEARS = 25
 DISCOUNT_RATE = 0.04
 CO2_EMISSIONS_GRID_KWH = 0.474  # kg CO2 pro kWh
@@ -230,7 +244,7 @@ def calculate_net_present_value(investment: float,
     rate = safe_float(discount_rate, DISCOUNT_RATE)
 
     cash_flows = [savings] * period
-    return npf.npv(rate, cash_flows) - investment_val
+    return sum(cf / (1 + rate)**i for i, cf in enumerate(cash_flows)) - investment_val
 
 
 def calculate_irr(investment: float,
@@ -257,7 +271,7 @@ def calculate_irr(investment: float,
     cash_flows = [-investment_val] + [savings] * period
 
     try:
-        irr_result = npf.irr(cash_flows)
+        irr_result = _calculate_irr_newton(cash_flows)
         return safe_float(irr_result * 100, 0.0)
     except BaseException:
         return 0.0
