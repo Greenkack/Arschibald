@@ -4,10 +4,25 @@ Implements comprehensive financial calculations for solar projects
 """
 
 import numpy as np
+
+def _calculate_irr_newton(cash_flows, guess=0.1, max_iter=1000, tol=1e-6):
+    if not cash_flows or len(cash_flows) < 2: return float('nan')
+    def npv(r): return sum(cf / (1 + r)**i for i, cf in enumerate(cash_flows))
+
+    # Simple secant method which is more robust than Newton when derivative is hard
+    r0 = guess
+    r1 = guess + 0.05
+    for _ in range(max_iter):
+        f0 = npv(r0)
+        f1 = npv(r1)
+        if abs(f1) < tol: return r1
+        if f1 == f0: break
+        r2 = r1 - f1 * (r1 - r0) / (f1 - f0)
+        r0, r1 = r1, r2
+
+    return float('nan')
 from typing import List, Tuple, Optional, Dict
 from datetime import datetime
-import numpy_financial as npf
-
 from ..models.financial_schemas import (
     FinancialAnalysisRequest,
     FinancialAnalysisResponse,
@@ -229,7 +244,7 @@ class FinancialAnalysisService:
         cash_flow_array.extend([cf.net_cash_flow for cf in cash_flows])
         
         # Calculate NPV
-        npv = npf.npv(discount_rate, cash_flow_array)
+        npv = sum(cf / (1 + discount_rate)**i for i, cf in enumerate(cash_flow_array))
         
         # Calculate present value of benefits and costs
         pv_benefits = sum(
@@ -267,7 +282,7 @@ class FinancialAnalysisService:
         
         try:
             # Calculate IRR
-            irr = npf.irr(cash_flow_array)
+            irr = _calculate_irr_newton(cash_flow_array)
             irr_percent = irr * 100
             
             # Calculate Modified IRR (MIRR)

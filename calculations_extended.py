@@ -24,7 +24,23 @@ Version: 1.1 (AI-Fully-Implemented)
 
 from typing import Any
 
-import numpy_financial as npf  # Benötigt: pip install numpy-financial
+def _calculate_irr_newton(cash_flows, guess=0.1, max_iter=1000, tol=1e-6):
+    if not cash_flows or len(cash_flows) < 2: return float('nan')
+    def npv(r): return sum(cf / (1 + r)**i for i, cf in enumerate(cash_flows))
+
+    # Simple secant method which is more robust than Newton when derivative is hard
+    r0 = guess
+    r1 = guess + 0.05
+    for _ in range(max_iter):
+        f0 = npv(r0)
+        f1 = npv(r1)
+        if abs(f1) < tol: return r1
+        if f1 == f0: break
+        r2 = r1 - f1 * (r1 - r0) / (f1 - f0)
+        r0, r1 = r1, r2
+
+    return float('nan')
+
 
 # --- Globale Annahmen für Berechnungen (können in Settings ausgelagert werden) ---
 LIFESPAN_YEARS = 25  # Lebensdauer der Anlage in Jahren
@@ -60,7 +76,7 @@ def calculate_net_present_value(
         annual_savings: float) -> float:
     """Berechnet den Kapitalwert (NPV) der Investition."""
     cash_flows = [annual_savings] * LIFESPAN_YEARS
-    return npf.npv(DISCOUNT_RATE, cash_flows) - investment
+    return sum(cf / (1 + DISCOUNT_RATE)**i for i, cf in enumerate(cash_flows)) - investment
 
 
 def calculate_internal_rate_of_return(
@@ -71,7 +87,7 @@ def calculate_internal_rate_of_return(
         return 0.0
     cash_flows = [-investment] + [annual_savings] * LIFESPAN_YEARS
     try:
-        return npf.irr(cash_flows) * 100
+        return _calculate_irr_newton(cash_flows) * 100
     except Exception:
         return 0.0
 
@@ -176,13 +192,13 @@ def calculate_npv(cashflows: list[float], discount_rate: float) -> float:
     """11. Nettobarwert (NPV) """
     # npf.npv erwartet die Rate als ersten Parameter und dann die Cashflows.
     # Die Initialinvestition ist oft der erste (negative) Cashflow.
-    return npf.npv(discount_rate, cashflows)
+    return sum(cf / (1 + discount_rate)**i for i, cf in enumerate(cashflows))
 
 
 def calculate_irr(cashflows: list[float]) -> float:
     """12. Interner Zinsfuß (IRR) """
     try:
-        return npf.irr(cashflows) * 100
+        return _calculate_irr_newton(cashflows) * 100
     except BaseException:
         return 0.0
 
@@ -522,8 +538,8 @@ def calculate_profitability_index(
     """Berechnet den Rentabilitätsindex."""
     if investment <= 0:
         return 0.0
-    npv_of_future_cash_flows = npf.npv(
-        DISCOUNT_RATE, [annual_savings] * LIFESPAN_YEARS)
+    npv_of_future_cash_flows = sum(cf / (1 +
+        DISCOUNT_RATE)**i for i, cf in enumerate([annual_savings] * LIFESPAN_YEARS))
     return npv_of_future_cash_flows / investment
 
 
